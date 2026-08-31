@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20260901_final">
 </head>
 <body>
   <!-- Paper grain overlay -->
@@ -45,8 +45,7 @@
     </div>
 
     <div class="hero__text">
-      <h1 class="hero__name" id="hero-name">askar</h1>
-      <p class="hero__fullname">mohamed askar</p>
+      <h1 class="hero__name" id="hero-name">mohamed askar</h1>
       <p class="hero__tagline">frontend engineer · angular craftsman · still drawing the map</p>
       <p class="hero__reflection">I build interfaces that people live inside, and I am learning to build the systems that live longer than any single screen.</p>
     </div>
@@ -73,66 +72,67 @@
       </svg>
     </div>
 
-    <div class="origin__content reveal-group">
-      <p class="origin__line reveal-item">I was trained in mechatronics — the meeting of mechanics, electronics, and code.</p>
-      <p class="origin__line reveal-item">Then I chose the screen.</p>
-      <p class="origin__line reveal-item">Four years of drawing interfaces for hospitality systems,</p>
-      <p class="origin__line reveal-item">migrating old AngularJS kingdoms into modern Angular cities,</p>
-      <p class="origin__line reveal-item">watching state flow through RxJS streams the way current once flowed through circuits.</p>
-      <p class="origin__line reveal-item origin__line--emphasis">The tools changed. The patience required did not.</p>
-    </div>
+    <div class="origin__body">
+      <div class="origin__illustrations reveal-group" aria-hidden="true">
+        <div class="origin__illustration reveal-item">
+          <svg viewBox="0 0 120 120" class="origin__gear-morph">
+            <!-- Gear that morphs into component tree -->
+            <g class="gear-group">
+              <circle cx="60" cy="60" r="24" fill="none" stroke="#1A1A1A" stroke-width="0.7"/>
+              <circle cx="60" cy="60" r="12" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
+              <!-- Gear teeth -->
+              <line x1="60" y1="34" x2="60" y2="26" stroke="#1A1A1A" stroke-width="0.7"/>
+              <line x1="60" y1="86" x2="60" y2="94" stroke="#1A1A1A" stroke-width="0.7"/>
+              <line x1="34" y1="60" x2="26" y2="60" stroke="#1A1A1A" stroke-width="0.7"/>
+              <line x1="86" y1="60" x2="94" y2="60" stroke="#1A1A1A" stroke-width="0.7"/>
+              <line x1="42" y1="42" x2="36" y2="36" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="78" y1="42" x2="84" y2="36" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="42" y1="78" x2="36" y2="84" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="78" y1="78" x2="84" y2="84" stroke="#1A1A1A" stroke-width="0.6"/>
+            </g>
+            <g class="component-tree-group" opacity="0">
+              <rect x="45" y="20" width="30" height="16" rx="3" fill="none" stroke="#1A1A1A" stroke-width="0.7"/>
+              <line x1="52" y1="36" x2="40" y2="52" stroke="#1A1A1A" stroke-width="0.5"/>
+              <line x1="68" y1="36" x2="80" y2="52" stroke="#1A1A1A" stroke-width="0.5"/>
+              <rect x="25" y="52" width="28" height="14" rx="3" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
+              <rect x="67" y="52" width="28" height="14" rx="3" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="39" y1="66" x2="32" y2="78" stroke="#1A1A1A" stroke-width="0.5"/>
+              <line x1="39" y1="66" x2="48" y2="78" stroke="#1A1A1A" stroke-width="0.5"/>
+              <rect x="18" y="78" width="24" height="12" rx="2" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
+              <rect x="36" y="78" width="24" height="12" rx="2" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
+            </g>
+          </svg>
+          <span class="origin__illustration-label">mechanics → components</span>
+        </div>
 
-    <div class="origin__illustrations reveal-group" aria-hidden="true">
-      <div class="origin__illustration reveal-item">
-        <svg viewBox="0 0 120 120" class="origin__gear-morph">
-          <!-- Gear that morphs into component tree -->
-          <g class="gear-group">
-            <circle cx="60" cy="60" r="24" fill="none" stroke="#1A1A1A" stroke-width="0.7"/>
-            <circle cx="60" cy="60" r="12" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
-            <!-- Gear teeth -->
-            <line x1="60" y1="34" x2="60" y2="26" stroke="#1A1A1A" stroke-width="0.7"/>
-            <line x1="60" y1="86" x2="60" y2="94" stroke="#1A1A1A" stroke-width="0.7"/>
-            <line x1="34" y1="60" x2="26" y2="60" stroke="#1A1A1A" stroke-width="0.7"/>
-            <line x1="86" y1="60" x2="94" y2="60" stroke="#1A1A1A" stroke-width="0.7"/>
-            <line x1="42" y1="42" x2="36" y2="36" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="78" y1="42" x2="84" y2="36" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="42" y1="78" x2="36" y2="84" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="78" y1="78" x2="84" y2="84" stroke="#1A1A1A" stroke-width="0.6"/>
-          </g>
-          <g class="component-tree-group" opacity="0">
-            <rect x="45" y="20" width="30" height="16" rx="3" fill="none" stroke="#1A1A1A" stroke-width="0.7"/>
-            <line x1="52" y1="36" x2="40" y2="52" stroke="#1A1A1A" stroke-width="0.5"/>
-            <line x1="68" y1="36" x2="80" y2="52" stroke="#1A1A1A" stroke-width="0.5"/>
-            <rect x="25" y="52" width="28" height="14" rx="3" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
-            <rect x="67" y="52" width="28" height="14" rx="3" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="39" y1="66" x2="32" y2="78" stroke="#1A1A1A" stroke-width="0.5"/>
-            <line x1="39" y1="66" x2="48" y2="78" stroke="#1A1A1A" stroke-width="0.5"/>
-            <rect x="18" y="78" width="24" height="12" rx="2" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
-            <rect x="36" y="78" width="24" height="12" rx="2" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
-          </g>
-        </svg>
-        <span class="origin__illustration-label">mechatronics → components</span>
+        <div class="origin__illustration reveal-item">
+          <svg viewBox="0 0 120 120" class="origin__circuit-morph">
+            <!-- Circuit board that becomes hierarchy -->
+            <g class="circuit-group">
+              <line x1="20" y1="60" x2="45" y2="60" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="45" y1="60" x2="45" y2="30" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="45" y1="30" x2="75" y2="30" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="45" y1="60" x2="75" y2="60" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="45" y1="60" x2="45" y2="90" stroke="#1A1A1A" stroke-width="0.6"/>
+              <line x1="45" y1="90" x2="75" y2="90" stroke="#1A1A1A" stroke-width="0.6"/>
+              <circle cx="75" cy="30" r="4" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
+              <circle cx="75" cy="60" r="4" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
+              <circle cx="75" cy="90" r="4" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
+              <rect x="80" y="22" width="20" height="16" rx="1" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
+              <rect x="80" y="52" width="20" height="16" rx="1" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
+              <rect x="80" y="82" width="20" height="16" rx="1" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
+            </g>
+          </svg>
+          <span class="origin__illustration-label">circuits → data flow</span>
+        </div>
       </div>
 
-      <div class="origin__illustration reveal-item">
-        <svg viewBox="0 0 120 120" class="origin__circuit-morph">
-          <!-- Circuit board that becomes hierarchy -->
-          <g class="circuit-group">
-            <line x1="20" y1="60" x2="45" y2="60" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="45" y1="60" x2="45" y2="30" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="45" y1="30" x2="75" y2="30" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="45" y1="60" x2="75" y2="60" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="45" y1="60" x2="45" y2="90" stroke="#1A1A1A" stroke-width="0.6"/>
-            <line x1="45" y1="90" x2="75" y2="90" stroke="#1A1A1A" stroke-width="0.6"/>
-            <circle cx="75" cy="30" r="4" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
-            <circle cx="75" cy="60" r="4" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
-            <circle cx="75" cy="90" r="4" fill="none" stroke="#1A1A1A" stroke-width="0.6"/>
-            <rect x="80" y="22" width="20" height="16" rx="1" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
-            <rect x="80" y="52" width="20" height="16" rx="1" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
-            <rect x="80" y="82" width="20" height="16" rx="1" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
-          </g>
-        </svg>
-        <span class="origin__illustration-label">circuits → data flow</span>
+      <div class="origin__content reveal-group">
+        <p class="origin__line reveal-item">My journey began with a fascination for how things are built.</p>
+        <p class="origin__line reveal-item">From understanding physical constraints to mastering digital architecture,</p>
+        <p class="origin__line reveal-item">I found my purpose in crafting the spaces where people and systems meet.</p>
+        <p class="origin__line reveal-item">Four years of shaping logic, refining interactions,</p>
+        <p class="origin__line reveal-item origin__line--emphasis">and turning complex problems into elegant interfaces.</p>
       </div>
     </div>
   </section>
@@ -760,6 +760,6 @@
     <div class="journey-node" data-tooltip="still in motion" style="display:none;"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260901_final"></script>
 </body>
 </html>
