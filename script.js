@@ -1,0 +1,479 @@
+/* ═══════════════════════════════════════════════════════
+   ASKAR PORTFOLIO — DRAWN FROM THE INSIDE
+   Interactive behaviors: scroll reveals, particles,
+   journey line, idle star pulse, constellation dots
+   ═══════════════════════════════════════════════════════ */
+
+(function () {
+  'use strict';
+
+  // ── Reduced Motion Check ──────────────────────────
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Intersection Observer: Reveal on Scroll ───────
+  function initRevealObserver() {
+    const revealItems = document.querySelectorAll('.reveal-item');
+    const revealSections = document.querySelectorAll('.origin, .timeline__node');
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -60px 0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, observerOptions);
+
+    revealItems.forEach(item => observer.observe(item));
+
+    // Section-level reveals (for branch animations, etc.)
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealSections.forEach(section => sectionObserver.observe(section));
+  }
+
+  // ── Ambient Particles ─────────────────────────────
+  function initParticles() {
+    if (prefersReducedMotion) return;
+
+    const canvas = document.getElementById('particles-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationId;
+    const PARTICLE_COUNT = 35;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createParticle() {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2 + 0.3,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.1 - 0.05,
+        opacity: Math.random() * 0.3 + 0.1,
+        life: Math.random() * 600 + 200,
+        maxLife: 0
+      };
+    }
+
+    function initParticlesArray() {
+      particles = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const p = createParticle();
+        p.maxLife = p.life;
+        particles.push(p);
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+
+        const lifeRatio = p.life / p.maxLife;
+        const fadeOpacity = lifeRatio < 0.2 ? lifeRatio / 0.2 : (lifeRatio > 0.8 ? (1 - lifeRatio) / 0.2 : 1);
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(196, 149, 106, ${p.opacity * fadeOpacity})`;
+        ctx.fill();
+
+        if (p.life <= 0 || p.x < -10 || p.x > canvas.width + 10 || p.y < -10 || p.y > canvas.height + 10) {
+          particles[i] = createParticle();
+          particles[i].maxLife = particles[i].life;
+        }
+      });
+
+      // Draw faint constellation connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            const alpha = (1 - dist / 120) * 0.06;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(196, 149, 106, ${alpha})`;
+            ctx.lineWidth = 0.4;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationId = requestAnimationFrame(drawParticles);
+    }
+
+    resize();
+    initParticlesArray();
+    drawParticles();
+
+    window.addEventListener('resize', () => {
+      resize();
+    });
+
+    // Pause when tab hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationId);
+      } else {
+        drawParticles();
+      }
+    });
+  }
+
+  // ── Hero Constellation Dots ───────────────────────
+  function initHeroConstellation() {
+    if (prefersReducedMotion) return;
+
+    const container = document.querySelector('.hero__cosmos');
+    if (!container) return;
+
+    const DOTS = 20;
+    const dots = [];
+
+    for (let i = 0; i < DOTS; i++) {
+      const dot = document.createElement('div');
+      dot.style.cssText = `
+        position: absolute;
+        width: ${Math.random() * 2 + 1}px;
+        height: ${Math.random() * 2 + 1}px;
+        border-radius: 50%;
+        background: rgba(26, 26, 26, ${Math.random() * 0.08 + 0.03});
+        left: ${Math.random() * 100}%;
+        top: ${Math.random() * 100}%;
+        pointer-events: none;
+      `;
+      container.appendChild(dot);
+      dots.push({
+        el: dot,
+        x: parseFloat(dot.style.left),
+        y: parseFloat(dot.style.top),
+        vx: (Math.random() - 0.5) * 0.003,
+        vy: (Math.random() - 0.5) * 0.003
+      });
+    }
+
+    function animateDots() {
+      dots.forEach(d => {
+        d.x += d.vx;
+        d.y += d.vy;
+        if (d.x < 0 || d.x > 100) d.vx *= -1;
+        if (d.y < 0 || d.y > 100) d.vy *= -1;
+        d.el.style.left = d.x + '%';
+        d.el.style.top = d.y + '%';
+      });
+      requestAnimationFrame(animateDots);
+    }
+
+    animateDots();
+  }
+
+  // ── Journey Line (Continuous Thread) ──────────────
+  function initJourneyLine() {
+    const svg = document.querySelector('.journey-line');
+    const path = document.querySelector('.thread-path');
+    const nodesContainer = document.querySelector('.journey-nodes');
+    if (!svg || !path || !nodesContainer) return;
+
+    const nodeElements = nodesContainer.querySelectorAll('.journey-node');
+
+    function calculatePath() {
+      const docHeight = document.documentElement.scrollHeight;
+      const docWidth = document.documentElement.clientWidth;
+      const centerX = docWidth / 2;
+
+      // Create a gentle weaving path through the entire document
+      const points = [];
+      const segments = 30;
+      const segmentHeight = docHeight / segments;
+
+      for (let i = 0; i <= segments; i++) {
+        const y = i * segmentHeight;
+        const wave = Math.sin(i * 0.5) * (docWidth * 0.08);
+        const x = centerX + wave;
+        points.push({ x, y });
+      }
+
+      // Build SVG path
+      let d = `M${points[0].x},${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const cpY = (prev.y + curr.y) / 2;
+        d += ` Q${prev.x},${cpY} ${curr.x},${curr.y}`;
+      }
+
+      svg.setAttribute('width', docWidth);
+      svg.setAttribute('height', docHeight);
+      svg.style.width = docWidth + 'px';
+      svg.style.height = docHeight + 'px';
+      path.setAttribute('d', d);
+
+      const pathLength = path.getTotalLength();
+      path.style.strokeDasharray = pathLength;
+      path.style.strokeDashoffset = pathLength;
+
+      // Position journey nodes along the path
+      const nodePositions = [0.08, 0.18, 0.32, 0.5, 0.7, 0.88];
+      nodeElements.forEach((node, i) => {
+        if (i < nodePositions.length) {
+          const point = path.getPointAtLength(pathLength * nodePositions[i]);
+          node.style.display = 'block';
+          node.style.left = (point.x - 5) + 'px';
+          node.style.top = (point.y - 5) + 'px';
+        }
+      });
+
+      return pathLength;
+    }
+
+    let pathLength = calculatePath();
+
+    // Animate line on scroll
+    function animateLine() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = scrollTop / docHeight;
+
+      const drawLength = pathLength * scrollPercent;
+      path.style.strokeDashoffset = pathLength - drawLength;
+    }
+
+    window.addEventListener('scroll', animateLine, { passive: true });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        pathLength = calculatePath();
+        animateLine();
+      }, 200);
+    });
+
+    animateLine();
+  }
+
+  // ── Idle Star Pulse ───────────────────────────────
+  function initIdlePulse() {
+    if (prefersReducedMotion) return;
+
+    const nodes = document.querySelectorAll('.journey-node');
+    let idleTimer;
+
+    function triggerPulse() {
+      const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
+      if (randomNode) {
+        randomNode.style.transition = 'transform 1s ease, opacity 1s ease';
+        randomNode.style.transform = 'scale(2)';
+        randomNode.style.opacity = '0.9';
+        setTimeout(() => {
+          randomNode.style.transform = 'scale(1)';
+          randomNode.style.opacity = '0.5';
+        }, 1500);
+      }
+    }
+
+    function resetIdle() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(triggerPulse, 4000);
+    }
+
+    window.addEventListener('scroll', resetIdle, { passive: true });
+    window.addEventListener('mousemove', resetIdle, { passive: true });
+    resetIdle();
+  }
+
+  // ── SVG Draw-line Animation Enhancement ───────────
+  function initDrawLines() {
+    const drawLines = document.querySelectorAll('.draw-line');
+
+    drawLines.forEach(line => {
+      const length = line.getTotalLength ? line.getTotalLength() : 500;
+      line.style.strokeDasharray = length;
+      line.style.strokeDashoffset = length;
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const lines = entry.target.querySelectorAll('.draw-line');
+          lines.forEach((line, i) => {
+            setTimeout(() => {
+              line.classList.add('is-drawn');
+              line.style.strokeDashoffset = '0';
+            }, i * 150);
+          });
+        }
+      });
+    }, { threshold: 0.2 });
+
+    // Observe parent containers of draw-lines
+    const containers = new Set();
+    drawLines.forEach(line => {
+      const parent = line.closest('.reveal-item, .project-card__illustration, .timeline__illustration, .about__illu-item, .origin__illustration');
+      if (parent) containers.add(parent);
+    });
+    containers.forEach(c => observer.observe(c));
+  }
+
+  // ── Smooth Scroll Hint (hero prompt) ──────────────
+  function initScrollHint() {
+    const prompt = document.querySelector('.hero__scroll-prompt');
+    if (!prompt) return;
+
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          prompt.style.opacity = '0';
+          prompt.style.transition = 'opacity 1s ease';
+        }
+      });
+    }, { threshold: 0.5 });
+
+    fadeObserver.observe(document.querySelector('.hero'));
+  }
+
+  // ── Skill Cell Entrance Animation ─────────────────
+  function initSkillCells() {
+    const cells = document.querySelectorAll('.skill-cell');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          const cell = entry.target;
+          const icon = cell.querySelector('.skill-cell__icon svg');
+          if (icon) {
+            const paths = icon.querySelectorAll('path, line, rect, circle, ellipse');
+            paths.forEach(p => {
+              if (p.getTotalLength) {
+                const len = p.getTotalLength();
+                p.style.strokeDasharray = len;
+                p.style.strokeDashoffset = len;
+                p.style.transition = `stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1) ${Math.random() * 0.3}s`;
+                requestAnimationFrame(() => {
+                  p.style.strokeDashoffset = '0';
+                });
+              }
+            });
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    cells.forEach(cell => observer.observe(cell));
+  }
+
+  // ── Project Illustration Hover Breathing ──────────
+  function initProjectBreathing() {
+    if (prefersReducedMotion) return;
+
+    const cards = document.querySelectorAll('.project-card');
+
+    cards.forEach(card => {
+      const illu = card.querySelector('.project-card__illustration svg');
+      if (!illu) return;
+
+      card.addEventListener('mouseenter', () => {
+        illu.style.transition = 'transform 3s ease';
+        illu.style.transform = 'scale(1.02)';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        illu.style.transition = 'transform 2s ease';
+        illu.style.transform = 'scale(1)';
+      });
+    });
+  }
+
+  // ── Text Underline Hand-drawn Effect ──────────────
+  function initHandDrawnUnderlines() {
+    const links = document.querySelectorAll('.about__text a, .project-card__description a');
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        link.style.borderBottomWidth = '1.5px';
+        link.style.borderBottomStyle = 'solid';
+        link.style.borderBottomColor = 'rgba(184, 122, 90, 0.6)';
+      });
+
+      link.addEventListener('mouseleave', () => {
+        link.style.borderBottomColor = 'rgba(184, 122, 90, 0.3)';
+        link.style.borderBottomWidth = '1px';
+      });
+    });
+  }
+
+  // ── Timeline Node Expand ──────────────────────────
+  function initTimelineExpand() {
+    const nodes = document.querySelectorAll('.timeline__node');
+
+    nodes.forEach(node => {
+      const details = node.querySelector('.timeline__details');
+      const illustration = node.querySelector('.timeline__illustration');
+
+      if (details) {
+        // Initially partially visible, expand on hover/focus
+        node.addEventListener('mouseenter', () => {
+          if (illustration) {
+            illustration.style.opacity = '1';
+          }
+        });
+
+        node.addEventListener('mouseleave', () => {
+          if (illustration) {
+            illustration.style.opacity = '0.7';
+          }
+        });
+      }
+    });
+  }
+
+  // ── Initialize Everything ─────────────────────────
+  function init() {
+    initRevealObserver();
+    initParticles();
+    initHeroConstellation();
+    initJourneyLine();
+    initIdlePulse();
+    initScrollHint();
+    initSkillCells();
+    initProjectBreathing();
+    initHandDrawnUnderlines();
+    initTimelineExpand();
+
+    // Delayed init for draw lines (need layout to stabilize)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        initDrawLines();
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
