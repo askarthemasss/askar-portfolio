@@ -404,6 +404,141 @@ body {
   50% { transform: translateY(6px); }
 }
 
+/* ── Hero Dynamic Node & Edge Network ───────────────── */
+.hero__network-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  animation: heroFloatFade 1.5s var(--ease-out) 1.5s forwards;
+}
+
+.hero__floating-elements {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.hero__float-item {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--charcoal);
+  opacity: 0;
+  transition: transform 0.4s var(--ease-out), color 0.3s var(--ease-out);
+}
+
+.hero__float-item svg {
+  opacity: 0.36;
+  color: var(--charcoal);
+  transition: opacity 0.3s var(--ease-out), transform 0.4s var(--ease-out), color 0.3s var(--ease-out);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.02));
+}
+
+.hero__float-item:hover,
+.hero__float-item.is-active {
+  z-index: 10;
+}
+
+.hero__float-item:hover svg,
+.hero__float-item.is-active svg {
+  opacity: 0.95;
+  transform: scale(1.2);
+  color: var(--soft-black);
+}
+
+.hero__float-item.is-connected svg {
+  opacity: 0.75;
+  color: var(--charcoal);
+}
+
+.hero__float-label {
+  font-family: var(--font-serif);
+  font-size: 0.68rem;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: var(--terracotta);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.hero__float-item:hover .hero__float-label,
+.hero__float-item.is-active .hero__float-label {
+  opacity: 0.95;
+  transform: translateY(0);
+}
+
+/* 20 Specific Positions & Motion Keyframes */
+.hero__float-1  { top: 13%; left: 8%;   animation: heroFloatFade 1.5s var(--ease-out) 1.5s forwards, floatMotionA 9s ease-in-out 3.0s infinite; }
+.hero__float-2  { top: 11%; left: 22%;  animation: heroFloatFade 1.5s var(--ease-out) 1.7s forwards, floatMotionB 11s ease-in-out 3.2s infinite; }
+.hero__float-3  { top: 25%; left: 10%;  animation: heroFloatFade 1.5s var(--ease-out) 1.9s forwards, floatMotionC 10s ease-in-out 3.4s infinite; }
+.hero__float-4  { top: 24%; left: 26%;  animation: heroFloatFade 1.5s var(--ease-out) 2.1s forwards, floatMotionA 12s ease-in-out 3.6s infinite; }
+.hero__float-5  { top: 43%; left: 6%;   animation: heroFloatFade 1.5s var(--ease-out) 2.3s forwards, floatMotionB 9.5s ease-in-out 3.8s infinite; }
+.hero__float-6  { top: 45%; left: 19%;  animation: heroFloatFade 1.5s var(--ease-out) 2.5s forwards, floatMotionC 10.5s ease-in-out 4.0s infinite; }
+.hero__float-7  { top: 62%; left: 8%;   animation: heroFloatFade 1.5s var(--ease-out) 2.7s forwards, floatMotionA 11.5s ease-in-out 4.2s infinite; }
+.hero__float-8  { top: 65%; left: 22%;  animation: heroFloatFade 1.5s var(--ease-out) 2.9s forwards, floatMotionB 8.5s ease-in-out 4.4s infinite; }
+.hero__float-9  { top: 80%; left: 12%;  animation: heroFloatFade 1.5s var(--ease-out) 3.1s forwards, floatMotionC 12.5s ease-in-out 4.6s infinite; }
+.hero__float-10 { top: 83%; left: 26%;  animation: heroFloatFade 1.5s var(--ease-out) 3.3s forwards, floatMotionA 9s ease-in-out 4.8s infinite; }
+
+.hero__float-11 { top: 12%; right: 23%; animation: heroFloatFade 1.5s var(--ease-out) 1.6s forwards, floatMotionB 10s ease-in-out 3.1s infinite; }
+.hero__float-12 { top: 14%; right: 9%;  animation: heroFloatFade 1.5s var(--ease-out) 1.8s forwards, floatMotionC 9.5s ease-in-out 3.3s infinite; }
+.hero__float-13 { top: 27%; right: 21%; animation: heroFloatFade 1.5s var(--ease-out) 2.0s forwards, floatMotionA 11s ease-in-out 3.5s infinite; }
+.hero__float-14 { top: 32%; right: 8%;  animation: heroFloatFade 1.5s var(--ease-out) 2.2s forwards, floatMotionB 12s ease-in-out 3.7s infinite; }
+.hero__float-15 { top: 48%; right: 6%;  animation: heroFloatFade 1.5s var(--ease-out) 2.4s forwards, floatMotionC 10s ease-in-out 3.9s infinite; }
+.hero__float-16 { top: 50%; right: 19%; animation: heroFloatFade 1.5s var(--ease-out) 2.6s forwards, floatMotionA 8.5s ease-in-out 4.1s infinite; }
+.hero__float-17 { top: 66%; right: 7%;  animation: heroFloatFade 1.5s var(--ease-out) 2.8s forwards, floatMotionB 12.5s ease-in-out 4.3s infinite; }
+.hero__float-18 { top: 68%; right: 22%; animation: heroFloatFade 1.5s var(--ease-out) 3.0s forwards, floatMotionC 9s ease-in-out 4.5s infinite; }
+.hero__float-19 { top: 83%; right: 11%; animation: heroFloatFade 1.5s var(--ease-out) 3.2s forwards, floatMotionA 10.5s ease-in-out 4.7s infinite; }
+.hero__float-20 { top: 82%; right: 25%; animation: heroFloatFade 1.5s var(--ease-out) 3.4s forwards, floatMotionB 11.5s ease-in-out 4.9s infinite; }
+
+@keyframes heroFloatFade {
+  to { opacity: 1; }
+}
+
+@keyframes floatMotionA {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(5px, -8px) rotate(2deg); }
+  66% { transform: translate(-4px, 6px) rotate(-1.5deg); }
+}
+
+@keyframes floatMotionB {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-6px, 8px) rotate(-2.5deg); }
+  66% { transform: translate(6px, -5px) rotate(2deg); }
+}
+
+@keyframes floatMotionC {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(6px, 6px) rotate(2deg); }
+  66% { transform: translate(-5px, -7px) rotate(-2deg); }
+}
+
+@media (max-width: 900px) {
+  .hero__float-item svg {
+    transform: scale(0.85);
+    opacity: 0.28;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero__floating-elements,
+  .hero__network-canvas {
+    display: none;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
    ORIGIN INTERLUDE
    ═══════════════════════════════════════════════════════ */

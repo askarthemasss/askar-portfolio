@@ -190,6 +190,181 @@
     animateDots();
   }
 
+  // ── Hero Dynamic Node & Edge Network ─────────────────
+  function initHeroNetwork() {
+    const hero = document.getElementById('hero');
+    const canvas = document.getElementById('hero-network-canvas');
+    if (!hero || !canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const floatItems = Array.from(document.querySelectorAll('.hero__float-item'));
+    if (!floatItems.length) return;
+
+    let width = 0;
+    let height = 0;
+    let dpr = window.devicePixelRatio || 1;
+    let hoveredIndex = null;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    function resize() {
+      const rect = hero.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      dpr = window.devicePixelRatio || 1;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+
+    window.addEventListener('resize', resize, { passive: true });
+    resize();
+
+    // Hover tracking on nodes
+    floatItems.forEach((item, idx) => {
+      item.addEventListener('mouseenter', () => {
+        hoveredIndex = idx;
+        item.classList.add('is-active');
+        highlightNeighbors(idx);
+      });
+      item.addEventListener('mouseleave', () => {
+        hoveredIndex = null;
+        item.classList.remove('is-active');
+        floatItems.forEach(el => el.classList.remove('is-connected'));
+      });
+    });
+
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 22;
+      mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 22;
+    });
+
+    hero.addEventListener('mouseleave', () => {
+      mouseX = 0;
+      mouseY = 0;
+      hoveredIndex = null;
+    });
+
+    // Defined logical relationship edges between nodes (by index 0-19)
+    // Left cluster: 0:Angular, 1:TS, 2:RxJS, 3:YouTube, 4:Cricket, 5:Hospitality, 6:Copilot, 7:LeetCode, 8:Grok, 9:Chennai
+    // Right cluster: 10:MCP, 11:Claude, 12:.NET, 13:X, 14:Ride, 15:SaaS, 16:Testing, 17:CLI, 18:Code, 19:Systems
+    const definedEdges = [
+      // Frontend & Core Craft
+      [0, 1], [0, 2], [1, 2], [0, 5], [1, 7], [2, 6],
+      // Media & Identity (Left)
+      [3, 0], [3, 1], [4, 9], [5, 9], [6, 8], [7, 8], [8, 9], [4, 6],
+      // AI & Systems (Right)
+      [10, 11], [10, 12], [11, 13], [10, 15], [11, 16],
+      // Backend & Engineering (Right)
+      [12, 19], [12, 17], [13, 14], [14, 15], [15, 19], [16, 17], [17, 18], [18, 19], [15, 18],
+      // Bridging Cross-Constellations (delicate arches)
+      [1, 10], [6, 11], [9, 14], [7, 18]
+    ];
+
+    function highlightNeighbors(activeIdx) {
+      floatItems.forEach(el => el.classList.remove('is-connected'));
+      definedEdges.forEach(([a, b]) => {
+        if (a === activeIdx && floatItems[b]) floatItems[b].classList.add('is-connected');
+        if (b === activeIdx && floatItems[a]) floatItems[a].classList.add('is-connected');
+      });
+    }
+
+    function drawNetwork(time) {
+      if (width === 0 || height === 0) {
+        requestAnimationFrame(drawNetwork);
+        return;
+      }
+
+      // Parallax smooth interpolation
+      currentX += (mouseX - currentX) * 0.05;
+      currentY += (mouseY - currentY) * 0.05;
+
+      floatItems.forEach((item, idx) => {
+        const factor = (idx % 4 + 1) * 0.45;
+        const sign = idx % 2 === 0 ? 1 : -1;
+        item.style.transform = `translate(${currentX * factor * sign}px, ${currentY * factor * sign}px)`;
+      });
+
+      // Clear Canvas
+      ctx.clearRect(0, 0, width, height);
+
+      const heroRect = hero.getBoundingClientRect();
+      const nodePositions = floatItems.map(item => {
+        const r = item.getBoundingClientRect();
+        return {
+          x: r.left - heroRect.left + r.width / 2,
+          y: r.top - heroRect.top + r.height / 2
+        };
+      });
+
+      // Draw Edges
+      definedEdges.forEach(([a, b], edgeIdx) => {
+        const p1 = nodePositions[a];
+        const p2 = nodePositions[b];
+        if (!p1 || !p2) return;
+
+        const isHoveredEdge = (hoveredIndex === a || hoveredIndex === b);
+        const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+
+        ctx.save();
+        ctx.beginPath();
+
+        // Gentle curvature
+        const midX = (p1.x + p2.x) / 2;
+        const midY = (p1.y + p2.y) / 2 + (edgeIdx % 2 === 0 ? 6 : -6);
+        ctx.moveTo(p1.x, p1.y);
+        ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
+
+        if (isHoveredEdge) {
+          ctx.strokeStyle = 'rgba(196, 149, 106, 0.65)';
+          ctx.lineWidth = 1.2;
+          ctx.setLineDash([]);
+        } else {
+          ctx.strokeStyle = 'rgba(26, 26, 26, 0.09)';
+          ctx.lineWidth = 0.75;
+          ctx.setLineDash([3, 4]);
+        }
+        ctx.stroke();
+
+        // Subtle traveling pulse beacon on hovered or periodic active edges
+        if (isHoveredEdge || edgeIdx % 3 === 0) {
+          const speed = isHoveredEdge ? 0.0012 : 0.0004;
+          const t = (time * speed + edgeIdx * 0.17) % 1;
+          const qx = (1 - t) * (1 - t) * p1.x + 2 * (1 - t) * t * midX + t * t * p2.x;
+          const qy = (1 - t) * (1 - t) * p1.y + 2 * (1 - t) * t * midY + t * t * p2.y;
+
+          ctx.beginPath();
+          ctx.arc(qx, qy, isHoveredEdge ? 2.5 : 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = isHoveredEdge ? 'rgba(196, 149, 106, 0.9)' : 'rgba(139, 158, 139, 0.4)';
+          ctx.fill();
+        }
+
+        ctx.restore();
+      });
+
+      // Draw subtle ring halos around active node
+      if (hoveredIndex !== null && nodePositions[hoveredIndex]) {
+        const hp = nodePositions[hoveredIndex];
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(hp.x, hp.y, 22, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(196, 149, 106, 0.35)';
+        ctx.lineWidth = 0.8;
+        ctx.setLineDash([2, 3]);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      requestAnimationFrame(drawNetwork);
+    }
+
+    requestAnimationFrame(drawNetwork);
+  }
+
   // ── Journey Line (Continuous Thread) ──────────────
   function initJourneyLine() {
     const svg = document.querySelector('.journey-line');
@@ -455,6 +630,7 @@
     initRevealObserver();
     initParticles();
     initHeroConstellation();
+    initHeroNetwork();
     initJourneyLine();
     initIdlePulse();
     initScrollHint();
