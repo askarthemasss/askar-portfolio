@@ -223,7 +223,7 @@
     window.addEventListener('resize', resize, { passive: true });
     resize();
 
-    // Hover tracking on nodes
+    // Hover & touch tracking on nodes
     floatItems.forEach((item, idx) => {
       item.addEventListener('mouseenter', () => {
         hoveredIndex = idx;
@@ -235,6 +235,33 @@
         item.classList.remove('is-active');
         floatItems.forEach(el => el.classList.remove('is-connected'));
       });
+      // Touch support for mobile devices
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (hoveredIndex === idx) {
+          hoveredIndex = null;
+          item.classList.remove('is-active');
+          floatItems.forEach(el => el.classList.remove('is-connected'));
+        } else {
+          floatItems.forEach(el => {
+            el.classList.remove('is-active');
+            el.classList.remove('is-connected');
+          });
+          hoveredIndex = idx;
+          item.classList.add('is-active');
+          highlightNeighbors(idx);
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.hero__float-item')) {
+        hoveredIndex = null;
+        floatItems.forEach(el => {
+          el.classList.remove('is-active');
+          el.classList.remove('is-connected');
+        });
+      }
     });
 
     hero.addEventListener('mousemove', (e) => {
@@ -248,6 +275,15 @@
       mouseY = 0;
       hoveredIndex = null;
     });
+
+    hero.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches[0]) {
+        const touch = e.touches[0];
+        const rect = hero.getBoundingClientRect();
+        mouseX = ((touch.clientX - rect.left) / rect.width - 0.5) * 16;
+        mouseY = ((touch.clientY - rect.top) / rect.height - 0.5) * 16;
+      }
+    }, { passive: true });
 
     // Defined logical relationship edges between nodes (by index 0-19)
     // Left cluster: 0:Angular, 1:TS, 2:RxJS, 3:YouTube, 4:Cricket, 5:Hospitality, 6:Copilot, 7:LeetCode, 8:Grok, 9:Chennai

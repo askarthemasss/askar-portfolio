@@ -527,16 +527,48 @@ body {
 
 @media (max-width: 900px) {
   .hero__float-item svg {
-    transform: scale(0.85);
-    opacity: 0.28;
+    transform: scale(0.8);
+    opacity: 0.3;
   }
 }
 
 @media (max-width: 600px) {
   .hero__floating-elements,
   .hero__network-canvas {
-    display: none;
+    display: block;
   }
+
+  .hero__float-item svg {
+    transform: scale(0.65);
+    opacity: 0.32;
+  }
+
+  .hero__float-label {
+    font-size: 0.58rem;
+  }
+
+  /* Perimeter distribution on mobile */
+  .hero__float-1  { top: 5%; left: 3%; }
+  .hero__float-2  { top: 5%; left: 24%; }
+  .hero__float-3  { top: 16%; left: 2%; }
+  .hero__float-4  { top: 22%; left: 14%; }
+  .hero__float-5  { top: 40%; left: 1%; }
+  .hero__float-6  { top: 52%; left: 4%; }
+  .hero__float-7  { top: 68%; left: 2%; }
+  .hero__float-8  { top: 76%; left: 14%; }
+  .hero__float-9  { top: 88%; left: 5%; }
+  .hero__float-10 { top: 89%; left: 26%; }
+
+  .hero__float-11 { top: 5%; right: 24%; }
+  .hero__float-12 { top: 5%; right: 3%; }
+  .hero__float-13 { top: 16%; right: 2%; }
+  .hero__float-14 { top: 22%; right: 14%; }
+  .hero__float-15 { top: 40%; right: 1%; }
+  .hero__float-16 { top: 52%; right: 4%; }
+  .hero__float-17 { top: 68%; right: 2%; }
+  .hero__float-18 { top: 76%; right: 14%; }
+  .hero__float-19 { top: 88%; right: 5%; }
+  .hero__float-20 { top: 89%; right: 26%; }
 }
 
 /* ═══════════════════════════════════════════════════════
