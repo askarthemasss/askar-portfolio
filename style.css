@@ -1163,18 +1163,36 @@ body {
 
 .learning__header {
   max-width: var(--content-wide);
+  margin: 0 auto 3rem;
+}
+
+.learning__body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  max-width: var(--content-wide);
   margin: 0 auto;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .learning__body {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2.5rem, 5vw, 5rem);
+  }
 }
 
 .learning__constellation {
-  max-width: var(--content-wide);
-  margin: 0 auto 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .learning__map {
   width: 100%;
+  max-width: 480px;
   height: auto;
-  max-height: 350px;
 }
 
 .pulse-node {
@@ -1187,10 +1205,8 @@ body {
 }
 
 .learning__content {
-  max-width: var(--content-max);
-  margin: 0 auto;
   display: grid;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
 .learning__item h3 {
@@ -1198,13 +1214,13 @@ body {
   font-weight: 400;
   font-size: 1.15rem;
   color: var(--charcoal);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   letter-spacing: 0.03em;
 }
 
 .learning__item p {
   font-size: clamp(0.88rem, 1.2vw, 0.95rem);
-  line-height: 1.8;
+  line-height: 1.75;
   color: var(--soft-black);
 }
 
