@@ -13,7 +13,7 @@
   // ── Intersection Observer: Reveal on Scroll ───────
   function initRevealObserver() {
     const revealItems = document.querySelectorAll('.reveal-item');
-    const revealSections = document.querySelectorAll('.origin, .timeline__node');
+    const revealSections = document.querySelectorAll('.about, .timeline__node');
 
     const observerOptions = {
       root: null,
@@ -543,7 +543,7 @@
     // Observe parent containers of draw-lines
     const containers = new Set();
     drawLines.forEach(line => {
-      const parent = line.closest('.reveal-item, .project-card__illustration, .timeline__illustration, .about__illu-item, .origin__illustration');
+      const parent = line.closest('.reveal-item, .project-card__illustration, .timeline__illustration, .about__visual-card, .about__illu-item');
       if (parent) containers.add(parent);
     });
     containers.forEach(c => observer.observe(c));
