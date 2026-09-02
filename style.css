@@ -14,9 +14,12 @@
 
 :root {
   /* Palette */
-  --cream: #F8F4F0;
-  --parchment: #F2EDE7;
-  --warm-white: #FDFBF8;
+  --cream: #F7F5F0;
+  --sage: #EEF3ED;
+  --parchment: #F1ECE3;
+  --warm-white: #FAF8F5;
+  --linen: #F3EFE8;
+  --sage-tint: #EFF3EE;
   --charcoal: #1A1A1A;
   --soft-black: #2C2C2C;
   --warm-grey: #8A8580;
@@ -26,7 +29,6 @@
   --gold: #C4956A;
   --gold-dim: rgba(196, 149, 106, 0.3);
   --blush: #F0EBE5;
-  --sage: #E8EDE6;
   --sage-dark: #8B9E8B;
 
   /* Typography */
@@ -102,7 +104,7 @@ body {
   opacity: 0.4;
 }
 
-/* ── Journey Line (SVG) ────────────────────────────── */
+/* ── Journey Line (SVG Continuous Thread) ──────────── */
 .journey-line {
   position: absolute;
   top: 0;
@@ -110,66 +112,309 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 2;
+  z-index: 6; /* Floating above all section backgrounds (z-index 5) — never submerged! */
 }
 
 .thread-path {
   stroke: var(--gold);
-  opacity: 0.35;
-  transition: stroke-dashoffset 0.05s linear;
+  stroke-width: 1px;
+  opacity: 0.16; /* Whisper-quiet, ambient watermark thread — never disturbs reading */
+  mix-blend-mode: multiply;
+  transition: stroke-dashoffset 0.08s linear;
 }
 
-/* ── Journey Nodes ─────────────────────────────────── */
-.journey-nodes {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.journey-node {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--gold);
-  opacity: 0.5;
+/* ── Journey Waypoint (Interactive Section Connectors) ── */
+.journey-waypoint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
   cursor: pointer;
-  pointer-events: all;
-  transition: transform 0.4s var(--ease-out), opacity 0.4s var(--ease-out);
+  user-select: none;
+  text-decoration: none;
+  outline: none;
+  position: relative;
+  transition: transform 0.3s var(--ease-out);
 }
 
-.journey-node::before {
-  content: attr(data-tooltip);
+.journey-waypoint:focus-visible {
+  outline: 2px solid var(--terracotta);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+.journey-waypoint__track {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.journey-waypoint__ring {
   position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  white-space: nowrap;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(196, 149, 106, 0.35);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(4px);
+  transition: transform 0.4s var(--ease-out), border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+}
+
+.journey-waypoint__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  opacity: 0.6;
+  transition: transform 0.4s var(--ease-out), opacity 0.4s var(--ease-out), background-color 0.4s var(--ease-out);
+}
+
+.journey-waypoint__meta {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 0.8rem;
-  color: var(--warm-grey);
-  background: var(--cream);
-  padding: 4px 12px;
-  border-radius: 4px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
-  border: 1px solid rgba(196, 149, 106, 0.15);
+  font-size: 0.92rem;
+  letter-spacing: 0.03em;
+  color: var(--terracotta);
+  opacity: 0.85;
+  transition: opacity 0.3s var(--ease-out), color 0.3s var(--ease-out);
 }
 
-.journey-node:hover {
-  transform: scale(1.6);
-  opacity: 0.9;
+/* Hover & Reached States */
+.journey-waypoint:hover,
+.journey-waypoint.is-reached {
+  transform: translateX(2px);
 }
 
-.journey-node:hover::before {
+.journey-waypoint:hover .journey-waypoint__ring,
+.journey-waypoint.is-reached .journey-waypoint__ring {
+  transform: scale(1.3);
+  border-color: var(--terracotta);
+  box-shadow: 0 0 16px rgba(196, 149, 106, 0.4);
+}
+
+.journey-waypoint:hover .journey-waypoint__dot,
+.journey-waypoint.is-reached .journey-waypoint__dot {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: scale(1.4);
+  background: var(--gold);
+}
+
+.journey-waypoint:hover .journey-waypoint__meta,
+.journey-waypoint.is-reached .journey-waypoint__meta {
+  opacity: 1;
+  color: var(--charcoal);
+  font-weight: 500;
+}
+
+.journey-waypoint--hero {
+  margin-bottom: 0.75rem;
+}
+
+.journey-waypoint--closing {
+  margin-bottom: 2rem;
+}
+
+/* ── Section Data Popover One-Liner Pill ───────────── */
+.waypoint-popover {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  padding: 0.38rem 0.85rem;
+  background: rgba(255, 254, 250, 0.96);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(196, 149, 106, 0.3);
+  border-radius: 999px;
+  box-shadow: 0 4px 20px rgba(26, 26, 26, 0.08), 0 1px 4px rgba(196, 149, 106, 0.06);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s var(--ease-out), transform 0.22s var(--ease-out), visibility 0.22s;
+  z-index: 1010;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1;
+}
+
+.waypoint-popover::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 254, 250, 0.96);
+  border-top: 1px solid rgba(196, 149, 106, 0.3);
+  border-right: 1px solid rgba(196, 149, 106, 0.3);
+}
+
+.waypoint-popover__tag {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--terracotta);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.waypoint-popover__divider {
+  color: rgba(196, 149, 106, 0.45);
+  font-size: 0.72rem;
+  user-select: none;
+}
+
+.waypoint-popover__text {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--charcoal);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Inline Popover (Attached to Section Headers) */
+.waypoint-popover--inline {
+  left: calc(100% + 12px);
+  right: auto;
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px);
+}
+
+.waypoint-popover--inline::after {
+  left: -5px;
+  right: auto;
+  top: 50%;
+  transform: translateY(-50%) rotate(-135deg);
+  border-top: 1px solid rgba(196, 149, 106, 0.3);
+  border-right: 1px solid rgba(196, 149, 106, 0.3);
+}
+
+.journey-waypoint:hover .waypoint-popover--inline,
+.journey-waypoint:focus-within .waypoint-popover--inline,
+.journey-waypoint.is-open .waypoint-popover--inline {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+}
+
+@media (max-width: 640px) {
+  .waypoint-popover--inline {
+    display: none;
+  }
+}
+
+/* ── Floating Journey Rail Navigation ─────────────── */
+.journey-rail {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+
+@media (max-width: 960px) {
+  .journey-rail {
+    display: none;
+  }
+}
+
+.journey-rail__track {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  bottom: 12px;
+  width: 1.5px;
+  background: rgba(196, 149, 106, 0.2);
+  transform: translateX(-50%);
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+.journey-rail__progress {
+  width: 100%;
+  height: 0%;
+  background: var(--terracotta);
+  border-radius: 999px;
+  transition: height 0.15s ease-out;
+}
+
+.journey-rail__dots {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.rail-node {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+}
+
+.rail-node__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1.5px solid rgba(196, 149, 106, 0.45);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.35s var(--ease-out);
+}
+
+.rail-node:hover .rail-node__dot,
+.rail-node:focus-visible .rail-node__dot,
+.rail-node.is-active .rail-node__dot {
+  transform: scale(1.4);
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+  box-shadow: 0 0 12px rgba(196, 149, 106, 0.5);
+}
+
+/* Floating Rail Popover Notch */
+.journey-rail .waypoint-popover {
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+}
+
+.journey-rail .waypoint-popover::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 254, 250, 0.96);
+  border-top: 1px solid rgba(196, 149, 106, 0.28);
+  border-right: 1px solid rgba(196, 149, 106, 0.28);
+}
+
+.rail-node:hover .waypoint-popover,
+.rail-node:focus-visible .waypoint-popover,
+.rail-node.is-open .waypoint-popover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* ── Legacy Journey Nodes Fallback ─────────────────── */
+.journey-nodes {
+  display: none;
 }
 
 /* ── Shared Typography ─────────────────────────────── */
@@ -578,7 +823,8 @@ body {
   position: relative;
   padding: var(--section-pad) var(--side-pad);
   z-index: 5;
-  background: var(--cream);
+  background: var(--sage);
+  border-top: 1px solid rgba(139, 158, 139, 0.22);
 }
 
 .about__header {
@@ -876,6 +1122,7 @@ body {
   padding: var(--section-pad) var(--side-pad);
   z-index: 5;
   background: var(--parchment);
+  border-top: 1px solid rgba(196, 149, 106, 0.16);
 }
 
 .experience__header {
@@ -1020,6 +1267,8 @@ body {
   position: relative;
   padding: var(--section-pad) var(--side-pad) calc(var(--section-pad) + 2rem);
   z-index: 5;
+  background: var(--warm-white);
+  border-top: 1px solid rgba(196, 149, 106, 0.14);
 }
 
 .skills__header {
@@ -1177,7 +1426,8 @@ body {
   position: relative;
   padding: var(--section-pad) var(--side-pad);
   z-index: 5;
-  background: var(--parchment);
+  background: var(--linen);
+  border-top: 1px solid rgba(196, 149, 106, 0.14);
 }
 
 .projects__header {
@@ -1283,6 +1533,8 @@ body {
   position: relative;
   padding: var(--section-pad) var(--side-pad);
   z-index: 5;
+  background: var(--sage-tint);
+  border-top: 1px solid rgba(139, 158, 139, 0.18);
 }
 
 .learning__header {
@@ -1356,6 +1608,8 @@ body {
   padding: var(--section-pad) var(--side-pad);
   padding-bottom: 4rem;
   z-index: 5;
+  background: var(--cream);
+  border-top: 1px solid rgba(196, 149, 106, 0.14);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -405,72 +405,200 @@
   function initJourneyLine() {
     const svg = document.querySelector('.journey-line');
     const path = document.querySelector('.thread-path');
-    const nodesContainer = document.querySelector('.journey-nodes');
-    if (!svg || !path || !nodesContainer) return;
+    const waypoints = Array.from(document.querySelectorAll('.journey-waypoint'));
+    if (!svg || !path) return;
 
-    const nodeElements = nodesContainer.querySelectorAll('.journey-node');
+    let pathLength = 0;
+    let waypointCoords = [];
 
     function calculatePath() {
-      const docHeight = document.documentElement.scrollHeight;
+      const docHeight = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight,
+        document.body.clientHeight, document.documentElement.clientHeight
+      );
       const docWidth = document.documentElement.clientWidth;
       const centerX = docWidth / 2;
-
-      // Create a gentle weaving path through the entire document
-      const points = [];
-      const segments = 30;
-      const segmentHeight = docHeight / segments;
-
-      for (let i = 0; i <= segments; i++) {
-        const y = i * segmentHeight;
-        const wave = Math.sin(i * 0.5) * (docWidth * 0.08);
-        const x = centerX + wave;
-        points.push({ x, y });
-      }
-
-      // Build SVG path
-      let d = `M${points[0].x},${points[0].y}`;
-      for (let i = 1; i < points.length; i++) {
-        const prev = points[i - 1];
-        const curr = points[i];
-        const cpY = (prev.y + curr.y) / 2;
-        d += ` Q${prev.x},${cpY} ${curr.x},${curr.y}`;
-      }
 
       svg.setAttribute('width', docWidth);
       svg.setAttribute('height', docHeight);
       svg.style.width = docWidth + 'px';
       svg.style.height = docHeight + 'px';
+
+      const points = [];
+
+      // Hero starting point (around cosmos center)
+      const hero = document.getElementById('hero');
+      const heroHeight = hero ? hero.offsetHeight : 600;
+      points.push({ x: centerX, y: Math.min(heroHeight * 0.35, 260) });
+
+      // Gather waypoints coordinates
+      waypointCoords = [];
+      waypoints.forEach((wp, idx) => {
+        const dot = wp.querySelector('.journey-waypoint__dot') || wp;
+        const rect = dot.getBoundingClientRect();
+        const y = rect.top + window.scrollY + rect.height / 2;
+        const x = rect.left + window.scrollX + rect.width / 2;
+
+        waypointCoords.push({ wp, y, x });
+
+        // Add an organic weave point between waypoints if distance is large
+        const prev = points[points.length - 1];
+        if (prev && (y - prev.y > 450)) {
+          const midY = (prev.y + y) / 2;
+          const weaveSign = (idx % 2 === 0) ? 1 : -1;
+          const amplitude = Math.min(docWidth * 0.12, 100);
+          const weaveX = centerX + (weaveSign * amplitude);
+          points.push({ x: weaveX, y: midY });
+        }
+
+        points.push({ x, y });
+      });
+
+      // Closing end point (bottom of closing compass)
+      const closing = document.getElementById('closing');
+      if (closing) {
+        const closingRect = closing.getBoundingClientRect();
+        const closingBottom = closingRect.top + window.scrollY + closingRect.height * 0.9;
+        points.push({ x: centerX, y: closingBottom });
+      }
+
+      // Fallback if not enough points
+      if (points.length < 2) {
+        const segments = 25;
+        const segH = docHeight / segments;
+        for (let i = 0; i <= segments; i++) {
+          const y = i * segH;
+          const wave = Math.sin(i * 0.5) * (docWidth * 0.08);
+          points.push({ x: centerX + wave, y });
+        }
+      }
+
+      // Build smooth SVG Bézier path
+      let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const cpX = (prev.x + curr.x) / 2;
+        const cpY = (prev.y + curr.y) / 2;
+        d += ` Q ${prev.x.toFixed(1)} ${prev.y.toFixed(1)}, ${cpX.toFixed(1)} ${cpY.toFixed(1)}`;
+      }
+      const last = points[points.length - 1];
+      d += ` T ${last.x.toFixed(1)} ${last.y.toFixed(1)}`;
+
       path.setAttribute('d', d);
 
-      const pathLength = path.getTotalLength();
+      pathLength = path.getTotalLength();
       path.style.strokeDasharray = pathLength;
       path.style.strokeDashoffset = pathLength;
-
-      // Position journey nodes along the path
-      const nodePositions = [0.08, 0.18, 0.32, 0.5, 0.7, 0.88];
-      nodeElements.forEach((node, i) => {
-        if (i < nodePositions.length) {
-          const point = path.getPointAtLength(pathLength * nodePositions[i]);
-          node.style.display = 'block';
-          node.style.left = (point.x - 5) + 'px';
-          node.style.top = (point.y - 5) + 'px';
-        }
-      });
 
       return pathLength;
     }
 
-    let pathLength = calculatePath();
+    calculatePath();
 
-    // Animate line on scroll
+    // ── Floating Rail Elements & Synchronization ──
+    const railProgress = document.querySelector('.journey-rail__progress');
+    const railNodes = Array.from(document.querySelectorAll('.rail-node'));
+    const allSections = ['hero', 'about', 'experience', 'skills', 'projects', 'learning', 'closing'].map(id => document.getElementById(id)).filter(Boolean);
+
+    // Animate line on scroll and sync waypoint & rail activation
     function animateLine() {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = scrollTop / docHeight;
+      const scrollPercent = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
 
       const drawLength = pathLength * scrollPercent;
-      path.style.strokeDashoffset = pathLength - drawLength;
+      path.style.strokeDashoffset = Math.max(pathLength - drawLength, 0);
+
+      // Update floating rail progress bar
+      if (railProgress) {
+        railProgress.style.height = (scrollPercent * 100).toFixed(1) + '%';
+      }
+
+      // Determine current tip Y in document coordinates
+      let tipY = scrollTop + window.innerHeight * 0.6;
+      if (path.getPointAtLength && drawLength > 0) {
+        try {
+          const tipPoint = path.getPointAtLength(drawLength);
+          if (tipPoint && tipPoint.y) tipY = tipPoint.y;
+        } catch (e) {
+          // fallback to viewport middle
+        }
+      }
+
+      // Activate in-section waypoints as line reaches them
+      waypointCoords.forEach(({ wp, y }) => {
+        if (tipY >= y - 60) {
+          wp.classList.add('is-reached');
+        } else {
+          wp.classList.remove('is-reached');
+        }
+      });
+
+      // Update active section on floating rail
+      let activeSectionId = 'hero';
+      const viewportMid = scrollTop + window.innerHeight * 0.45;
+
+      allSections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        if (viewportMid >= top && viewportMid < top + height) {
+          activeSectionId = section.id;
+        }
+      });
+
+      railNodes.forEach(node => {
+        if (node.getAttribute('data-section') === activeSectionId) {
+          node.classList.add('is-active');
+        } else {
+          node.classList.remove('is-active');
+        }
+      });
     }
+
+    // Interactive Waypoint Navigation & Popover Trigger
+    function setupNavEvents(element, getTargetId) {
+      function handleAction(e) {
+        const actionBtn = e.target.closest('.waypoint-popover__action');
+        const sectionId = getTargetId(element);
+        const target = document.getElementById(sectionId);
+
+        if (actionBtn || e.target.closest('.rail-node__dot') || element.classList.contains('rail-node')) {
+          e.preventDefault();
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          return;
+        }
+
+        // For in-section waypoints: toggle inline popover
+        if (element.classList.contains('journey-waypoint')) {
+          const wasOpen = element.classList.contains('is-open');
+          document.querySelectorAll('.journey-waypoint.is-open').forEach(w => w.classList.remove('is-open'));
+          if (!wasOpen) {
+            element.classList.add('is-open');
+          }
+        }
+      }
+
+      element.addEventListener('click', handleAction);
+      element.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleAction(e);
+        }
+      });
+    }
+
+    waypoints.forEach(wp => setupNavEvents(wp, el => el.getAttribute('data-section')));
+    railNodes.forEach(node => setupNavEvents(node, el => el.getAttribute('data-section')));
+
+    // Close open inline popovers on outside click
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.journey-waypoint')) {
+        document.querySelectorAll('.journey-waypoint.is-open').forEach(w => w.classList.remove('is-open'));
+      }
+    });
 
     window.addEventListener('scroll', animateLine, { passive: true });
 
@@ -478,12 +606,24 @@
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        pathLength = calculatePath();
+        calculatePath();
         animateLine();
       }, 200);
     });
 
-    animateLine();
+    // Ensure layout is measured after font loading / reflow
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        calculatePath();
+        animateLine();
+      });
+    }
+
+    // Initial render
+    requestAnimationFrame(() => {
+      calculatePath();
+      animateLine();
+    });
   }
 
   // ── Idle Star Pulse ───────────────────────────────
