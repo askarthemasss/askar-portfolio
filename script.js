@@ -410,6 +410,28 @@
 
     let pathLength = 0;
     let waypointCoords = [];
+    let yToLengthTable = [];
+    let currentDrawLength = 0;
+    let targetDrawLength = 0;
+    let rAFId = null;
+
+    function getLengthForY(targetY) {
+      if (!yToLengthTable.length) return 0;
+      if (targetY <= yToLengthTable[0].y) return 0;
+      const last = yToLengthTable[yToLengthTable.length - 1];
+      if (targetY >= last.y) return pathLength;
+
+      for (let i = 0; i < yToLengthTable.length - 1; i++) {
+        const p1 = yToLengthTable[i];
+        const p2 = yToLengthTable[i + 1];
+        if (targetY >= p1.y && targetY <= p2.y) {
+          const span = p2.y - p1.y;
+          const frac = span > 0 ? (targetY - p1.y) / span : 0;
+          return p1.len + frac * (p2.len - p1.len);
+        }
+      }
+      return pathLength;
+    }
 
     function calculatePath() {
       const docHeight = Math.max(
@@ -425,72 +447,128 @@
       svg.style.width = docWidth + 'px';
       svg.style.height = docHeight + 'px';
 
+      const bodyRect = document.body.getBoundingClientRect();
       const points = [];
 
-      // Hero starting point (around cosmos center)
+      // Hero starting point (around cosmos center, high up)
       const hero = document.getElementById('hero');
       const heroHeight = hero ? hero.offsetHeight : 600;
-      points.push({ x: centerX, y: Math.min(heroHeight * 0.35, 260) });
+      points.push({
+        x: centerX,
+        y: Math.min(heroHeight * 0.22, 170)
+      });
 
-      // Gather waypoints coordinates
+      // Gather waypoint coordinates (passing directly through each dot's exact center)
       waypointCoords = [];
-      waypoints.forEach((wp, idx) => {
+      waypoints.forEach((wp) => {
         const dot = wp.querySelector('.journey-waypoint__dot') || wp;
         const rect = dot.getBoundingClientRect();
-        const y = rect.top + window.scrollY + rect.height / 2;
-        const x = rect.left + window.scrollX + rect.width / 2;
+        // Calculate coordinate relative to document body (immune to scroll position)
+        const x = rect.left - bodyRect.left + rect.width / 2;
+        const y = rect.top - bodyRect.top + rect.height / 2;
 
-        waypointCoords.push({ wp, y, x });
-
-        // Add an organic weave point between waypoints if distance is large
-        const prev = points[points.length - 1];
-        if (prev && (y - prev.y > 450)) {
-          const midY = (prev.y + y) / 2;
-          const weaveSign = (idx % 2 === 0) ? 1 : -1;
-          const amplitude = Math.min(docWidth * 0.12, 100);
-          const weaveX = centerX + (weaveSign * amplitude);
-          points.push({ x: weaveX, y: midY });
-        }
-
+        waypointCoords.push({ wp, x, y, len: 0 });
         points.push({ x, y });
       });
 
-      // Closing end point (bottom of closing compass)
-      const closing = document.getElementById('closing');
-      if (closing) {
-        const closingRect = closing.getBoundingClientRect();
-        const closingBottom = closingRect.top + window.scrollY + closingRect.height * 0.9;
-        points.push({ x: centerX, y: closingBottom });
-      }
-
-      // Fallback if not enough points
-      if (points.length < 2) {
-        const segments = 25;
-        const segH = docHeight / segments;
-        for (let i = 0; i <= segments; i++) {
-          const y = i * segH;
-          const wave = Math.sin(i * 0.5) * (docWidth * 0.08);
-          points.push({ x: centerX + wave, y });
+      // Closing end point (bottom compass star center)
+      const closingCircle = document.querySelector('.closing__circle');
+      if (closingCircle) {
+        const circleRect = closingCircle.getBoundingClientRect();
+        points.push({
+          x: circleRect.left - bodyRect.left + circleRect.width / 2,
+          y: circleRect.top - bodyRect.top + circleRect.height / 2
+        });
+      } else {
+        const closing = document.getElementById('closing');
+        if (closing) {
+          const closingRect = closing.getBoundingClientRect();
+          points.push({
+            x: centerX,
+            y: closingRect.top - bodyRect.top + closingRect.height * 0.85
+          });
         }
       }
 
-      // Build smooth SVG Bézier path
-      let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
-      for (let i = 1; i < points.length; i++) {
-        const prev = points[i - 1];
-        const curr = points[i];
-        const cpX = (prev.x + curr.x) / 2;
-        const cpY = (prev.y + curr.y) / 2;
-        d += ` Q ${prev.x.toFixed(1)} ${prev.y.toFixed(1)}, ${cpX.toFixed(1)} ${cpY.toFixed(1)}`;
+      // Ensure points are ordered from top to bottom
+      points.sort((a, b) => a.y - b.y);
+
+      const n = points.length;
+      if (n < 2) return 0;
+
+      // Calculate smooth unit tangent vectors for every point (C1 continuity, no sharp corners)
+      const tangents = [];
+      for (let i = 0; i < n; i++) {
+        if (i === 0) {
+          const dx = points[1].x - points[0].x;
+          const dy = Math.max(points[1].y - points[0].y, 1);
+          const len = Math.hypot(dx, dy) || 1;
+          tangents.push({ x: dx / len, y: dy / len });
+        } else if (i === n - 1) {
+          const dx = points[n - 1].x - points[n - 2].x;
+          const dy = Math.max(points[n - 1].y - points[n - 2].y, 1);
+          const len = Math.hypot(dx, dy) || 1;
+          tangents.push({ x: dx / len, y: dy / len });
+        } else {
+          const prev = points[i - 1];
+          const curr = points[i];
+          const next = points[i + 1];
+
+          const d1x = curr.x - prev.x;
+          const d1y = Math.max(curr.y - prev.y, 0.1);
+          const len1 = Math.hypot(d1x, d1y) || 1;
+
+          const d2x = next.x - curr.x;
+          const d2y = Math.max(next.y - curr.y, 0.1);
+          const len2 = Math.hypot(d2x, d2y) || 1;
+
+          const tx = (d1x / len1) + (d2x / len2);
+          const ty = (d1y / len1) + (d2y / len2);
+          const tLen = Math.hypot(tx, ty) || 1;
+          tangents.push({ x: tx / tLen, y: ty / tLen });
+        }
       }
-      const last = points[points.length - 1];
-      d += ` T ${last.x.toFixed(1)} ${last.y.toFixed(1)}`;
+
+      // Build smooth cubic Bézier curve segments passing directly through every point
+      const tension = 0.30;
+      let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+
+      for (let i = 0; i < n - 1; i++) {
+        const p0 = points[i];
+        const p1 = points[i + 1];
+        const segLen = Math.hypot(p1.x - p0.x, p1.y - p0.y);
+        const handleLen = segLen * tension;
+
+        const cp1x = Math.max(16, Math.min(docWidth - 16, p0.x + tangents[i].x * handleLen));
+        const cp1y = p0.y + tangents[i].y * handleLen;
+
+        const cp2x = Math.max(16, Math.min(docWidth - 16, p1.x - tangents[i + 1].x * handleLen));
+        const cp2y = p1.y - tangents[i + 1].y * handleLen;
+
+        d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p1.x.toFixed(1)} ${p1.y.toFixed(1)}`;
+      }
 
       path.setAttribute('d', d);
 
       pathLength = path.getTotalLength();
-      path.style.strokeDasharray = pathLength;
-      path.style.strokeDashoffset = pathLength;
+
+      // Set strokeDasharray with a massive gap to mathematically guarantee
+      // that no second dash or ghost line can EVER wrap around or appear down the page
+      path.style.strokeDasharray = `${pathLength + 100} ${pathLength * 3 + 5000}`;
+
+      // Build a vertical lookup table to map document Y coordinate to exact path length
+      yToLengthTable = [];
+      const SAMPLES = 120;
+      for (let i = 0; i <= SAMPLES; i++) {
+        const len = (pathLength * i) / SAMPLES;
+        const pt = path.getPointAtLength(len);
+        yToLengthTable.push({ len, y: pt.y });
+      }
+
+      // Update exact path length for each waypoint
+      waypointCoords.forEach(item => {
+        item.len = getLengthForY(item.y);
+      });
 
       return pathLength;
     }
@@ -502,39 +580,56 @@
     const railNodes = Array.from(document.querySelectorAll('.rail-node'));
     const allSections = ['hero', 'about', 'experience', 'skills', 'projects', 'learning', 'closing'].map(id => document.getElementById(id)).filter(Boolean);
 
-    // Animate line on scroll and sync waypoint & rail activation
-    function animateLine() {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
+    // Frame renderer for buttery-smooth fluid interpolation during scroll up and down
+    function renderSmoothLine() {
+      const diff = targetDrawLength - currentDrawLength;
 
-      const drawLength = pathLength * scrollPercent;
-      path.style.strokeDashoffset = Math.max(pathLength - drawLength, 0);
-
-      // Update floating rail progress bar
-      if (railProgress) {
-        railProgress.style.height = (scrollPercent * 100).toFixed(1) + '%';
+      if (Math.abs(diff) < 0.2) {
+        currentDrawLength = targetDrawLength;
+        rAFId = null;
+      } else {
+        // 0.18 gives a silky, natural liquid ease-out with zero stutter
+        currentDrawLength += diff * 0.18;
+        rAFId = requestAnimationFrame(renderSmoothLine);
       }
 
-      // Determine current tip Y in document coordinates
-      let tipY = scrollTop + window.innerHeight * 0.6;
-      if (path.getPointAtLength && drawLength > 0) {
-        try {
-          const tipPoint = path.getPointAtLength(drawLength);
-          if (tipPoint && tipPoint.y) tipY = tipPoint.y;
-        } catch (e) {
-          // fallback to viewport middle
-        }
-      }
+      const offset = Math.max(pathLength - currentDrawLength, 0);
+      path.style.strokeDashoffset = offset.toFixed(1);
 
-      // Activate in-section waypoints as line reaches them
-      waypointCoords.forEach(({ wp, y }) => {
-        if (tipY >= y - 60) {
+      // Activate in-section waypoints as the line physically reaches them
+      waypointCoords.forEach(({ wp, len }) => {
+        if (currentDrawLength >= len - 15) {
           wp.classList.add('is-reached');
         } else {
           wp.classList.remove('is-reached');
         }
       });
+    }
+
+    // Animate line on scroll: active drawing tip stays at the middle of the viewport
+    function animateLine() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollFraction = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
+
+      // The tip of the line stays at the middle of the user's screen (0.50 of viewport height)
+      // As the user nears the end of the page (last 15%), smoothly complete into the closing compass star
+      let targetY = scrollTop + window.innerHeight * 0.50;
+
+      if (yToLengthTable.length > 0) {
+        const endY = yToLengthTable[yToLengthTable.length - 1].y;
+        if (scrollFraction > 0.85) {
+          const finishRatio = (scrollFraction - 0.85) / 0.15;
+          targetY = targetY * (1 - finishRatio) + endY * finishRatio;
+        }
+      }
+
+      targetDrawLength = getLengthForY(targetY);
+
+      // Update floating rail progress bar
+      if (railProgress) {
+        railProgress.style.height = (scrollFraction * 100).toFixed(1) + '%';
+      }
 
       // Update active section on floating rail
       let activeSectionId = 'hero';
@@ -555,48 +650,58 @@
           node.classList.remove('is-active');
         }
       });
+
+      if (!rAFId) {
+        rAFId = requestAnimationFrame(renderSmoothLine);
+      }
     }
 
-    // Interactive Waypoint Navigation & Popover Trigger
-    function setupNavEvents(element, getTargetId) {
-      function handleAction(e) {
-        const actionBtn = e.target.closest('.waypoint-popover__action');
-        const sectionId = getTargetId(element);
+    // Floating rail navigation (side dots navigate to sections)
+    railNodes.forEach(node => {
+      function handleRailAction(e) {
+        const sectionId = node.getAttribute('data-section');
         const target = document.getElementById(sectionId);
-
-        if (actionBtn || e.target.closest('.rail-node__dot') || element.classList.contains('rail-node')) {
+        if (target) {
           e.preventDefault();
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-          return;
-        }
-
-        // For in-section waypoints: toggle inline popover
-        if (element.classList.contains('journey-waypoint')) {
-          const wasOpen = element.classList.contains('is-open');
-          document.querySelectorAll('.journey-waypoint.is-open').forEach(w => w.classList.remove('is-open'));
-          if (!wasOpen) {
-            element.classList.add('is-open');
-          }
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
 
-      element.addEventListener('click', handleAction);
-      element.addEventListener('keydown', (e) => {
+      node.addEventListener('click', handleRailAction);
+      node.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
-          handleAction(e);
+          handleRailAction(e);
         }
       });
-    }
+    });
 
-    waypoints.forEach(wp => setupNavEvents(wp, el => el.getAttribute('data-section')));
-    railNodes.forEach(node => setupNavEvents(node, el => el.getAttribute('data-section')));
+    // In-page journey waypoint dots:
+    // MUST NOT scroll to start of section on click!
+    // Clicking/tapping toggles the cool hover message in-place without moving the viewport.
+    waypoints.forEach(wp => {
+      function toggleWaypointMessage(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const wasActive = wp.classList.contains('is-active');
+        // Dismiss other open waypoint messages
+        waypoints.forEach(other => other.classList.remove('is-active'));
+        if (!wasActive) {
+          wp.classList.add('is-active');
+        }
+      }
 
-    // Close open inline popovers on outside click
+      wp.addEventListener('click', toggleWaypointMessage);
+      wp.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          toggleWaypointMessage(e);
+        }
+      });
+    });
+
+    // Close any active in-page waypoint message when clicking anywhere else
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.journey-waypoint')) {
-        document.querySelectorAll('.journey-waypoint.is-open').forEach(w => w.classList.remove('is-open'));
+        waypoints.forEach(wp => wp.classList.remove('is-active'));
       }
     });
 
@@ -619,10 +724,13 @@
       });
     }
 
-    // Initial render
+    // Initial render: immediately draw down to the middle of the hero section
     requestAnimationFrame(() => {
       calculatePath();
       animateLine();
+      // Snap initial frame without transition delay
+      currentDrawLength = targetDrawLength;
+      path.style.strokeDashoffset = Math.max(pathLength - currentDrawLength, 0).toFixed(1);
     });
   }
 

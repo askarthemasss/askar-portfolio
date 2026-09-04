@@ -117,95 +117,135 @@ body {
 
 .thread-path {
   stroke: var(--gold);
-  stroke-width: 1px;
-  opacity: 0.16; /* Whisper-quiet, ambient watermark thread — never disturbs reading */
-  mix-blend-mode: multiply;
-  transition: stroke-dashoffset 0.08s linear;
+  stroke-width: 1.4px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.38; /* Crisp, lustrous gold — never muddy or clipped */
 }
 
 /* ── Journey Waypoint (Interactive Section Connectors) ── */
 .journey-waypoint {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  user-select: none;
-  text-decoration: none;
-  outline: none;
-  position: relative;
-  transition: transform 0.3s var(--ease-out);
-}
-
-.journey-waypoint:focus-visible {
-  outline: 2px solid var(--terracotta);
-  outline-offset: 4px;
-  border-radius: 999px;
-}
-
-.journey-waypoint__track {
-  position: relative;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-}
-
-.journey-waypoint__ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(196, 149, 106, 0.35);
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(4px);
-  transition: transform 0.4s var(--ease-out), border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  padding: 6px; /* Generous 20px hit target around the 8px dot */
+  margin-bottom: calc(0.75rem - 6px);
+  line-height: 1;
 }
 
 .journey-waypoint__dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--terracotta);
-  opacity: 0.6;
-  transition: transform 0.4s var(--ease-out), opacity 0.4s var(--ease-out), background-color 0.4s var(--ease-out);
-}
-
-.journey-waypoint__meta {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.92rem;
-  letter-spacing: 0.03em;
-  color: var(--terracotta);
-  opacity: 0.85;
-  transition: opacity 0.3s var(--ease-out), color 0.3s var(--ease-out);
-}
-
-/* Hover & Reached States */
-.journey-waypoint:hover,
-.journey-waypoint.is-reached {
-  transform: translateX(2px);
-}
-
-.journey-waypoint:hover .journey-waypoint__ring,
-.journey-waypoint.is-reached .journey-waypoint__ring {
-  transform: scale(1.3);
-  border-color: var(--terracotta);
-  box-shadow: 0 0 16px rgba(196, 149, 106, 0.4);
+  background: var(--gold);
+  opacity: 0.45;
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
+  pointer-events: none;
 }
 
 .journey-waypoint:hover .journey-waypoint__dot,
-.journey-waypoint.is-reached .journey-waypoint__dot {
+.journey-waypoint:focus-visible .journey-waypoint__dot,
+.journey-waypoint.is-active .journey-waypoint__dot {
+  transform: scale(1.5);
   opacity: 1;
-  transform: scale(1.4);
-  background: var(--gold);
+  background: var(--terracotta);
 }
 
-.journey-waypoint:hover .journey-waypoint__meta,
-.journey-waypoint.is-reached .journey-waypoint__meta {
-  opacity: 1;
+.journey-waypoint.is-reached .journey-waypoint__dot {
+  opacity: 0.75;
+}
+
+/* Positioning variants for organic traversal across the page */
+.journey-waypoint--left {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.journey-waypoint--center {
+  margin-left: clamp(80px, 25vw, 380px);
+  margin-right: auto;
+}
+
+.journey-waypoint--right {
+  margin-left: clamp(160px, 48vw, 680px);
+  margin-right: auto;
+}
+
+@media (min-width: 1400px) {
+  .journey-waypoint--center {
+    margin-left: 360px;
+  }
+  .journey-waypoint--right {
+    margin-left: 650px;
+  }
+}
+
+@media (max-width: 768px) {
+  .journey-waypoint--center {
+    margin-left: clamp(40px, 18vw, 120px);
+  }
+  .journey-waypoint--right {
+    margin-left: clamp(70px, 32vw, 220px);
+  }
+}
+
+@media (max-width: 480px) {
+  .journey-waypoint--left,
+  .journey-waypoint--center,
+  .journey-waypoint--right {
+    margin-left: 0;
+  }
+}
+
+/* Cool Hover Message: floating, light opacity, non-interrupting */
+.journey-waypoint__message {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  white-space: nowrap;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.84rem;
+  letter-spacing: 0.02em;
   color: var(--charcoal);
-  font-weight: 500;
+  background: rgba(247, 245, 240, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(196, 149, 106, 0.25);
+  border-radius: 999px;
+  padding: 0.32rem 0.85rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out), visibility 0.25s;
+  z-index: 100;
+}
+
+.journey-waypoint:hover .journey-waypoint__message,
+.journey-waypoint:focus-visible .journey-waypoint__message,
+.journey-waypoint.is-active .journey-waypoint__message {
+  opacity: 0.95;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* When waypoint is placed on right, open tooltip inward towards the left */
+.journey-waypoint--right .journey-waypoint__message {
+  left: auto;
+  right: calc(100% + 12px);
+  transform: translateY(-50%) translateX(4px);
+}
+
+.journey-waypoint--right:hover .journey-waypoint__message,
+.journey-waypoint--right:focus-visible .journey-waypoint__message,
+.journey-waypoint--right.is-active .journey-waypoint__message {
+  transform: translateY(-50%) translateX(0);
 }
 
 .journey-waypoint--hero {
@@ -216,95 +256,25 @@ body {
   margin-bottom: 2rem;
 }
 
-/* ── Section Data Popover One-Liner Pill ───────────── */
-.waypoint-popover {
-  position: absolute;
-  right: calc(100% + 14px);
-  top: 50%;
-  transform: translateY(-50%) translateX(8px);
-  padding: 0.38rem 0.85rem;
-  background: rgba(255, 254, 250, 0.96);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(196, 149, 106, 0.3);
-  border-radius: 999px;
-  box-shadow: 0 4px 20px rgba(26, 26, 26, 0.08), 0 1px 4px rgba(196, 149, 106, 0.06);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.22s var(--ease-out), transform 0.22s var(--ease-out), visibility 0.22s;
-  z-index: 1010;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  line-height: 1;
+@media (max-width: 600px) {
+  .journey-waypoint__message {
+    font-size: 0.76rem;
+    padding: 0.25rem 0.65rem;
+    max-width: 240px;
+    white-space: normal;
+  }
 }
 
-.waypoint-popover::after {
-  content: '';
-  position: absolute;
-  right: -5px;
-  top: 50%;
-  transform: translateY(-50%) rotate(45deg);
-  width: 8px;
-  height: 8px;
-  background: rgba(255, 254, 250, 0.96);
-  border-top: 1px solid rgba(196, 149, 106, 0.3);
-  border-right: 1px solid rgba(196, 149, 106, 0.3);
-}
-
-.waypoint-popover__tag {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.82rem;
-  color: var(--terracotta);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-.waypoint-popover__divider {
-  color: rgba(196, 149, 106, 0.45);
-  font-size: 0.72rem;
-  user-select: none;
-}
-
-.waypoint-popover__text {
-  font-family: var(--font-sans);
-  font-size: 0.76rem;
-  color: var(--charcoal);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
-
-/* Inline Popover (Attached to Section Headers) */
-.waypoint-popover--inline {
-  left: calc(100% + 12px);
-  right: auto;
-  top: 50%;
-  transform: translateY(-50%) translateX(-6px);
-}
-
-.waypoint-popover--inline::after {
-  left: -5px;
-  right: auto;
-  top: 50%;
-  transform: translateY(-50%) rotate(-135deg);
-  border-top: 1px solid rgba(196, 149, 106, 0.3);
-  border-right: 1px solid rgba(196, 149, 106, 0.3);
-}
-
-.journey-waypoint:hover .waypoint-popover--inline,
-.journey-waypoint:focus-within .waypoint-popover--inline,
-.journey-waypoint.is-open .waypoint-popover--inline {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(-50%) translateX(0);
-}
-
-@media (max-width: 640px) {
-  .waypoint-popover--inline {
-    display: none;
+@media (max-width: 480px) {
+  .journey-waypoint--right .journey-waypoint__message {
+    left: calc(100% + 10px);
+    right: auto;
+    transform: translateY(-50%) translateX(-4px);
+  }
+  .journey-waypoint--right:hover .journey-waypoint__message,
+  .journey-waypoint--right:focus-visible .journey-waypoint__message,
+  .journey-waypoint--right.is-active .journey-waypoint__message {
+    transform: translateY(-50%) translateX(0);
   }
 }
 
@@ -365,8 +335,8 @@ body {
 }
 
 .rail-node__dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--cream);
   border: 1.5px solid rgba(196, 149, 106, 0.45);
@@ -383,30 +353,59 @@ body {
   box-shadow: 0 0 12px rgba(196, 149, 106, 0.5);
 }
 
-/* Floating Rail Popover Notch */
-.journey-rail .waypoint-popover {
+/* Floating Rail Label (Light Opacity, Readable, No Clunky Tooltip Notches) */
+.rail-node__label {
+  position: absolute;
   right: calc(100% + 14px);
   top: 50%;
-  transform: translateY(-50%) translateX(10px);
+  transform: translateY(-50%) translateX(6px);
+  padding: 0.35rem 0.85rem;
+  background: rgba(247, 245, 240, 0.76);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(196, 149, 106, 0.22);
+  border-radius: 999px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out), visibility 0.25s;
+  z-index: 1010;
+  line-height: 1;
 }
 
-.journey-rail .waypoint-popover::after {
-  content: '';
-  position: absolute;
-  right: -6px;
-  top: 50%;
-  transform: translateY(-50%) rotate(45deg);
-  width: 10px;
-  height: 10px;
-  background: rgba(255, 254, 250, 0.96);
-  border-top: 1px solid rgba(196, 149, 106, 0.28);
-  border-right: 1px solid rgba(196, 149, 106, 0.28);
+.rail-node__tag {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--terracotta);
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 
-.rail-node:hover .waypoint-popover,
-.rail-node:focus-visible .waypoint-popover,
-.rail-node.is-open .waypoint-popover {
-  opacity: 1;
+.rail-node__divider {
+  color: rgba(196, 149, 106, 0.4);
+  font-size: 0.72rem;
+  user-select: none;
+}
+
+.rail-node__text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--charcoal);
+  opacity: 0.88;
+  letter-spacing: 0.02em;
+}
+
+.rail-node:hover .rail-node__label,
+.rail-node:focus-visible .rail-node__label,
+.rail-node.is-active:hover .rail-node__label {
+  opacity: 0.95;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(-50%) translateX(0);
