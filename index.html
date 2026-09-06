@@ -13,18 +13,26 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260906_compact_v5">
+  <link rel="stylesheet" href="style.css?v=20260906_perfect_exp_v9">
   <style id="learning-compact-layout">
+    /* ═══════════════════════════════════════════════════════
+       COMPACT LEARNING SECTION
+       ═══════════════════════════════════════════════════════ */
     #learning.learning {
-      padding: clamp(2.5rem, 5vh, 4rem) var(--side-pad, 2rem) !important;
+      padding: clamp(1.75rem, 3vh, 2.5rem) var(--side-pad, 2rem) !important;
     }
     #learning .learning__header {
-      margin: 0 auto 1.5rem !important;
+      margin: 0 auto 0.85rem !important;
+    }
+    #learning .learning__intro {
+      font-size: 0.84rem !important;
+      line-height: 1.45 !important;
+      margin-top: 0.25rem !important;
     }
     #learning .learning__split {
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
-      gap: 1.5rem !important;
+      gap: 1.25rem !important;
       align-items: start !important;
       max-width: var(--content-wide, 1100px) !important;
       margin: 0 auto !important;
@@ -37,17 +45,17 @@
     #learning .learning__col {
       display: flex !important;
       flex-direction: column !important;
-      gap: 0.75rem !important;
+      gap: 0.5rem !important;
     }
     #learning .learning__col-header {
-      padding-bottom: 0.4rem !important;
+      padding-bottom: 0.35rem !important;
       border-bottom: 1px solid rgba(196, 149, 106, 0.22) !important;
-      margin-bottom: 0.25rem !important;
+      margin-bottom: 0.2rem !important;
     }
     #learning .col-kicker {
       display: block;
       font-family: var(--font-sans);
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--terracotta, #C4956A);
@@ -56,18 +64,18 @@
     #learning .col-title {
       font-family: var(--font-serif);
       font-weight: 400;
-      font-size: 1.15rem;
+      font-size: 1.08rem;
       letter-spacing: 0.02em;
       color: var(--charcoal, #1A1A1A);
-      margin: 0.1rem 0 0 0;
+      margin: 0.05rem 0 0 0;
     }
     #learning .compact-card {
       display: flex !important;
       flex-direction: row !important;
       align-items: center !important;
-      gap: 0.85rem !important;
-      padding: 0.75rem 0.95rem !important;
-      background: rgba(255, 255, 255, 0.62) !important;
+      gap: 0.7rem !important;
+      padding: 0.55rem 0.8rem !important;
+      background: rgba(255, 255, 255, 0.65) !important;
       border: 1px solid rgba(196, 149, 106, 0.22) !important;
       border-radius: 8px !important;
       text-decoration: none !important;
@@ -78,27 +86,23 @@
       cursor: pointer !important;
     }
     #learning .compact-card:hover {
-      transform: translateX(3px) translateY(-1px) !important;
+      transform: translateX(2px) translateY(-1px) !important;
       border-color: var(--terracotta, #C4956A) !important;
       background: rgba(255, 255, 255, 0.95) !important;
-      box-shadow: 0 6px 18px rgba(196, 149, 106, 0.12) !important;
+      box-shadow: 0 4px 14px rgba(196, 149, 106, 0.12) !important;
     }
     #learning .compact-card__icon {
       flex-shrink: 0 !important;
-      width: 60px !important;
-      height: 60px !important;
+      width: 48px !important;
+      height: 48px !important;
       border-radius: 6px !important;
       background: rgba(247, 245, 240, 0.75) !important;
       border: 1px solid rgba(196, 149, 106, 0.18) !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      opacity: 0.85 !important;
-      transition: opacity 0.25s var(--ease-out, ease) !important;
+      opacity: 0.9 !important;
       overflow: hidden !important;
-    }
-    #learning .compact-card:hover .compact-card__icon {
-      opacity: 1 !important;
     }
     #learning .compact-svg {
       width: 100% !important;
@@ -109,12 +113,12 @@
       min-width: 0 !important;
       display: flex !important;
       flex-direction: column !important;
-      gap: 0.15rem !important;
+      gap: 0.1rem !important;
     }
     #learning .compact-card__meta {
       display: flex !important;
       align-items: center !important;
-      gap: 0.5rem !important;
+      gap: 0.45rem !important;
     }
     #learning .compact-card__tag {
       font-family: var(--font-sans);
@@ -129,107 +133,31 @@
       font-size: 0.58rem;
       color: var(--warm-grey, #8A8580);
       border-left: 1px solid rgba(196, 149, 106, 0.3);
-      padding-left: 0.5rem;
+      padding-left: 0.45rem;
     }
     #learning .compact-card__title {
       font-family: var(--font-serif);
       font-weight: 400;
-      font-size: 0.92rem;
-      line-height: 1.3;
+      font-size: 0.88rem;
+      line-height: 1.25;
       color: var(--charcoal, #1A1A1A);
       margin: 0;
     }
     #learning .compact-card__desc {
-      font-size: 0.74rem;
-      line-height: 1.45;
+      font-size: 0.72rem;
+      line-height: 1.4;
       color: var(--soft-black, #333);
-      opacity: 0.8;
-      margin: 0.1rem 0;
+      opacity: 0.85;
+      margin: 0.08rem 0;
     }
     #learning .compact-card__cta {
       display: inline-flex !important;
       align-items: center !important;
-      gap: 0.3rem !important;
-      font-size: 0.72rem !important;
+      gap: 0.25rem !important;
+      font-size: 0.7rem !important;
       font-weight: 500 !important;
       color: var(--terracotta, #C4956A) !important;
-      transition: transform 0.2s var(--ease-out, ease) !important;
-      align-self: flex-start !important;
-      margin-top: 0.1rem !important;
-    }
-    #learning .compact-card:hover .compact-card__cta {
-      transform: translateX(2px) !important;
-    }
-
-    /* Experience Section — Left Contents, Right Icons with aligned heights */
-    #experience .timeline__content {
-      display: grid !important;
-      grid-template-columns: 1fr !important;
-      gap: 1.5rem !important;
-      padding: 1.25rem 0 !important;
-      align-items: stretch !important;
-    }
-    @media (min-width: 820px) {
-      #experience .timeline__content {
-        grid-template-columns: 1.2fr 1fr !important;
-        gap: clamp(2rem, 3.5vw, 3.5rem) !important;
-        align-items: stretch !important;
-      }
-    }
-    #experience .timeline__body {
-      min-width: 0 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: center !important;
-    }
-    #experience .timeline__details p:last-child,
-    #experience .timeline__highlight {
-      margin-bottom: 0 !important;
-    }
-    #experience .timeline__illustration {
-      margin-top: 0 !important;
-      height: 100% !important;
-      min-height: 100% !important;
-      align-self: stretch !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      background: rgba(255, 255, 255, 0.65) !important;
-      border: 1px solid rgba(196, 149, 106, 0.25) !important;
-      border-radius: 14px !important;
-      padding: clamp(1rem, 2vw, 1.5rem) !important;
-      backdrop-filter: blur(12px) !important;
-      -webkit-backdrop-filter: blur(12px) !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
-      box-sizing: border-box !important;
-      overflow: hidden !important;
-      position: relative !important;
-      transition: opacity 0.4s var(--ease-out, ease),
-                  border-color 0.4s var(--ease-out, ease),
-                  box-shadow 0.4s var(--ease-out, ease),
-                  transform 0.4s var(--ease-out, ease) !important;
-    }
-    @media (max-width: 819px) {
-      #experience .timeline__illustration {
-        height: auto !important;
-        min-height: 280px !important;
-      }
-    }
-    #experience .timeline__node:hover .timeline__illustration {
-      opacity: 1 !important;
-      border-color: rgba(196, 149, 106, 0.5) !important;
-      transform: translateY(-2px) !important;
-      box-shadow: 0 12px 32px rgba(196, 149, 106, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
-    }
-    #experience .timeline__illustration svg {
-      width: 100% !important;
-      height: 100% !important;
-      max-height: 100% !important;
-      display: block !important;
-    }
-    #experience .timeline__node {
-      margin-bottom: clamp(2.5rem, 5vh, 4rem) !important;
+      margin-top: 0.08rem !important;
     }
   </style>
 </head>
@@ -718,198 +646,108 @@
       <!-- Node 1: Zappyworks -->
       <div class="timeline__node reveal-group" id="exp-zappyworks">
         <div class="timeline__marker" aria-hidden="true">
-          <svg viewBox="0 0 40 40" width="40" height="40">
-            <circle cx="20" cy="20" r="16" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="node-circle" />
-            <circle cx="20" cy="20" r="3" fill="#C4956A" opacity="0.5" />
+          <svg viewBox="0 0 36 36" width="36" height="36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="node-circle" />
+            <circle cx="18" cy="18" r="3" fill="#C4956A" opacity="0.6" />
           </svg>
         </div>
         <div class="timeline__content reveal-item">
           <div class="timeline__body">
             <div class="timeline__period">Sept 2021 — Apr 2023</div>
             <h3 class="timeline__company">Zappyworks</h3>
-            <p class="timeline__role">Intern (Sept 2021 — Dec 2021) → Member Technical Staff (Jan 2022 — Apr 2023)</p>
+            <p class="timeline__role">Intern → Member Technical Staff</p>
             <div class="timeline__details">
-              <p>Started as an Intern and transitioned into Member Technical Staff, building custom applications and
-                business logic across the Zoho ecosystem. Developed applications within Zoho Creator, constructed CRM lead
-                conversion pipelines, and integrated Zoho Books for procurement, purchase orders, returns, and financial
-                data flows.</p>
-              <p>Built DOM-heavy JavaScript interfaces, created and consumed REST APIs, and engineered robust solutions
-                for enterprise business workflows.</p>
+              <p>Constructed custom web applications and business logic across the Zoho ecosystem (Creator, CRM, Books). Built DOM-heavy JavaScript interfaces, constructed lead conversion pipelines, and automated financial workflows.</p>
+              <p>Engineered and consumed REST APIs to deliver unified procurement, purchase order, and ledger synchronization for enterprise clients.</p>
             </div>
           </div>
           <div class="timeline__illustration" aria-hidden="true">
-            <svg viewBox="0 0 340 300" class="timeline-svg" preserveAspectRatio="xMidYMid meet">
-              <defs>
-                <filter id="zappy-shadow" x="-12%" y="-12%" width="130%" height="135%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1A1817" flood-opacity="0.07" />
-                  <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#C4956A" flood-opacity="0.12" />
-                </filter>
-                <linearGradient id="card-surf" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#FFFFFF" />
-                  <stop offset="100%" stop-color="#F7F3EE" />
-                </linearGradient>
-                <linearGradient id="gold-badge" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#FCE7C8" />
-                  <stop offset="100%" stop-color="#C4956A" />
-                </linearGradient>
-                <linearGradient id="coin-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#FFF1D6" />
-                  <stop offset="50%" stop-color="#E5B869" />
-                  <stop offset="100%" stop-color="#A67332" />
-                </linearGradient>
-                <linearGradient id="coin-silver" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#FFFFFF" />
-                  <stop offset="50%" stop-color="#E2E0DD" />
-                  <stop offset="100%" stop-color="#9E9B97" />
-                </linearGradient>
-                <linearGradient id="funnel-grad-1" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#F2C7A2" />
-                  <stop offset="100%" stop-color="#C47A46" />
-                </linearGradient>
-                <linearGradient id="funnel-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#C47A46" />
-                  <stop offset="100%" stop-color="#96481E" />
-                </linearGradient>
-                <linearGradient id="chip-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#FFEAA7" />
-                  <stop offset="100%" stop-color="#DDA15E" />
-                </linearGradient>
-                <linearGradient id="chart-area" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#C4956A" stop-opacity="0.35" />
-                  <stop offset="100%" stop-color="#C4956A" stop-opacity="0" />
-                </linearGradient>
-              </defs>
+            <div class="exp-card">
+              <div class="exp-card__list">
+                <!-- Item 1: Zoho Creator -->
+                <div class="exp-item">
+                  <div class="exp-item__icon">
+                    <svg viewBox="0 0 28 28">
+                      <defs>
+                        <linearGradient id="zc-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#FF8A65" />
+                          <stop offset="100%" stop-color="#D84315" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="2" y="2" width="24" height="24" rx="3.5" fill="#FAF8F5" stroke="#D84315" stroke-width="0.8" />
+                      <rect x="2" y="2" width="24" height="6.5" rx="3.5" fill="url(#zc-g)" />
+                      <circle cx="5.5" cy="5.2" r="0.9" fill="#FFFFFF" />
+                      <circle cx="8.5" cy="5.2" r="0.9" fill="#FFFFFF" opacity="0.75" />
+                      <circle cx="11.5" cy="5.2" r="0.9" fill="#FFFFFF" opacity="0.75" />
+                      <rect x="5" y="11.5" width="11" height="2.2" rx="1" fill="#C4956A" />
+                      <rect x="5" y="15.5" width="18" height="1.8" rx="0.9" fill="rgba(26,26,26,0.18)" />
+                      <rect x="5" y="19" width="9" height="1.8" rx="0.9" fill="rgba(26,26,26,0.12)" />
+                      <rect x="17.5" y="10.5" width="5.5" height="4" rx="1" fill="#FFFFFF" stroke="#D84315" stroke-width="0.5" />
+                    </svg>
+                  </div>
+                  <div class="exp-item__text">
+                    <span class="exp-item__title">Zoho Creator</span>
+                    <span class="exp-item__desc">Custom Applications &amp; DOM Interfaces</span>
+                  </div>
+                </div>
 
-              <!-- ─── CARD 1: ZOHO CREATOR (Top Left) ─── -->
-              <g class="illu-group">
-                <rect x="14" y="14" width="146" height="98" rx="8" fill="url(#card-surf)" stroke="rgba(196,149,106,0.35)" stroke-width="0.8" filter="url(#zappy-shadow)" />
-                <rect x="14" y="14" width="146" height="22" rx="8" fill="rgba(196,149,106,0.06)" />
-                <circle cx="25" cy="25" r="2.5" fill="#FF5F56" />
-                <circle cx="32" cy="25" r="2.5" fill="#FFBD2E" />
-                <circle cx="39" cy="25" r="2.5" fill="#27C93F" />
-                <text x="50" y="28" fill="#C4956A" font-size="6.2" font-family="'Inter', sans-serif" font-weight="600" letter-spacing="0.06em">ZOHO CREATOR</text>
-                
-                <!-- 3D Floating App Canvas -->
-                <rect x="24" y="42" width="70" height="44" rx="4" fill="#FAF8F5" stroke="rgba(26,26,26,0.2)" stroke-width="0.6" filter="url(#zappy-shadow)" />
-                <rect x="24" y="42" width="70" height="10" rx="4" fill="url(#gold-badge)" opacity="0.9" />
-                <text x="30" y="49" fill="#FFFFFF" font-size="5" font-family="'Inter', sans-serif" font-weight="600">DOM Interface</text>
-                <rect x="28" y="56" width="62" height="4" rx="1" fill="rgba(196,149,106,0.18)" />
-                <rect x="28" y="63" width="46" height="4" rx="1" fill="rgba(26,26,26,0.08)" />
-                <rect x="28" y="70" width="54" height="4" rx="1" fill="rgba(26,26,26,0.08)" />
-                <rect x="68" y="77" width="22" height="6" rx="3" fill="#38A169" />
-                <text x="79" y="81.5" fill="#FFFFFF" font-size="4.2" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">ACTIVE</text>
+                <!-- Item 2: Zoho CRM -->
+                <div class="exp-item">
+                  <div class="exp-item__icon">
+                    <svg viewBox="0 0 28 28">
+                      <defs>
+                        <linearGradient id="crm-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#FBA058" />
+                          <stop offset="100%" stop-color="#E65100" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="2" y="2" width="24" height="24" rx="3.5" fill="#FAF8F5" stroke="#E65100" stroke-width="0.8" />
+                      <polygon points="5,5.5 23,5.5 16.5,15 16.5,22 13,20.5 13,15" fill="url(#crm-g)" stroke="#BF360C" stroke-width="0.5" />
+                      <ellipse cx="14" cy="5.5" rx="8" ry="1.8" fill="#FFE0B2" stroke="#BF360C" stroke-width="0.5" />
+                      <circle cx="14" cy="5.5" r="1.2" fill="#FFFFFF" />
+                      <circle cx="15" cy="21" r="1.4" fill="#22C55E" />
+                    </svg>
+                  </div>
+                  <div class="exp-item__text">
+                    <span class="exp-item__title">Zoho CRM</span>
+                    <span class="exp-item__desc">Lead Conversion &amp; Pipelines</span>
+                  </div>
+                </div>
 
-                <!-- 3D Database Cylinder Stack -->
-                <g transform="translate(102, 42)">
-                  <ellipse cx="24" cy="10" rx="15" ry="5.5" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" />
-                  <path d="M9,10 L9,22 Q24,28 39,22 L39,10" fill="url(#card-surf)" stroke="#C4956A" stroke-width="0.8" />
-                  <ellipse cx="24" cy="22" rx="15" ry="5.5" fill="none" stroke="#C4956A" stroke-width="0.8" stroke-dasharray="2,2" />
-                  <path d="M9,22 L9,34 Q24,40 39,34 L39,22" fill="url(#card-surf)" stroke="#C4956A" stroke-width="0.8" />
-                  <ellipse cx="24" cy="34" rx="15" ry="5.5" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" />
-                  <path d="M16,16 Q24,19 32,16" fill="none" stroke="#C4956A" stroke-width="0.7" />
-                  <path d="M16,28 Q24,31 32,28" fill="none" stroke="#C4956A" stroke-width="0.7" />
-                </g>
-                <text x="24" y="99" fill="#8A8580" font-size="5.2" font-family="'Inter', sans-serif">Enterprise Workflows · Custom JS</text>
-              </g>
+                <!-- Item 3: Zoho Books -->
+                <div class="exp-item">
+                  <div class="exp-item__icon">
+                    <svg viewBox="0 0 28 28">
+                      <defs>
+                        <linearGradient id="coin-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#FFF176" />
+                          <stop offset="50%" stop-color="#FBC02D" />
+                          <stop offset="100%" stop-color="#B78103" />
+                        </linearGradient>
+                        <linearGradient id="coin-silver" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#FFFFFF" />
+                          <stop offset="100%" stop-color="#CFD8DC" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="2" y="2" width="24" height="24" rx="3.5" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" />
+                      <ellipse cx="9.5" cy="15.5" rx="6.2" ry="6.2" fill="url(#coin-silver)" stroke="#90A4AE" stroke-width="0.5" />
+                      <text x="9.5" y="17.8" fill="#455A64" font-size="5.5" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">$</text>
+                      <ellipse cx="16.5" cy="12" rx="6.8" ry="6.8" fill="url(#coin-gold)" stroke="#8F6228" stroke-width="0.5" />
+                      <text x="16.5" y="14.5" fill="#4E342E" font-size="6" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">₹</text>
+                    </svg>
+                  </div>
+                  <div class="exp-item__text">
+                    <span class="exp-item__title">Zoho Books</span>
+                    <span class="exp-item__desc">Multi-Currency &amp; Procurement Sync</span>
+                  </div>
+                </div>
+              </div>
 
-              <!-- ─── CARD 2: ZOHO CRM (Top Right) ─── -->
-              <g class="illu-group">
-                <rect x="180" y="14" width="146" height="98" rx="8" fill="url(#card-surf)" stroke="rgba(196,149,106,0.35)" stroke-width="0.8" filter="url(#zappy-shadow)" />
-                <rect x="180" y="14" width="146" height="22" rx="8" fill="rgba(196,149,106,0.06)" />
-                <rect x="190" y="21" width="7" height="7" rx="2" fill="#C4956A" />
-                <text x="203" y="28" fill="#C4956A" font-size="6.2" font-family="'Inter', sans-serif" font-weight="600" letter-spacing="0.06em">ZOHO CRM</text>
-                <rect x="272" y="20" width="44" height="10" rx="3" fill="rgba(196,149,106,0.15)" />
-                <text x="294" y="27" fill="#C4956A" font-size="4.5" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">LEAD PIPELINE</text>
-
-                <!-- 3D Dimensional Funnel -->
-                <g transform="translate(195, 38)">
-                  <ellipse cx="40" cy="8" rx="36" ry="8" fill="url(#funnel-grad-1)" stroke="#96481E" stroke-width="0.5" />
-                  <ellipse cx="40" cy="8" rx="30" ry="5.5" fill="#7A3614" opacity="0.4" />
-
-                  <!-- Floating Lead Spheres entering funnel -->
-                  <circle cx="24" cy="4" r="4.5" fill="url(#coin-gold)" filter="url(#zappy-shadow)" />
-                  <circle cx="42" cy="-1" r="3.5" fill="url(#coin-gold)" filter="url(#zappy-shadow)" />
-                  <circle cx="56" cy="5" r="4" fill="url(#coin-gold)" filter="url(#zappy-shadow)" />
-
-                  <path d="M5,9 L24,30 Q40,35 56,30 L75,9 Q40,18 5,9 Z" fill="url(#funnel-grad-1)" stroke="#96481E" stroke-width="0.4" />
-                  <path d="M24,30 L32,46 Q40,48 48,46 L56,30 Q40,35 24,30 Z" fill="url(#funnel-grad-2)" stroke="#7A3614" stroke-width="0.4" />
-                  <rect x="35" y="46" width="10" height="8" rx="2" fill="#96481E" />
-
-                  <!-- Output Converted Token -->
-                  <circle cx="40" cy="60" r="6" fill="url(#coin-gold)" filter="url(#zappy-shadow)" />
-                  <text x="40" y="62.5" fill="#FFFFFF" font-size="6" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">✓</text>
-                </g>
-                <text x="286" y="88" fill="#1A1A1A" font-size="6.5" font-family="'Inter', sans-serif" font-weight="600" text-anchor="end">98.4%</text>
-                <text x="286" y="98" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="end">Conversion Velocity</text>
-              </g>
-
-              <!-- ─── CENTRAL SYNC BRIDGE ─── -->
-              <path d="M87,112 L87,130 Q87,142 125,142 L145,142" fill="none" stroke="#C4956A" stroke-width="0.9" stroke-dasharray="3,2" />
-              <path d="M253,112 L253,130 Q253,142 215,142 L195,142" fill="none" stroke="#C4956A" stroke-width="0.9" stroke-dasharray="3,2" />
-
-              <g transform="translate(170, 142)">
-                <circle cx="0" cy="0" r="20" fill="url(#card-surf)" stroke="#C4956A" stroke-width="1" filter="url(#zappy-shadow)" />
-                <circle cx="0" cy="0" r="14" fill="none" stroke="#C4956A" stroke-width="0.6" stroke-dasharray="2,2" />
-                <circle cx="0" cy="0" r="8" fill="url(#gold-badge)" />
-                <path d="M-4,-3 Q0,-6 4,-3 Q2,0 0,0" fill="none" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" />
-                <path d="M4,3 Q0,6 -4,3 Q-2,0 0,0" fill="none" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" />
-              </g>
-
-              <path d="M170,162 L170,178" fill="none" stroke="#C4956A" stroke-width="1" />
-              <polygon points="170,181 167,175 173,175" fill="#C4956A" />
-
-              <!-- ─── CARD 3: ZOHO BOOKS · FINANCIAL ENGINE (Bottom) ─── -->
-              <g class="illu-group">
-                <rect x="14" y="182" width="312" height="104" rx="9" fill="url(#card-surf)" stroke="rgba(196,149,106,0.45)" stroke-width="0.9" filter="url(#zappy-shadow)" />
-                <rect x="14" y="182" width="312" height="22" rx="9" fill="rgba(196,149,106,0.06)" />
-                <rect x="25" y="190" width="6" height="6" rx="1.5" fill="#C4956A" />
-                <text x="37" y="196" fill="#C4956A" font-size="6.5" font-family="'Inter', sans-serif" font-weight="600" letter-spacing="0.06em">ZOHO BOOKS · FINANCIAL ENGINE</text>
-                <circle cx="285" cy="193" r="2.5" fill="#38A169" />
-                <text x="292" y="195.5" fill="#38A169" font-size="5" font-family="'Inter', sans-serif" font-weight="600">REALTIME</text>
-
-                <!-- Left: 3D Currency Coins Stack -->
-                <g transform="translate(25, 212)">
-                  <g transform="translate(0, 8)">
-                    <ellipse cx="15" cy="17" rx="13" ry="13" fill="url(#coin-silver)" stroke="#7E7B77" stroke-width="0.6" filter="url(#zappy-shadow)" />
-                    <ellipse cx="15" cy="17" rx="10" ry="10" fill="url(#coin-silver)" stroke="#9E9B97" stroke-width="0.4" />
-                    <text x="15" y="20" fill="#42403D" font-size="8" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">€</text>
-                  </g>
-                  <g transform="translate(18, 0)">
-                    <ellipse cx="16" cy="17" rx="14" ry="14" fill="url(#coin-gold)" stroke="#8F6228" stroke-width="0.6" filter="url(#zappy-shadow)" />
-                    <ellipse cx="16" cy="17" rx="11" ry="11" fill="url(#coin-gold)" stroke="#B8863A" stroke-width="0.4" />
-                    <text x="16" y="20.5" fill="#5A3B12" font-size="9" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">$</text>
-                  </g>
-                  <g transform="translate(38, 8)">
-                    <ellipse cx="15" cy="17" rx="13" ry="13" fill="url(#coin-gold)" stroke="#8F6228" stroke-width="0.6" filter="url(#zappy-shadow)" />
-                    <ellipse cx="15" cy="17" rx="10" ry="10" fill="url(#coin-gold)" stroke="#B8863A" stroke-width="0.4" />
-                    <text x="15" y="20" fill="#5A3B12" font-size="8" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">₹</text>
-                  </g>
-                  <text x="34" y="49" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="middle">Multi-Currency Pipeline</text>
-                </g>
-
-                <line x1="115" y1="214" x2="115" y2="274" stroke="rgba(196,149,106,0.3)" stroke-width="0.6" stroke-dasharray="2,2" />
-
-                <!-- Right: Procurement & Ledger Cards Flow -->
-                <g transform="translate(126, 214)">
-                  <rect x="0" y="2" width="24" height="19" rx="3" fill="url(#chip-gold)" stroke="#A8732E" stroke-width="0.6" filter="url(#zappy-shadow)" />
-                  <line x1="0" y1="11" x2="24" y2="11" stroke="#8A5E24" stroke-width="0.5" />
-                  <line x1="8" y1="2" x2="8" y2="11" stroke="#8A5E24" stroke-width="0.5" />
-                  <line x1="16" y1="2" x2="16" y2="11" stroke="#8A5E24" stroke-width="0.5" />
-                  <line x1="12" y1="11" x2="12" y2="21" stroke="#8A5E24" stroke-width="0.5" />
-
-                  <text x="32" y="10" fill="#1A1A1A" font-size="6.8" font-family="'Inter', sans-serif" font-weight="600">Procurement &amp; Orders</text>
-                  <text x="32" y="20" fill="#8A8580" font-size="5.4" font-family="'Inter', sans-serif">Automated ledger sync · Returns &amp; Payables</text>
-
-                  <g transform="translate(0, 30)">
-                    <path d="M0,18 Q30,4 65,14 T130,6 T185,12 L185,24 L0,24 Z" fill="url(#chart-area)" />
-                    <path d="M0,18 Q30,4 65,14 T130,6 T185,12" fill="none" stroke="#C4956A" stroke-width="1.2" />
-                    <circle cx="65" cy="14" r="2.5" fill="#FFFFFF" stroke="#C4956A" stroke-width="1" />
-                    <circle cx="130" cy="6" r="2.5" fill="#FFFFFF" stroke="#C4956A" stroke-width="1" />
-                    <circle cx="185" cy="12" r="3" fill="#38A169" stroke="#FFFFFF" stroke-width="1" />
-                  </g>
-                </g>
-              </g>
-            </svg>
+              <div class="exp-card__footer">
+                <span class="exp-card__dot"></span>
+                <span>Unified REST APIs · Automated Ledger Flow</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -917,10 +755,9 @@
       <!-- Node 2: Agilysys -->
       <div class="timeline__node reveal-group" id="exp-agilysys">
         <div class="timeline__marker" aria-hidden="true">
-          <svg viewBox="0 0 40 40" width="40" height="40">
-            <circle cx="20" cy="20" r="16" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="node-circle" />
-            <circle cx="20" cy="20" r="3" fill="#C4956A" opacity="0.7" />
-            <circle cx="20" cy="20" r="8" fill="none" stroke="#C4956A" stroke-width="0.3" opacity="0.4" />
+          <svg viewBox="0 0 36 36" width="36" height="36">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#1A1A1A" stroke-width="0.8" class="node-circle" />
+            <circle cx="18" cy="18" r="3" fill="#C4956A" opacity="0.6" />
           </svg>
         </div>
         <div class="timeline__content reveal-item">
@@ -929,230 +766,124 @@
             <h3 class="timeline__company">Agilysys</h3>
             <p class="timeline__role">Software Analyst</p>
             <div class="timeline__details">
-              <p>Architecting and scaling enterprise frontend systems for international hospitality operations, ensuring
-                high availability across multi-property environments.</p>
-              <p>Led large-scale AngularJS to modern Angular migration initiatives, authored comprehensive test suites using
-                Jest, enforced strict architectural standards, and integrated modern AI tooling (Copilot, Model Context
-                Protocol) into the frontend engineering workflow.</p>
-              <p class="timeline__highlight">Received the <em>Super Squad Award</em> at Agilysys for cross-functional
-                collaboration, technical execution, and delivering critical interface milestones.</p>
+              <p>Architecting enterprise frontend systems for international hospitality operations across multi-property environments. Spearheaded migration from legacy AngularJS to modern Angular (v17+), authoring comprehensive Jest test suites and strict type contracts.</p>
+              <p>Integrated modern AI tooling (Copilot, Model Context Protocol) into frontend workflows to accelerate interface delivery.</p>
+            </div>
+            <div class="exp-award-pill">
+              <span class="exp-award-star">★</span>
+              <span><strong>Super Squad Award</strong> · Cross-functional delivery &amp; milestones</span>
             </div>
           </div>
           <div class="timeline__illustration" aria-hidden="true">
-            <svg viewBox="0 0 340 320" class="timeline-svg" preserveAspectRatio="xMidYMid meet">
-              <defs>
-                <filter id="agi-shadow" x="-12%" y="-12%" width="130%" height="135%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1A1817" flood-opacity="0.07" />
-                  <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#C4956A" flood-opacity="0.12" />
-                </filter>
-                <filter id="shield-shadow" x="-25%" y="-25%" width="150%" height="150%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#9C3012" flood-opacity="0.28" />
-                </filter>
-                <filter id="sparkle-glow" x="-30%" y="-30%" width="160%" height="160%">
-                  <feGaussianBlur stdDeviation="2" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-                <linearGradient id="agi-surf" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#FFFFFF" />
-                  <stop offset="100%" stop-color="#F7F3EE" />
-                </linearGradient>
-                <linearGradient id="shield-left-face" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#FF7D54" />
-                  <stop offset="100%" stop-color="#C8441E" />
-                </linearGradient>
-                <linearGradient id="shield-right-face" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#A32E10" />
-                  <stop offset="100%" stop-color="#6B1C08" />
-                </linearGradient>
-                <linearGradient id="ts-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#3B82F6" />
-                  <stop offset="100%" stop-color="#1D4ED8" />
-                </linearGradient>
-                <linearGradient id="jest-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#10B981" />
-                  <stop offset="100%" stop-color="#047857" />
-                </linearGradient>
-                <linearGradient id="copilot-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#FFE5A3" />
-                  <stop offset="50%" stop-color="#F6A85B" />
-                  <stop offset="100%" stop-color="#D9531E" />
-                </linearGradient>
-                <linearGradient id="mcp-core-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#FDE68A" />
-                  <stop offset="100%" stop-color="#D97706" />
-                </linearGradient>
-                <linearGradient id="mcp-blue-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#93C5FD" />
-                  <stop offset="100%" stop-color="#2563EB" />
-                </linearGradient>
-                <linearGradient id="mcp-green-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#86EFAC" />
-                  <stop offset="100%" stop-color="#059669" />
-                </linearGradient>
-                <linearGradient id="iso-top" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#FFFFFF" />
-                  <stop offset="100%" stop-color="#EBE5DE" />
-                </linearGradient>
-              </defs>
+            <div class="exp-card">
+              <div class="exp-card__list">
+                <!-- Item 1: Hospitality Core -->
+                <div class="exp-item">
+                  <div class="exp-item__icon">
+                    <svg viewBox="0 0 28 28">
+                      <defs>
+                        <linearGradient id="iso-top" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#FAF8F5" />
+                          <stop offset="100%" stop-color="#E6DFD5" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="2" y="2" width="24" height="24" rx="3.5" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" />
+                      <polygon points="14,5 21,9 14,13 7,9" fill="url(#iso-top)" stroke="#C4956A" stroke-width="0.6" />
+                      <polygon points="7,9 14,13 14,20 7,16" fill="#D9CFC4" stroke="#C4956A" stroke-width="0.6" />
+                      <polygon points="14,13 21,9 21,16 14,20" fill="#BCAEA0" stroke="#C4956A" stroke-width="0.6" />
+                      <circle cx="9.5" cy="13" r="0.9" fill="#22C55E" />
+                      <circle cx="9.5" cy="15.5" r="0.9" fill="#22C55E" />
+                      <circle cx="18.5" cy="13" r="0.9" fill="#22C55E" />
+                      <circle cx="18.5" cy="15.5" r="0.9" fill="#EAB308" />
+                    </svg>
+                  </div>
+                  <div class="exp-item__text">
+                    <span class="exp-item__title">Hospitality Core · PMS</span>
+                    <span class="exp-item__desc">Multi-Property Enterprise Systems · 99.99% Uptime</span>
+                  </div>
+                </div>
 
-              <!-- ─── ROW 1: HOSPITALITY CORE & ANGULAR ─── -->
-              <g class="illu-group">
-                <rect x="14" y="12" width="146" height="94" rx="8" fill="url(#agi-surf)" stroke="rgba(196,149,106,0.35)" stroke-width="0.8" filter="url(#agi-shadow)" />
-                <rect x="14" y="12" width="146" height="20" rx="8" fill="rgba(196,149,106,0.06)" />
-                <circle cx="24" cy="22" r="2.5" fill="#C4956A" />
-                <text x="33" y="25" fill="#C4956A" font-size="6" font-family="'Inter', sans-serif" font-weight="600" letter-spacing="0.05em">HOSPITALITY CORE</text>
+                <!-- Item 2: Modern Angular -->
+                <div class="exp-item">
+                  <div class="exp-item__icon">
+                    <svg viewBox="0 0 28 28">
+                      <defs>
+                        <linearGradient id="sh-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#FF6D43" />
+                          <stop offset="100%" stop-color="#E53935" />
+                        </linearGradient>
+                        <linearGradient id="sh-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#D32F2F" />
+                          <stop offset="100%" stop-color="#B71C1C" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="2" y="2" width="24" height="24" rx="3.5" fill="#FAF8F5" stroke="#C8441E" stroke-width="0.8" />
+                      <path d="M14,4.2 L6.5,7.2 L7.8,16.5 L14,21 L20.2,16.5 L21.5,7.2 Z" fill="none" stroke="#C8441E" stroke-width="0.5" />
+                      <path d="M14,4.6 L7.4,7.6 L8.6,16.2 L14,20.2 Z" fill="url(#sh-left)" />
+                      <path d="M14,4.6 L20.6,7.6 L19.4,16.2 L14,20.2 Z" fill="url(#sh-right)" />
+                      <path d="M14,7.5 L10.8,17 L12.3,17 L13,14.8 L15,14.8 L15.7,17 L17.2,17 Z M14,10.2 L13.4,13 L14.6,13 Z" fill="#FFFFFF" />
+                    </svg>
+                  </div>
+                  <div class="exp-item__text">
+                    <span class="exp-item__title">Modern Angular</span>
+                    <span class="exp-item__desc">Angular 17+ Signals · Enterprise Platform Modernization</span>
+                  </div>
+                </div>
 
-                <!-- 3D Isometric PMS Rack / Building Structure -->
-                <g transform="translate(25, 38)">
-                  <polygon points="26,4 46,-6 66,4 46,14" fill="url(#iso-top)" stroke="#C4956A" stroke-width="0.7" />
-                  <polygon points="26,4 46,14 46,38 26,28" fill="#D9CFC4" stroke="#C4956A" stroke-width="0.7" />
-                  <polygon points="46,14 66,4 66,28 46,38" fill="#C2B3A3" stroke="#C4956A" stroke-width="0.7" />
-                  
-                  <!-- Rack LED Matrix -->
-                  <circle cx="32" cy="15" r="1.2" fill="#22C55E" />
-                  <circle cx="37" cy="17.5" r="1.2" fill="#22C55E" />
-                  <circle cx="42" cy="20" r="1.2" fill="#EAB308" />
-                  <circle cx="32" cy="21" r="1.2" fill="#22C55E" />
-                  <circle cx="37" cy="23.5" r="1.2" fill="#C4956A" />
-                  <circle cx="42" cy="26" r="1.2" fill="#22C55E" />
+                <!-- Item 3: TypeScript & Jest -->
+                <div class="exp-item">
+                  <div class="exp-item__icon">
+                    <svg viewBox="0 0 28 28">
+                      <defs>
+                        <linearGradient id="ts-b" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#3B82F6" />
+                          <stop offset="100%" stop-color="#1D4ED8" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="2" y="2" width="24" height="24" rx="3.5" fill="#FAF8F5" stroke="#3B82F6" stroke-width="0.8" />
+                      <rect x="4" y="5" width="20" height="15" rx="2.5" fill="url(#ts-b)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5" />
+                      <text x="11" y="16" fill="#FFFFFF" font-size="8.5" font-family="'Inter', sans-serif" font-weight="800" text-anchor="middle">TS</text>
+                      <circle cx="19.5" cy="6.5" r="3.8" fill="#10B981" stroke="#FAF8F5" stroke-width="0.8" />
+                      <path d="M18,6.5 L19.2,7.7 L21.3,5.2" stroke="#FFFFFF" stroke-width="0.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </div>
+                  <div class="exp-item__text">
+                    <span class="exp-item__title">TypeScript &amp; Jest</span>
+                    <span class="exp-item__desc">Strict Architectural Typing · Automated Test Suites</span>
+                  </div>
+                </div>
 
-                  <circle cx="50" cy="20" r="1.2" fill="#22C55E" />
-                  <circle cx="55" cy="17.5" r="1.2" fill="#22C55E" />
-                  <circle cx="60" cy="15" r="1.2" fill="#22C55E" />
-                  <circle cx="50" cy="26" r="1.2" fill="#22C55E" />
-                  <circle cx="55" cy="23.5" r="1.2" fill="#EAB308" />
-                  <circle cx="60" cy="21" r="1.2" fill="#22C55E" />
+                <!-- Item 4: AI Copilot & MCP -->
+                <div class="exp-item">
+                  <div class="exp-item__icon">
+                    <svg viewBox="0 0 28 28">
+                      <defs>
+                        <linearGradient id="star-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#FFE082" />
+                          <stop offset="50%" stop-color="#FFA726" />
+                          <stop offset="100%" stop-color="#E65100" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="2" y="2" width="24" height="24" rx="3.5" fill="#FAF8F5" stroke="#E65100" stroke-width="0.8" />
+                      <ellipse cx="14" cy="14" rx="9" ry="3" fill="none" stroke="#C4956A" stroke-width="0.5" stroke-dasharray="2,1" transform="rotate(-20 14 14)" />
+                      <circle cx="6.5" cy="11" r="1" fill="#C4956A" />
+                      <circle cx="21.5" cy="17" r="1" fill="#C4956A" />
+                      <path d="M14,4.5 Q15.5,10.5 21,14 Q15.5,17.5 14,23.5 Q12.5,17.5 7,14 Q12.5,10.5 14,4.5 Z" fill="url(#star-g)" />
+                      <circle cx="14" cy="14" r="1.5" fill="#FFFFFF" />
+                    </svg>
+                  </div>
+                  <div class="exp-item__text">
+                    <span class="exp-item__title">AI Copilot &amp; MCP</span>
+                    <span class="exp-item__desc">Model Context Protocol · Agentic Velocity</span>
+                  </div>
+                </div>
+              </div>
 
-                  <!-- Wireless High-Availability Arcs -->
-                  <path d="M58,-8 A10,10 0 0,1 68,0" fill="none" stroke="#C4956A" stroke-width="0.7" stroke-linecap="round" />
-                  <path d="M62,-12 A16,16 0 0,1 76,-2" fill="none" stroke="#C4956A" stroke-width="0.7" stroke-linecap="round" opacity="0.7" />
-                </g>
-
-                <text x="86" y="58" fill="#1A1A1A" font-size="6.8" font-family="'Inter', sans-serif" font-weight="600">Enterprise PMS</text>
-                <text x="86" y="69" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif">Multi-Property</text>
-                <rect x="86" y="75" width="58" height="12" rx="3" fill="rgba(196,149,106,0.12)" />
-                <text x="115" y="83.5" fill="#C4956A" font-size="5" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">99.99% UPTIME</text>
-              </g>
-
-              <!-- Card 2: Angular Platform Modernization -->
-              <g class="illu-group">
-                <rect x="180" y="12" width="146" height="94" rx="8" fill="url(#agi-surf)" stroke="rgba(196,149,106,0.35)" stroke-width="0.8" filter="url(#agi-shadow)" />
-                <rect x="180" y="12" width="146" height="20" rx="8" fill="rgba(196,149,106,0.06)" />
-                <rect x="190" y="18" width="8" height="8" rx="2" fill="#C4956A" />
-                <text x="203" y="25" fill="#C4956A" font-size="6" font-family="'Inter', sans-serif" font-weight="600" letter-spacing="0.05em">ANGULAR PLATFORM</text>
-
-                <!-- 3D Faceted Angular Shield -->
-                <g transform="translate(196, 40)" filter="url(#shield-shadow)">
-                  <path d="M24,2 L3,9 L6,36 L24,47 Z" fill="url(#shield-left-face)" />
-                  <path d="M24,2 L45,9 L42,36 L24,47 Z" fill="url(#shield-right-face)" />
-                  <path d="M3,9 L24,2 L45,9" fill="none" stroke="#FFA585" stroke-width="0.8" />
-                  <path d="M24,10 L15,31 L19.5,31 L21.5,26 L26.5,26 L28.5,31 L33,31 Z M24,17 L22.5,22.5 L25.5,22.5 Z" fill="#FFFFFF" />
-                </g>
-
-                <text x="252" y="56" fill="#1A1A1A" font-size="6.8" font-family="'Inter', sans-serif" font-weight="600">Modernization</text>
-                <text x="252" y="67" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif">Signals Architecture</text>
-                <rect x="252" y="74" width="62" height="12" rx="3" fill="rgba(200,68,30,0.12)" />
-                <text x="283" y="82.5" fill="#C8441E" font-size="5" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">ANGULAR 17+ CORE</text>
-              </g>
-
-              <!-- ─── ROW 2: TYPESCRIPT & JEST TEST AUTOMATION ─── -->
-              <g class="illu-group">
-                <rect x="14" y="116" width="312" height="56" rx="8" fill="url(#agi-surf)" stroke="rgba(196,149,106,0.35)" stroke-width="0.8" filter="url(#agi-shadow)" />
-                <!-- Left: 3D TypeScript Cube -->
-                <g transform="translate(26, 124)">
-                  <rect x="0" y="2" width="36" height="36" rx="5" fill="url(#ts-grad)" filter="url(#agi-shadow)" />
-                  <rect x="0" y="2" width="36" height="36" rx="5" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" />
-                  <text x="18" y="26" fill="#FFFFFF" font-size="16" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">TS</text>
-                </g>
-
-                <g transform="translate(74, 134)">
-                  <text x="0" y="5" fill="#1A1A1A" font-size="7" font-family="'Inter', sans-serif" font-weight="600">TypeScript Architecture</text>
-                  <text x="0" y="16" fill="#8A8580" font-size="5.4" font-family="'Inter', sans-serif">Strict Typing · Enterprise Design Patterns</text>
-                </g>
-
-                <!-- Center Bus Data Connector -->
-                <path d="M175,144 L198,144" stroke="#C4956A" stroke-width="1" stroke-dasharray="3,2" />
-                <polygon points="198,144 194,141.5 194,146.5" fill="#C4956A" />
-
-                <!-- Right: 3D Jest Runner Badge -->
-                <g transform="translate(206, 126)">
-                  <rect x="0" y="3" width="108" height="34" rx="6" fill="#16251E" stroke="#10B981" stroke-width="0.8" filter="url(#agi-shadow)" />
-                  <circle cx="18" cy="20" r="9" fill="url(#jest-grad)" />
-                  <text x="18" y="23.5" fill="#FFFFFF" font-size="8" font-family="'Inter', sans-serif" font-weight="700" text-anchor="middle">✓</text>
-                  <text x="34" y="17" fill="#FFFFFF" font-size="6.5" font-family="'Inter', sans-serif" font-weight="600">JEST SUITES</text>
-                  <text x="34" y="27" fill="#6EE7B7" font-size="5" font-family="'Inter', sans-serif" font-weight="600">100% REGRESSION PASS</text>
-                </g>
-              </g>
-
-              <!-- Connectors down to Tier 3 -->
-              <path d="M87,172 L87,184" stroke="#C4956A" stroke-width="0.9" stroke-dasharray="3,2" />
-              <polygon points="87,187 84,181 90,181" fill="#C4956A" />
-              <path d="M253,172 L253,184" stroke="#C4956A" stroke-width="0.9" stroke-dasharray="3,2" />
-              <polygon points="253,187 250,181 256,181" fill="#C4956A" />
-
-              <!-- ─── ROW 3: AI COPILOT & MCP PROTOCOL ─── -->
-              <!-- Card 4: AI Copilot -->
-              <g class="illu-group">
-                <rect x="14" y="188" width="146" height="118" rx="8" fill="url(#agi-surf)" stroke="rgba(196,149,106,0.35)" stroke-width="0.8" filter="url(#agi-shadow)" />
-                <rect x="14" y="188" width="146" height="20" rx="8" fill="rgba(196,149,106,0.06)" />
-                <text x="24" y="201" fill="#C4956A" font-size="6" font-family="'Inter', sans-serif" font-weight="600" letter-spacing="0.05em">AI COPILOT</text>
-                <rect x="92" y="193" width="60" height="10" rx="3" fill="rgba(196,149,106,0.14)" />
-                <text x="122" y="200" fill="#C4956A" font-size="4.5" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">ENGINEERING VELOCITY</text>
-
-                <!-- 3D Dimensional Neural Spark & Orbit -->
-                <g transform="translate(87, 246)">
-                  <ellipse cx="0" cy="0" rx="36" ry="12" fill="none" stroke="#C4956A" stroke-width="0.5" stroke-dasharray="3,2" transform="rotate(-18)" opacity="0.6" />
-                  <ellipse cx="0" cy="0" rx="24" ry="8" fill="none" stroke="#C4956A" stroke-width="0.6" transform="rotate(35)" opacity="0.6" />
-                  <circle cx="-26" cy="-12" r="2.5" fill="#C4956A" filter="url(#agi-shadow)" />
-                  <circle cx="28" cy="10" r="2" fill="#C4956A" filter="url(#agi-shadow)" />
-
-                  <!-- 3D 8-Point Sparkling Star -->
-                  <path d="M0,-18 Q2,-4 18,0 Q4,2 0,18 Q-2,4 -18,0 Q-4,-2 0,-18 Z" fill="url(#copilot-gold)" filter="url(#sparkle-glow)" />
-                  <circle cx="0" cy="0" r="3" fill="#FFFFFF" />
-                </g>
-
-                <text x="87" y="285" fill="#1A1A1A" font-size="6.8" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">Augmented Development</text>
-                <text x="87" y="296" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="middle">Contextual Prompting · Accelerated Delivery</text>
-              </g>
-
-              <!-- Card 5: MCP Protocol -->
-              <g class="illu-group">
-                <rect x="180" y="188" width="146" height="118" rx="8" fill="url(#agi-surf)" stroke="rgba(196,149,106,0.35)" stroke-width="0.8" filter="url(#agi-shadow)" />
-                <rect x="180" y="188" width="146" height="20" rx="8" fill="rgba(196,149,106,0.06)" />
-                <circle cx="190" cy="198" r="2.5" fill="#C4956A" />
-                <text x="199" y="201" fill="#C4956A" font-size="6" font-family="'Inter', sans-serif" font-weight="600" letter-spacing="0.05em">MCP PROTOCOL</text>
-                <rect x="264" y="193" width="54" height="10" rx="3" fill="rgba(196,149,106,0.14)" />
-                <text x="291" y="200" fill="#C4956A" font-size="4.5" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">AGENTIC LOOPS</text>
-
-                <!-- 3D Tetrahedral / Tri-Node Agent Hub -->
-                <g transform="translate(253, 246)">
-                  <polygon points="0,-20 -24,14 24,14" fill="rgba(196,149,106,0.05)" stroke="#C4956A" stroke-width="0.8" stroke-dasharray="3,2" />
-                  
-                  <circle cx="0" cy="-1" r="5" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" />
-                  <path d="M-2,-1 L2,-1 M0,-3 L0,1" stroke="#C4956A" stroke-width="0.8" />
-
-                  <!-- Top Node: LLM Core -->
-                  <circle cx="0" cy="-20" r="8" fill="url(#mcp-core-grad)" filter="url(#agi-shadow)" />
-                  <circle cx="-2" cy="-22" r="2" fill="#FFFFFF" opacity="0.8" />
-                  
-                  <!-- Left Node: Tool Agent -->
-                  <circle cx="-24" cy="14" r="8" fill="url(#mcp-blue-grad)" filter="url(#agi-shadow)" />
-                  <circle cx="-26" cy="12" r="2" fill="#FFFFFF" opacity="0.8" />
-
-                  <!-- Right Node: Context Server -->
-                  <circle cx="24" cy="14" r="8" fill="url(#mcp-green-grad)" filter="url(#agi-shadow)" />
-                  <circle cx="22" cy="12" r="2" fill="#FFFFFF" opacity="0.8" />
-
-                  <!-- Connecting Flow Rays -->
-                  <circle cx="-12" cy="-3" r="1.8" fill="#C4956A" />
-                  <circle cx="12" cy="-3" r="1.8" fill="#C4956A" />
-                  <circle cx="0" cy="14" r="1.8" fill="#C4956A" />
-                </g>
-
-                <text x="253" y="285" fill="#1A1A1A" font-size="6.8" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">Model Context Protocol</text>
-                <text x="253" y="296" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="middle">Autonomous Agent Tooling · Structured Context</text>
-              </g>
-            </svg>
+              <div class="exp-card__footer">
+                <span class="exp-card__dot exp-card__dot--green"></span>
+                <span>Production Architecture · Enterprise Scale</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
