@@ -1909,6 +1909,16 @@ body {
   overflow: hidden;
 }
 
+/* Closing section network canvas (mirrors hero-network-canvas) */
+.closing__network-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
 /* Floating craft nodes in closing section */
 .closing__floating-elements {
   position: absolute;
@@ -1927,21 +1937,34 @@ body {
   align-items: center;
   gap: 3px;
   color: var(--charcoal);
-  opacity: 0.38;
-  transition: transform 0.35s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out);
+  opacity: 0.35;
+  transition: transform 0.35s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), z-index 0s;
+}
+
+.closing__float-item.is-active {
+  opacity: 0.95;
+  z-index: 10;
+  color: var(--terracotta);
+}
+
+.closing__float-item.is-connected {
+  opacity: 0.75;
+  color: var(--terracotta);
 }
 
 .closing__float-item svg {
   transition: transform 0.35s var(--ease-out);
 }
 
-.closing__float-item:hover {
+.closing__float-item:hover,
+.closing__float-item.is-active {
   opacity: 0.95;
   z-index: 10;
   color: var(--terracotta);
 }
 
-.closing__float-item:hover svg {
+.closing__float-item:hover svg,
+.closing__float-item.is-active svg {
   transform: scale(1.15);
 }
 
@@ -1958,27 +1981,57 @@ body {
   white-space: nowrap;
 }
 
-.closing__float-item:hover .closing__float-label {
+.closing__float-item:hover .closing__float-label,
+.closing__float-item.is-active .closing__float-label {
   opacity: 1;
   transform: translateY(0);
 }
 
-.closing__float-1 { top: 12%; left: 8%; animation: floatMotionA 9s ease-in-out infinite; }
-.closing__float-2 { top: 46%; left: 6%;  animation: floatMotionB 11s ease-in-out infinite; }
-.closing__float-3 { top: 76%; left: 10%; animation: floatMotionC 10s ease-in-out infinite; }
-.closing__float-4 { top: 14%; right: 9%; animation: floatMotionB 10s ease-in-out infinite; }
-.closing__float-5 { top: 46%; right: 7%;  animation: floatMotionA 12s ease-in-out infinite; }
-.closing__float-6 { top: 76%; right: 11%; animation: floatMotionC 9.5s ease-in-out infinite; }
-.closing__float-7 { top: 20%; left: 22%; animation: floatMotionC 11s ease-in-out infinite; }
-.closing__float-8 { top: 18%; right: 24%; animation: floatMotionA 10.5s ease-in-out infinite; }
+/* 20 node positions — symmetrical two-constellation layout mirroring hero */
+/* Left Constellation (Outer: left ~5-7%, Inner: left ~18-22%) */
+.closing__float-1  { top: 10%; left: 6%;   animation: floatMotionA 9s ease-in-out infinite; }
+.closing__float-2  { top: 13%; left: 19%;  animation: floatMotionB 11s ease-in-out 0.4s infinite; }
+.closing__float-3  { top: 29%; left: 5%;   animation: floatMotionC 10s ease-in-out 0.8s infinite; }
+.closing__float-4  { top: 33%; left: 21%;  animation: floatMotionA 12s ease-in-out 1.2s infinite; }
+.closing__float-5  { top: 49%; left: 6%;   animation: floatMotionB 9.5s ease-in-out 1.6s infinite; }
+.closing__float-6  { top: 52%; left: 18%;  animation: floatMotionC 10.5s ease-in-out 2.0s infinite; }
+.closing__float-7  { top: 71%; left: 22%;  animation: floatMotionA 11.5s ease-in-out 2.4s infinite; }
+.closing__float-8  { top: 68%; left: 5%;   animation: floatMotionB 8.5s ease-in-out 2.8s infinite; }
+.closing__float-9  { top: 88%; left: 19%;  animation: floatMotionC 12.5s ease-in-out 3.2s infinite; }
+.closing__float-10 { top: 86%; left: 7%;   animation: floatMotionA 9.8s ease-in-out 3.6s infinite; }
 
-@media (max-width: 768px) {
-  .closing__float-item {
+/* Right Constellation (Inner: right ~18-22%, Outer: right ~5-7%) */
+.closing__float-11 { top: 11%; right: 20%; animation: floatMotionB 10s ease-in-out 0.3s infinite; }
+.closing__float-12 { top: 14%; right: 6%;  animation: floatMotionC 9.5s ease-in-out 0.7s infinite; }
+.closing__float-13 { top: 31%; right: 22%; animation: floatMotionA 11s ease-in-out 1.1s infinite; }
+.closing__float-14 { top: 34%; right: 5%;  animation: floatMotionB 12s ease-in-out 1.5s infinite; }
+.closing__float-15 { top: 51%; right: 19%; animation: floatMotionC 10s ease-in-out 1.9s infinite; }
+.closing__float-16 { top: 53%; right: 6%;  animation: floatMotionA 8.5s ease-in-out 2.3s infinite; }
+.closing__float-17 { top: 69%; right: 21%; animation: floatMotionB 12.5s ease-in-out 2.7s infinite; }
+.closing__float-18 { top: 72%; right: 5%;  animation: floatMotionC 9s ease-in-out 3.1s infinite; }
+.closing__float-19 { top: 87%; right: 18%; animation: floatMotionA 10.5s ease-in-out 3.5s infinite; }
+.closing__float-20 { top: 86%; right: 7%;  animation: floatMotionB 11.5s ease-in-out 3.9s infinite; }
+
+@media (max-width: 900px) {
+  .closing__float-item svg {
+    transform: scale(0.85);
+    opacity: 0.3;
+  }
+}
+
+@media (max-width: 600px) {
+  .closing__float-item svg {
+    transform: scale(0.7);
     opacity: 0.28;
   }
-  .closing__float-7, .closing__float-8 {
-    display: none;
+  .closing__float-label {
+    font-size: 0.55rem;
   }
+  /* On very narrow screens, push nodes toward perimeter so center stays pristine */
+  .closing__float-1, .closing__float-3, .closing__float-5, .closing__float-8, .closing__float-10 { left: 2%; }
+  .closing__float-2, .closing__float-4, .closing__float-6, .closing__float-7, .closing__float-9 { left: 14%; }
+  .closing__float-11, .closing__float-13, .closing__float-15, .closing__float-17, .closing__float-19 { right: 14%; }
+  .closing__float-12, .closing__float-14, .closing__float-16, .closing__float-18, .closing__float-20 { right: 2%; }
 }
 
 .journey-waypoint--closing {

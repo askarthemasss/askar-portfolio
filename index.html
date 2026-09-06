@@ -13,7 +13,10 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260906_hero_closing_compact_v11">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <link rel="stylesheet" href="style.css?v=20260906_closing_network_v13">
 </head>
 
 <body>
@@ -1121,6 +1124,42 @@
             </div>
           </div>
         </a>
+
+        <!-- Article 2: @defer vs lazy routing -->
+        <a class="compact-card reveal-item" href="https://x.com/askarthemass/status/2096511640380596469?s=20" target="_blank" rel="noopener" aria-label="Read @defer Is Not Lazy Routing article on X">
+          <div class="compact-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 72 72" class="compact-svg">
+              <!-- Screen / template split diagram -->
+              <rect x="8" y="14" width="56" height="38" rx="3" fill="none" stroke="#1A1A1A" stroke-width="0.5" />
+              <!-- Dashed divider -->
+              <line x1="34" y1="14" x2="34" y2="52" stroke="#1A1A1A" stroke-width="0.4" stroke-dasharray="2,2" opacity="0.5"/>
+              <!-- Left: initial chunk loaded -->
+              <rect x="12" y="19" width="18" height="7" rx="1.5" fill="none" stroke="#1A1A1A" stroke-width="0.5"/>
+              <rect x="12" y="29" width="14" height="5" rx="1.5" fill="none" stroke="#1A1A1A" stroke-width="0.4" opacity="0.6"/>
+              <rect x="12" y="37" width="16" height="5" rx="1.5" fill="none" stroke="#1A1A1A" stroke-width="0.4" opacity="0.6"/>
+              <!-- Right: @defer lazy block -->
+              <rect x="38" y="19" width="22" height="27" rx="2" fill="none" stroke="#C4956A" stroke-width="0.7" stroke-dasharray="3,2"/>
+              <text x="49" y="30" font-size="5" fill="#C4956A" font-family="'Inter', sans-serif" text-anchor="middle" font-weight="600">@defer</text>
+              <text x="49" y="38" font-size="4" fill="#C4956A" font-family="'Inter', sans-serif" text-anchor="middle" opacity="0.8">lazy</text>
+              <!-- Trigger arrow -->
+              <path d="M34 33 L38 33" fill="none" stroke="#C4956A" stroke-width="0.6"/>
+              <polygon points="38,33 35.5,31.5 35.5,34.5" fill="#C4956A"/>
+              <text x="36" y="62" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="middle">screen split</text>
+            </svg>
+          </div>
+          <div class="compact-card__content">
+            <div class="compact-card__meta">
+              <span class="compact-card__tag">Angular</span>
+              <span class="compact-card__platform">X Article</span>
+            </div>
+            <h4 class="compact-card__title">@defer Is Not Lazy Routing. It Is How You Split a Screen.</h4>
+            <p class="compact-card__desc">Route-level lazy loading hides a feature. @defer loads the real code only when a trigger fires on the page they're already on.</p>
+            <div class="compact-card__cta">
+              <span>Read on X</span>
+              <span class="cta-arrow" aria-hidden="true">↗</span>
+            </div>
+          </div>
+        </a>
       </div><!-- /left col -->
 
       <!-- ─── RIGHT: Video Shorts ─── -->
@@ -1213,17 +1252,23 @@
   <!-- CLOSING / CONTACT SECTION -->
   <!-- ═══════════════════════════════════════════════ -->
   <section id="closing" class="closing">
-    <!-- Floating ambient craft nodes in closing section -->
+    <!-- Node-edge network canvas (mirrors hero section) -->
+    <canvas id="closing-network-canvas" class="closing__network-canvas" aria-hidden="true"></canvas>
+
+    <!-- Floating craft nodes in closing section (mirrors hero constellation) -->
     <div class="closing__floating-elements" aria-hidden="true">
-      <div class="closing__float-item closing__float-1" title="Angular">
+      <!-- 1: Angular -->
+      <div class="closing__float-item closing__float-1" data-id="angular" title="Angular Craftsman">
         <svg viewBox="0 0 32 32" width="22" height="22">
           <path d="M16 3 L5 7 L6.5 21 L16 26 L25.5 21 L27 7 Z" fill="none" stroke="currentColor" stroke-width="0.8" />
           <path d="M16 6 L9 21 L12 21 L13.5 17 L18.5 17 L20 21 L23 21 Z" fill="none" stroke="currentColor" stroke-width="0.6" />
+          <line x1="14.5" y1="14" x2="17.5" y2="14" stroke="currentColor" stroke-width="0.6" />
         </svg>
         <span class="closing__float-label">Angular</span>
       </div>
 
-      <div class="closing__float-item closing__float-2" title="TypeScript">
+      <!-- 2: TypeScript -->
+      <div class="closing__float-item closing__float-2" data-id="ts" title="TypeScript">
         <svg viewBox="0 0 32 32" width="22" height="22">
           <rect x="4" y="4" width="24" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="0.8" />
           <text x="7" y="21" font-size="11" fill="currentColor" font-family="'Cormorant Garamond', serif" font-weight="600">TS</text>
@@ -1231,38 +1276,89 @@
         <span class="closing__float-label">TypeScript</span>
       </div>
 
-      <div class="closing__float-item closing__float-3" title="GitHub">
-        <svg viewBox="0 0 24 24" width="20" height="20">
-          <path d="M12,2 C6.5,2 2,6.5 2,12 C2,16.4 4.9,20.1 8.8,21.4 C9.3,21.5 9.5,21.2 9.5,20.9 L9.5,19.1 C6.7,19.7 6.1,17.8 6.1,17.8 C5.7,16.8 5,16.5 5,16.5 C4.1,15.9 5.1,15.9 5.1,15.9 C6.1,16 6.6,16.9 6.6,16.9 C7.5,18.4 9,17.9 9.5,17.6 C9.6,17 9.9,16.5 10.1,16.3 C7.8,16 5.4,15.1 5.4,11.3 C5.4,10.3 5.8,9.5 6.4,8.8 C6.3,8.6 5.9,7.6 6.5,6.3 C6.5,6.3 7.3,6 9.5,7.3 C10.3,7.1 11.2,7 12,7 C12.8,7 13.7,7.1 14.5,7.3 C16.7,6 17.5,6.3 17.5,6.3 C18.1,7.6 17.7,8.6 17.6,8.8 C18.2,9.5 18.6,10.3 18.6,11.3 C18.6,15.1 16.2,16 13.9,16.2 C14.2,16.5 14.5,17.1 14.5,18 L14.5,20.9 C14.5,21.2 14.7,21.5 15.2,21.4 C19.1,20.1 22,16.4 22,12 C22,6.5 17.5,2 12,2Z" fill="none" stroke="currentColor" stroke-width="0.8" />
+      <!-- 3: RxJS -->
+      <div class="closing__float-item closing__float-3" data-id="rxjs" title="Reactive Streams">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <path d="M4 16 Q10 8 16 16 T28 16" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <path d="M4 20 Q10 12 16 20 T28 20" fill="none" stroke="#C4956A" stroke-width="0.6" opacity="0.8" />
         </svg>
-        <span class="closing__float-label">GitHub</span>
+        <span class="closing__float-label">RxJS</span>
       </div>
 
-      <div class="closing__float-item closing__float-4" title="X / Twitter">
-        <svg viewBox="0 0 24 24" width="20" height="20">
-          <path d="M4 4l6.5 7.5L4 20h2l5.5-6.5L16 20h4l-7-8 6.5-8h-2l-5 6L8 4H4z" fill="none" stroke="currentColor" stroke-width="0.8" />
-        </svg>
-        <span class="closing__float-label">X</span>
-      </div>
-
-      <div class="closing__float-item closing__float-5" title="LeetCode">
-        <svg viewBox="0 0 24 24" width="20" height="20">
-          <path d="M16 18H8a4 4 0 0 1-4-4v0a4 4 0 0 1 4-4h3" fill="none" stroke="currentColor" stroke-width="0.8" />
-          <path d="M11 6l4 4-4 4" fill="none" stroke="currentColor" stroke-width="0.8" />
-          <line x1="9" y1="14" x2="16" y2="14" stroke="#C4956A" stroke-width="0.8" />
-        </svg>
-        <span class="closing__float-label">LeetCode</span>
-      </div>
-
-      <div class="closing__float-item closing__float-6" title="YouTube">
-        <svg viewBox="0 0 24 24" width="20" height="20">
-          <rect x="3" y="5" width="18" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="0.8" />
-          <polygon points="10,8.5 15,12 10,15.5" fill="none" stroke="#C4956A" stroke-width="0.8" />
+      <!-- 4: YouTube -->
+      <div class="closing__float-item closing__float-4" data-id="youtube" title="Tech Content">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <rect x="5" y="8" width="22" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <polygon points="13,12 20,16 13,20" fill="none" stroke="#C4956A" stroke-width="0.8" />
         </svg>
         <span class="closing__float-label">YouTube</span>
       </div>
 
-      <div class="closing__float-item closing__float-7" title="MCP">
+      <!-- 5: Cricket -->
+      <div class="closing__float-item closing__float-5" data-id="cricket" title="Cricket">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <path d="M6 24 L16 14 L19 17 L9 27 Z" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <line x1="17.5" y1="15.5" x2="23" y2="10" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+          <circle cx="23" cy="22" r="4" fill="none" stroke="#C4956A" stroke-width="0.8" />
+          <path d="M20 20 Q23 23 26 24" fill="none" stroke="#C4956A" stroke-width="0.5" stroke-dasharray="1,1" />
+        </svg>
+        <span class="closing__float-label">Cricket</span>
+      </div>
+
+      <!-- 6: Hospitality -->
+      <div class="closing__float-item closing__float-6" data-id="hospitality" title="Hospitality Domain">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <rect x="4" y="7" width="24" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <circle cx="21" cy="13" r="2" fill="none" stroke="currentColor" stroke-width="0.6" />
+          <line x1="8" y1="20" x2="19" y2="20" stroke="#C4956A" stroke-width="0.6" />
+        </svg>
+        <span class="closing__float-label">Hospitality</span>
+      </div>
+
+      <!-- 7: Copilot -->
+      <div class="closing__float-item closing__float-7" data-id="copilot" title="AI Engineering">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <path d="M16 4 Q16 16 26 16 Q16 16 16 28 Q16 16 6 16 Q16 16 16 4 Z" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <circle cx="23" cy="8" r="1.5" fill="#C4956A" />
+        </svg>
+        <span class="closing__float-label">Copilot</span>
+      </div>
+
+      <!-- 8: LeetCode -->
+      <div class="closing__float-item closing__float-8" data-id="leetcode" title="Problem Solving">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <path d="M20 22H11a4 4 0 0 1-4-4v0a4 4 0 0 1 4-4h4" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <path d="M14 8l5 5-5 5" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <line x1="12" y1="18" x2="21" y2="18" stroke="#C4956A" stroke-width="0.8" />
+        </svg>
+        <span class="closing__float-label">LeetCode</span>
+      </div>
+
+      <!-- 9: Grok -->
+      <div class="closing__float-item closing__float-9" data-id="grok" title="Reasoning Models">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <rect x="5" y="5" width="22" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <line x1="9" y1="23" x2="23" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <line x1="12" y1="9" x2="16" y2="9" stroke="#C4956A" stroke-width="0.8" />
+        </svg>
+        <span class="closing__float-label">Grok</span>
+      </div>
+
+      <!-- 10: Chennai -->
+      <div class="closing__float-item closing__float-10" data-id="chennai" title="Chennai, India">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <line x1="16" y1="3" x2="16" y2="7" stroke="currentColor" stroke-width="0.8" />
+          <line x1="16" y1="25" x2="16" y2="29" stroke="currentColor" stroke-width="0.8" />
+          <line x1="3" y1="16" x2="7" y2="16" stroke="currentColor" stroke-width="0.8" />
+          <line x1="25" y1="16" x2="29" y2="16" stroke="currentColor" stroke-width="0.8" />
+          <circle cx="16" cy="16" r="2" fill="#C4956A" />
+        </svg>
+        <span class="closing__float-label">13°N Chennai</span>
+      </div>
+
+      <!-- 11: MCP -->
+      <div class="closing__float-item closing__float-11" data-id="mcp" title="Model Context Protocol">
         <svg viewBox="0 0 32 32" width="22" height="22">
           <circle cx="8" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="0.8" />
           <circle cx="24" cy="10" r="3.5" fill="none" stroke="currentColor" stroke-width="0.8" />
@@ -1274,16 +1370,97 @@
         <span class="closing__float-label">MCP</span>
       </div>
 
-      <div class="closing__float-item closing__float-8" title="Chennai">
+      <!-- 12: Claude -->
+      <div class="closing__float-item closing__float-12" data-id="claude" title="Claude Pro Power User">
         <svg viewBox="0 0 32 32" width="22" height="22">
-          <circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="0.8" />
-          <line x1="16" y1="3" x2="16" y2="7" stroke="currentColor" stroke-width="0.8" />
-          <line x1="16" y1="25" x2="16" y2="29" stroke="currentColor" stroke-width="0.8" />
-          <line x1="3" y1="16" x2="7" y2="16" stroke="currentColor" stroke-width="0.8" />
-          <line x1="25" y1="16" x2="29" y2="16" stroke="currentColor" stroke-width="0.8" />
+          <line x1="16" y1="4" x2="16" y2="28" stroke="currentColor" stroke-width="0.9" />
+          <line x1="4" y1="16" x2="28" y2="16" stroke="currentColor" stroke-width="0.9" />
+          <line x1="7.5" y1="7.5" x2="24.5" y2="24.5" stroke="currentColor" stroke-width="0.8" />
+          <line x1="24.5" y1="7.5" x2="7.5" y2="24.5" stroke="currentColor" stroke-width="0.8" />
+          <circle cx="16" cy="16" r="2.5" fill="#C4956A" stroke="none" />
+        </svg>
+        <span class="closing__float-label">Claude</span>
+      </div>
+
+      <!-- 13: .NET Core -->
+      <div class="closing__float-item closing__float-13" data-id="dotnet" title=".NET Core / C#">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <line x1="10" y1="7" x2="8" y2="25" stroke="currentColor" stroke-width="0.8" />
+          <line x1="16" y1="7" x2="14" y2="25" stroke="currentColor" stroke-width="0.8" />
+          <line x1="5" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="0.8" />
+          <line x1="4" y1="19" x2="20" y2="19" stroke="currentColor" stroke-width="0.8" />
+          <circle cx="24" cy="16" r="2.5" fill="#C4956A" />
+        </svg>
+        <span class="closing__float-label">.NET Core</span>
+      </div>
+
+      <!-- 14: X / Twitter -->
+      <div class="closing__float-item closing__float-14" data-id="x" title="X / Twitter">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <path d="M7 7 L15 17 L7 25 H10 L16.5 18.5 L22 25 H25 L17.5 15 L24.5 7 H21.5 L16 13.5 L11 7 Z" fill="none" stroke="currentColor" stroke-width="0.8" />
+        </svg>
+        <span class="closing__float-label">X</span>
+      </div>
+
+      <!-- 15: Ride -->
+      <div class="closing__float-item closing__float-15" data-id="ride" title="Ride & Open Road">
+        <svg viewBox="0 0 34 34" width="24" height="24">
+          <circle cx="8" cy="22" r="5" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <circle cx="26" cy="22" r="5" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <path d="M8 22 L14 16 L22 16 L26 22 M14 16 L17 22 L22 16" fill="none" stroke="currentColor" stroke-width="0.7" />
+          <line x1="22" y1="16" x2="20" y2="12" stroke="currentColor" stroke-width="0.8" />
+          <line x1="18" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" />
+          <path d="M14 16 Q17 13 20 15" fill="none" stroke="#C4956A" stroke-width="0.6" />
+        </svg>
+        <span class="closing__float-label">Ride</span>
+      </div>
+
+      <!-- 16: SaaS -->
+      <div class="closing__float-item closing__float-16" data-id="saas" title="B2B SaaS Builder">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <path d="M9 22 A5 5 0 0 1 8 13 A7 7 0 0 1 21 11 A5 5 0 0 1 25 18 H9 Z" fill="none" stroke="currentColor" stroke-width="0.8" />
           <circle cx="16" cy="16" r="2" fill="#C4956A" />
         </svg>
-        <span class="closing__float-label">13°N Chennai</span>
+        <span class="closing__float-label">B2B SaaS</span>
+      </div>
+
+      <!-- 17: Testing -->
+      <div class="closing__float-item closing__float-17" data-id="testing" title="Jest & Jasmine">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <path d="M12 5 L20 5 L23 11 L23 25 A3 3 0 0 1 20 28 L12 28 A3 3 0 0 1 9 25 L9 11 Z" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <path d="M13 18 L16 21 L22 13" fill="none" stroke="#C4956A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="closing__float-label">Testing</span>
+      </div>
+
+      <!-- 18: CLI -->
+      <div class="closing__float-item closing__float-18" data-id="cli" title="Command Line Tools">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <rect x="4" y="6" width="24" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <path d="M8 12 L13 16 L8 20" fill="none" stroke="#C4956A" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" />
+          <line x1="16" y1="20" x2="22" y2="20" stroke="currentColor" stroke-width="0.8" />
+        </svg>
+        <span class="closing__float-label">CLI</span>
+      </div>
+
+      <!-- 19: Code -->
+      <div class="closing__float-item closing__float-19" data-id="code" title="Clean Code">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <path d="M10 11 L5 16 L10 21" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" />
+          <path d="M22 11 L27 16 L22 21" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" />
+          <line x1="18" y1="9" x2="14" y2="23" stroke="#C4956A" stroke-width="0.8" stroke-linecap="round" />
+        </svg>
+        <span class="closing__float-label">Code</span>
+      </div>
+
+      <!-- 20: Architecture -->
+      <div class="closing__float-item closing__float-20" data-id="systems" title="System Architecture">
+        <svg viewBox="0 0 32 32" width="22" height="22">
+          <polygon points="16,6 26,11 16,16 6,11" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <polygon points="6,11 16,16 16,26 6,21" fill="none" stroke="currentColor" stroke-width="0.8" />
+          <polygon points="26,11 16,16 16,26 26,21" fill="none" stroke="#C4956A" stroke-width="0.8" />
+        </svg>
+        <span class="closing__float-label">Architecture</span>
       </div>
     </div>
 
