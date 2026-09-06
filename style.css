@@ -1526,11 +1526,11 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════
-   LEARNING SECTION
+   LEARNING SECTION — COMPACT SPLIT (ARTICLES LEFT, VIDEOS RIGHT)
    ═══════════════════════════════════════════════════════ */
 .learning {
   position: relative;
-  padding: var(--section-pad) var(--side-pad);
+  padding: clamp(2rem, 4.5vh, 3.5rem) var(--side-pad);
   z-index: 5;
   background: var(--sage-tint);
   border-top: 1px solid rgba(139, 158, 139, 0.18);
@@ -1538,65 +1538,211 @@ body {
 
 .learning__header {
   max-width: var(--content-wide);
-  margin: 0 auto 3rem;
+  margin: 0 auto 1.25rem;
 }
 
-.learning__body {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
+.learning__intro {
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+  line-height: 1.55;
+  color: var(--soft-black);
+  max-width: 620px;
+  margin-top: 0.4rem;
+}
+
+/* ── Split Grid: Articles Left · Videos Right ── */
+.learning__split {
   max-width: var(--content-wide);
   margin: 0 auto;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
 }
 
-@media (min-width: 768px) {
-  .learning__body {
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: clamp(2.5rem, 5vw, 5rem);
+@media (max-width: 720px) {
+  .learning__split {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
-.learning__constellation {
-  width: 100%;
+.learning__col {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.65rem;
 }
 
-.learning__map {
-  width: 100%;
-  max-width: 480px;
-  height: auto;
+.learning__col-header {
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(196, 149, 106, 0.22);
+  margin-bottom: 0.2rem;
 }
 
-.pulse-node {
-  animation: nodePulse 4s var(--ease-smooth) infinite;
+.col-kicker {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  font-weight: 600;
 }
 
-@keyframes nodePulse {
-  0%, 100% { r: 8; opacity: 0.4; }
-  50% { r: 10; opacity: 0.6; }
-}
-
-.learning__content {
-  display: grid;
-  gap: 2rem;
-}
-
-.learning__item h3 {
+.col-title {
   font-family: var(--font-serif);
   font-weight: 400;
   font-size: 1.15rem;
+  letter-spacing: 0.02em;
   color: var(--charcoal);
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.03em;
+  margin: 0.1rem 0 0 0;
 }
 
-.learning__item p {
-  font-size: clamp(0.88rem, 1.2vw, 0.95rem);
-  line-height: 1.75;
+/* ── Compact Cards: Sleek & Lightweight ── */
+.compact-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0.95rem;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(196, 149, 106, 0.22);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.25s var(--ease-out),
+              border-color 0.25s var(--ease-out),
+              background 0.25s var(--ease-out),
+              box-shadow 0.25s var(--ease-out);
+  cursor: pointer;
+}
+
+.compact-card:hover {
+  transform: translateX(3px) translateY(-1px);
+  border-color: var(--terracotta);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 6px 18px rgba(196, 149, 106, 0.12);
+}
+
+.compact-card__icon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  background: rgba(247, 245, 240, 0.75);
+  border: 1px solid rgba(196, 149, 106, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  transition: opacity 0.25s var(--ease-out);
+  overflow: hidden;
+}
+
+.compact-card:hover .compact-card__icon {
+  opacity: 1;
+}
+
+.compact-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.play-circle,
+.badge-circle {
+  transition: transform 0.25s var(--ease-out), fill 0.25s var(--ease-out);
+  transform-origin: center;
+}
+
+.compact-card:hover .play-circle,
+.compact-card:hover .badge-circle {
+  transform: scale(1.12);
+  fill: #FFFFFF;
+}
+
+.compact-card__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.compact-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compact-card__tag {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  font-weight: 600;
+}
+
+.compact-card__platform {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  color: var(--warm-grey);
+  border-left: 1px solid rgba(196, 149, 106, 0.3);
+  padding-left: 0.5rem;
+}
+
+.compact-card__title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 0.92rem;
+  line-height: 1.3;
+  color: var(--charcoal);
+  margin: 0;
+}
+
+.compact-card__desc {
+  font-size: 0.74rem;
+  line-height: 1.45;
   color: var(--soft-black);
+  opacity: 0.8;
+  margin: 0.1rem 0;
+}
+
+.compact-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--terracotta);
+  transition: transform 0.2s var(--ease-out);
+  align-self: flex-start;
+  margin-top: 0.1rem;
+}
+
+.compact-card:hover .compact-card__cta {
+  transform: translateX(2px);
+}
+
+.cta-arrow {
+  display: inline-block;
+  transition: transform 0.2s var(--ease-out);
+}
+
+.compact-card:hover .cta-arrow {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 480px) {
+  .compact-card {
+    gap: 0.65rem;
+    padding: 0.65rem 0.75rem;
+  }
+  .compact-card__icon {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1777,10 +1923,6 @@ body {
 
   .skill-cell {
     padding: 0.75rem 0.9rem;
-  }
-
-  .learning__map {
-    max-height: 250px;
   }
 
   .about__chips {

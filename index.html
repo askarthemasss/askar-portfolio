@@ -13,7 +13,154 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260905_middle_viewport_smooth">
+  <link rel="stylesheet" href="style.css?v=20260906_compact_v4">
+  <style id="learning-compact-layout">
+    #learning.learning {
+      padding: clamp(2.5rem, 5vh, 4rem) var(--side-pad, 2rem) !important;
+    }
+    #learning .learning__header {
+      margin: 0 auto 1.5rem !important;
+    }
+    #learning .learning__split {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 1.5rem !important;
+      align-items: start !important;
+      max-width: var(--content-wide, 1100px) !important;
+      margin: 0 auto !important;
+    }
+    @media (max-width: 680px) {
+      #learning .learning__split {
+        grid-template-columns: 1fr !important;
+      }
+    }
+    #learning .learning__col {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0.75rem !important;
+    }
+    #learning .learning__col-header {
+      padding-bottom: 0.4rem !important;
+      border-bottom: 1px solid rgba(196, 149, 106, 0.22) !important;
+      margin-bottom: 0.25rem !important;
+    }
+    #learning .col-kicker {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--terracotta, #C4956A);
+      font-weight: 600;
+    }
+    #learning .col-title {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: 1.15rem;
+      letter-spacing: 0.02em;
+      color: var(--charcoal, #1A1A1A);
+      margin: 0.1rem 0 0 0;
+    }
+    #learning .compact-card {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 0.85rem !important;
+      padding: 0.75rem 0.95rem !important;
+      background: rgba(255, 255, 255, 0.62) !important;
+      border: 1px solid rgba(196, 149, 106, 0.22) !important;
+      border-radius: 8px !important;
+      text-decoration: none !important;
+      color: inherit !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      transition: transform 0.25s var(--ease-out, ease), border-color 0.25s var(--ease-out, ease), background 0.25s var(--ease-out, ease), box-shadow 0.25s var(--ease-out, ease) !important;
+      cursor: pointer !important;
+    }
+    #learning .compact-card:hover {
+      transform: translateX(3px) translateY(-1px) !important;
+      border-color: var(--terracotta, #C4956A) !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      box-shadow: 0 6px 18px rgba(196, 149, 106, 0.12) !important;
+    }
+    #learning .compact-card__icon {
+      flex-shrink: 0 !important;
+      width: 60px !important;
+      height: 60px !important;
+      border-radius: 6px !important;
+      background: rgba(247, 245, 240, 0.75) !important;
+      border: 1px solid rgba(196, 149, 106, 0.18) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      opacity: 0.85 !important;
+      transition: opacity 0.25s var(--ease-out, ease) !important;
+      overflow: hidden !important;
+    }
+    #learning .compact-card:hover .compact-card__icon {
+      opacity: 1 !important;
+    }
+    #learning .compact-svg {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    #learning .compact-card__content {
+      flex: 1 !important;
+      min-width: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0.15rem !important;
+    }
+    #learning .compact-card__meta {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+    }
+    #learning .compact-card__tag {
+      font-family: var(--font-sans);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--terracotta, #C4956A);
+      font-weight: 600;
+    }
+    #learning .compact-card__platform {
+      font-family: var(--font-sans);
+      font-size: 0.58rem;
+      color: var(--warm-grey, #8A8580);
+      border-left: 1px solid rgba(196, 149, 106, 0.3);
+      padding-left: 0.5rem;
+    }
+    #learning .compact-card__title {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: 0.92rem;
+      line-height: 1.3;
+      color: var(--charcoal, #1A1A1A);
+      margin: 0;
+    }
+    #learning .compact-card__desc {
+      font-size: 0.74rem;
+      line-height: 1.45;
+      color: var(--soft-black, #333);
+      opacity: 0.8;
+      margin: 0.1rem 0;
+    }
+    #learning .compact-card__cta {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.3rem !important;
+      font-size: 0.72rem !important;
+      font-weight: 500 !important;
+      color: var(--terracotta, #C4956A) !important;
+      transition: transform 0.2s var(--ease-out, ease) !important;
+      align-self: flex-start !important;
+      margin-top: 0.1rem !important;
+    }
+    #learning .compact-card:hover .compact-card__cta {
+      transform: translateX(2px) !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -999,101 +1146,136 @@
     <div class="learning__header reveal-group">
       <div class="journey-waypoint journey-waypoint--left" data-section="learning" tabindex="0" aria-label="what the line is reaching toward">
         <span class="journey-waypoint__dot"></span>
-        <span class="journey-waypoint__message">agentic AI horizons, MCP protocols & sovereign B2B SaaS</span>
+        <span class="journey-waypoint__message">shipping in public — writing &amp; video breakdowns</span>
       </div>
       <h2 class="section-title reveal-item" id="learning-title">what the line is reaching toward</h2>
+      <p class="learning__intro reveal-item">Building in the open through engineering dispatches, reactive architecture deep-dives, and visual algorithm breakdowns.</p>
     </div>
 
-    <div class="learning__body">
-      <div class="learning__constellation reveal-group" aria-hidden="true">
-        <svg viewBox="0 0 520 480" class="learning__map" preserveAspectRatio="xMidYMid meet">
-          <!-- Central node -->
-          <circle cx="260" cy="240" r="9" fill="#C4956A" opacity="0.45" class="pulse-node" />
-          <circle cx="260" cy="240" r="3" fill="#C4956A" />
-          <text x="260" y="262" text-anchor="middle" font-size="9.5" fill="#1A1A1A"
-            font-family="'Cormorant Garamond', serif" font-style="italic">current position</text>
+    <!-- ── Two-Column: Articles left · Videos right ── -->
+    <div class="learning__split reveal-group">
 
-          <!-- Branch: Senior Scope / System Design -->
-          <line x1="260" y1="230" x2="160" y2="105" stroke="#1A1A1A" stroke-width="0.6" class="draw-line" />
-          <circle cx="160" cy="105" r="22" fill="none" stroke="#1A1A1A" stroke-width="0.8" />
-          <text x="160" y="102" text-anchor="middle" font-size="7.5" fill="#1A1A1A" font-family="'Inter', sans-serif"
-            font-weight="500">senior</text>
-          <text x="160" y="113" text-anchor="middle" font-size="7.5" fill="#1A1A1A"
-            font-family="'Inter', sans-serif">engineer</text>
-
-          <!-- Branch: AI / LLM & Agents -->
-          <line x1="268" y1="232" x2="370" y2="105" stroke="#1A1A1A" stroke-width="0.6" class="draw-line" />
-          <circle cx="370" cy="105" r="22" fill="none" stroke="#1A1A1A" stroke-width="0.8" />
-          <text x="370" y="102" text-anchor="middle" font-size="7.5" fill="#1A1A1A" font-family="'Inter', sans-serif"
-            font-weight="500">AI / LLM</text>
-          <text x="370" y="113" text-anchor="middle" font-size="7" fill="#C4956A"
-            font-family="'Inter', sans-serif">agents · RAG</text>
-
-          <!-- Branch: Bootstrapped SaaS -->
-          <line x1="268" y1="248" x2="385" y2="365" stroke="#1A1A1A" stroke-width="0.5" stroke-dasharray="3,3"
-            class="draw-line" />
-          <circle cx="385" cy="365" r="20" fill="none" stroke="#1A1A1A" stroke-width="0.7" stroke-dasharray="3,2" />
-          <text x="385" y="362" text-anchor="middle" font-size="7.5" fill="#1A1A1A" font-family="'Inter', sans-serif"
-            font-weight="500">B2B SaaS</text>
-          <text x="385" y="373" text-anchor="middle" font-size="6.5" fill="#999"
-            font-family="'Inter', sans-serif">bootstrapped</text>
-
-          <!-- Branch: Network & Shipping -->
-          <line x1="252" y1="248" x2="135" y2="365" stroke="#1A1A1A" stroke-width="0.5" class="draw-line" />
-          <circle cx="135" cy="365" r="20" fill="none" stroke="#1A1A1A" stroke-width="0.7" />
-          <text x="135" y="362" text-anchor="middle" font-size="7.5" fill="#1A1A1A" font-family="'Inter', sans-serif"
-            font-weight="500">shipping</text>
-          <text x="135" y="373" text-anchor="middle" font-size="6.5" fill="#999" font-family="'Inter', sans-serif">in
-            public</text>
-
-          <!-- Branch: Hardware / Mechatronics Reconnection -->
-          <line x1="250" y1="238" x2="90" y2="230" stroke="#1A1A1A" stroke-width="0.4" stroke-dasharray="2,3"
-            class="draw-line" />
-          <circle cx="90" cy="230" r="14" fill="none" stroke="#1A1A1A" stroke-width="0.5" stroke-dasharray="2,2" />
-          <text x="90" y="233" text-anchor="middle" font-size="6" fill="#999"
-            font-family="'Inter', sans-serif">hardware</text>
-
-          <!-- Branch: Athletic Rigor -->
-          <line x1="270" y1="240" x2="430" y2="230" stroke="#1A1A1A" stroke-width="0.4" stroke-dasharray="2,3"
-            class="draw-line" />
-          <circle cx="430" cy="230" r="14" fill="none" stroke="#1A1A1A" stroke-width="0.5" stroke-dasharray="2,2" />
-          <text x="430" y="233" text-anchor="middle" font-size="6" fill="#999"
-            font-family="'Inter', sans-serif">athletic</text>
-
-          <!-- Constellation Interconnecting Web -->
-          <line x1="160" y1="127" x2="370" y2="127" stroke="#C4956A" stroke-width="0.3" stroke-dasharray="4,5"
-            opacity="0.7" />
-          <line x1="370" y1="127" x2="385" y2="345" stroke="#1A1A1A" stroke-width="0.2" stroke-dasharray="3,5" />
-          <line x1="385" y1="385" x2="135" y2="385" stroke="#1A1A1A" stroke-width="0.2" stroke-dasharray="4,6" />
-          <line x1="135" y1="345" x2="160" y2="127" stroke="#1A1A1A" stroke-width="0.2" stroke-dasharray="3,5" />
-        </svg>
-      </div>
-
-      <div class="learning__content reveal-group">
-        <div class="learning__item reveal-item">
-          <h3>Deepening AI / LLM understanding</h3>
-          <p>Not just usage — the actual engineering. Tokens, context windows, RAG architectures, embeddings, agents,
-            MCP, function calling. The refusal to treat AI as a black box is a practical requirement for building with
-            these tools responsibly.</p>
+      <!-- ─── LEFT: Articles ─── -->
+      <div class="learning__col learning__col--articles">
+        <div class="learning__col-header reveal-item">
+          <span class="col-kicker">01 · written dispatches</span>
+          <h3 class="col-title">articles &amp; threads</h3>
         </div>
-        <div class="learning__item reveal-item">
-          <h3>Entrepreneurship & B2B SaaS</h3>
-          <p>A preference for bootstrapped, India-first, single-problem B2B SaaS — the kind of software that solves one
-            thing well for businesses that already know what they need. Secondary explorations include hardware GPS
-            concepts reconnecting to mechatronics training.</p>
+
+        <!-- Article 1: Angular 22 httpResource -->
+        <a class="compact-card reveal-item" href="https://x.com/askarthemass/status/2095243642537697757?s=20" target="_blank" rel="noopener" aria-label="Read Angular 22 httpResource article on X">
+          <div class="compact-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 72 72" class="compact-svg">
+              <rect x="8" y="16" width="22" height="15" rx="2" fill="none" stroke="#1A1A1A" stroke-width="0.7" />
+              <text x="19" y="26" fill="#1A1A1A" font-size="5.5" font-family="'Inter', sans-serif" text-anchor="middle">RxJS</text>
+              <path d="M30,23.5 L40,23.5" fill="none" stroke="#8A8580" stroke-width="0.5" stroke-dasharray="2,1.5" />
+              <polygon points="40,23.5 37,22 37,25" fill="#8A8580" />
+              <rect x="42" y="14" width="22" height="19" rx="2" fill="none" stroke="#C4956A" stroke-width="0.9" />
+              <text x="53" y="25.5" fill="#C4956A" font-size="5.5" font-family="'Inter', sans-serif" font-weight="600" text-anchor="middle">v22</text>
+              <circle cx="36" cy="40" r="10" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" class="badge-circle" />
+              <path d="M31,37.5 L41,37.5 M31,40.5 L41,40.5 M31,43.5 L37,43.5" stroke="#C4956A" stroke-width="0.9" stroke-linecap="round" />
+              <text x="36" y="62" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="middle">httpResource()</text>
+            </svg>
+          </div>
+          <div class="compact-card__content">
+            <div class="compact-card__meta">
+              <span class="compact-card__tag">Angular 22</span>
+              <span class="compact-card__platform">X Article</span>
+            </div>
+            <h4 class="compact-card__title">httpResource Replaces Manual Observables</h4>
+            <p class="compact-card__desc">“That’s a lot of ceremony for ‘get this user when the id changes.’” Replaces manual subscription ceremony with declarative resources.</p>
+            <div class="compact-card__cta">
+              <span>Read on X</span>
+              <span class="cta-arrow" aria-hidden="true">↗</span>
+            </div>
+          </div>
+        </a>
+      </div><!-- /left col -->
+
+      <!-- ─── RIGHT: Video Shorts ─── -->
+      <div class="learning__col learning__col--videos">
+        <div class="learning__col-header reveal-item">
+          <span class="col-kicker">02 · visual breakdowns</span>
+          <h3 class="col-title">engineering shorts</h3>
         </div>
-        <div class="learning__item reveal-item">
-          <h3>Senior-level scope & architecture</h3>
-          <p>Deepening system design depth, end-to-end frontend performance, and large-scale architectural consistency.
-            Expanding responsibility beyond components into whole product lifecycles.</p>
-        </div>
-        <div class="learning__item reveal-item">
-          <h3>Shipping & community in public</h3>
-          <p>Moving fast by building real projects and creating genuine technical connections. Content creation,
-            open-source experiments, and direct conversations with other builders.</p>
-        </div>
-      </div>
-    </div>
+
+        <!-- Video 1: AI Content -->
+        <a class="compact-card reveal-item" href="https://youtube.com/shorts/-UV-0Wnm2rk?si=LVwRCW_CsXykPed5" target="_blank" rel="noopener" aria-label="Watch OpenAI Releases GPT-6 Astra on YouTube Shorts">
+          <div class="compact-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 72 72" class="compact-svg">
+              <circle cx="36" cy="34" r="24" fill="none" stroke="#1A1A1A" stroke-width="0.4" stroke-dasharray="2,2" />
+              <circle cx="36" cy="34" r="14" fill="none" stroke="#C4956A" stroke-width="0.5" />
+              <circle cx="36" cy="34" r="9" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" class="play-circle" />
+              <polygon points="34,30 40,34 34,38" fill="#C4956A" />
+              <text x="36" y="64" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="middle">1.05M context</text>
+            </svg>
+          </div>
+          <div class="compact-card__content">
+            <div class="compact-card__meta">
+              <span class="compact-card__tag">AI Systems</span>
+              <span class="compact-card__platform">Short</span>
+            </div>
+            <h4 class="compact-card__title">OpenAI Releases GPT-6 Astra: 1.05M-Context</h4>
+            <div class="compact-card__cta">
+              <span>Watch on YouTube</span>
+              <span class="cta-arrow" aria-hidden="true">↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Video 2: Angular Content -->
+        <a class="compact-card reveal-item" href="https://youtube.com/shorts/e1E6zBdXM0E?si=gWcxDyJf3H80I1-K" target="_blank" rel="noopener" aria-label="Watch How Angular @defer Controls Component Loading on YouTube Shorts">
+          <div class="compact-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 72 72" class="compact-svg">
+              <rect x="14" y="16" width="44" height="34" rx="3" fill="none" stroke="#1A1A1A" stroke-width="0.5" stroke-dasharray="3,2" />
+              <line x1="28" y1="16" x2="28" y2="50" stroke="#C4956A" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.6" />
+              <circle cx="36" cy="33" r="9" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" class="play-circle" />
+              <polygon points="34,29 40,33 34,37" fill="#C4956A" />
+              <text x="36" y="64" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="middle">@defer() runtime</text>
+            </svg>
+          </div>
+          <div class="compact-card__content">
+            <div class="compact-card__meta">
+              <span class="compact-card__tag">Frontend Craft</span>
+              <span class="compact-card__platform">Short</span>
+            </div>
+            <h4 class="compact-card__title">How Angular @defer() Controls Component Loading</h4>
+            <div class="compact-card__cta">
+              <span>Watch on YouTube</span>
+              <span class="cta-arrow" aria-hidden="true">↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Video 3: LeetCode Content -->
+        <a class="compact-card reveal-item" href="https://youtube.com/shorts/yhoWlU9vOqY?si=q-0vFP4ngvCTQOij" target="_blank" rel="noopener" aria-label="Watch LeetCode 1 Two Sum on YouTube Shorts">
+          <div class="compact-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 72 72" class="compact-svg">
+              <rect x="12" y="22" width="13" height="13" rx="2" fill="none" stroke="#1A1A1A" stroke-width="0.5" />
+              <text x="18.5" y="31" fill="#1A1A1A" font-size="5.5" font-family="'Inter', sans-serif" text-anchor="middle">2</text>
+              <rect x="47" y="22" width="13" height="13" rx="2" fill="none" stroke="#1A1A1A" stroke-width="0.5" />
+              <text x="53.5" y="31" fill="#1A1A1A" font-size="5.5" font-family="'Inter', sans-serif" text-anchor="middle">7</text>
+              <path d="M18.5,22 C18.5,13 53.5,13 53.5,22" fill="none" stroke="#C4956A" stroke-width="0.6" />
+              <circle cx="36" cy="33" r="9" fill="#FAF8F5" stroke="#C4956A" stroke-width="0.8" class="play-circle" />
+              <polygon points="34,29 40,33 34,37" fill="#C4956A" />
+              <text x="36" y="64" fill="#8A8580" font-size="5" font-family="'Inter', sans-serif" text-anchor="middle">Two Sum · O(n)</text>
+            </svg>
+          </div>
+          <div class="compact-card__content">
+            <div class="compact-card__meta">
+              <span class="compact-card__tag">Algorithms</span>
+              <span class="compact-card__platform">Short</span>
+            </div>
+            <h4 class="compact-card__title">LeetCode 1: Two Sum in Python</h4>
+            <div class="compact-card__cta">
+              <span>Watch on YouTube</span>
+              <span class="cta-arrow" aria-hidden="true">↗</span>
+            </div>
+          </div>
+        </a>
+      </div><!-- /right col -->
+
+    </div><!-- /learning__split -->
   </section>
 
   <!-- ═══════════════════════════════════════════════ -->
@@ -1253,7 +1435,7 @@
         <div class="rail-node__label">
           <span class="rail-node__tag">05 · forward arc</span>
           <span class="rail-node__divider">·</span>
-          <span class="rail-node__text">agentic AI horizons, MCP protocols & sovereign B2B SaaS</span>
+          <span class="rail-node__text">shipping in public — videos, threads &amp; open thinking</span>
         </div>
       </div>
 
