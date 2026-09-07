@@ -1447,8 +1447,8 @@ body {
 }
 
 .exp-card__dot--green {
-  background: #22C55E;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+  background: var(--sage-dark);
+  box-shadow: 0 0 0 2px rgba(139, 158, 139, 0.28);
 }
 
 
