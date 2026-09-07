@@ -126,7 +126,8 @@ body {
 /* ── Journey Waypoint (Interactive Section Connectors) ── */
 .journey-waypoint {
   position: relative;
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -184,20 +185,19 @@ body {
   }
 }
 
+/* On tablets and mobile: distribute waypoints across the full width */
 @media (max-width: 768px) {
-  .journey-waypoint--center {
-    margin-left: clamp(40px, 18vw, 120px);
-  }
-  .journey-waypoint--right {
-    margin-left: clamp(70px, 32vw, 220px);
-  }
-}
-
-@media (max-width: 480px) {
-  .journey-waypoint--left,
-  .journey-waypoint--center,
-  .journey-waypoint--right {
+  .journey-waypoint--left {
     margin-left: 0;
+    margin-right: auto;
+  }
+  .journey-waypoint--center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .journey-waypoint--right {
+    margin-left: auto;
+    margin-right: 0;
   }
 }
 
@@ -259,21 +259,57 @@ body {
 @media (max-width: 600px) {
   .journey-waypoint__message {
     font-size: 0.76rem;
-    padding: 0.25rem 0.65rem;
-    max-width: 240px;
+    padding: 0.28rem 0.68rem;
+    max-width: min(260px, calc(100vw - 64px));
     white-space: normal;
   }
-}
 
-@media (max-width: 480px) {
-  .journey-waypoint--right .journey-waypoint__message {
-    left: calc(100% + 10px);
+  /* Center, Hero, and Closing tooltips open centered beneath the dot */
+  .journey-waypoint--center .journey-waypoint__message,
+  .journey-waypoint--hero .journey-waypoint__message,
+  .journey-waypoint--closing .journey-waypoint__message {
+    left: 50%;
     right: auto;
-    transform: translateY(-50%) translateX(-4px);
+    top: calc(100% + 8px);
+    transform: translateX(-50%) translateY(-3px);
+    text-align: center;
   }
+
+  .journey-waypoint--center:hover .journey-waypoint__message,
+  .journey-waypoint--center:focus-visible .journey-waypoint__message,
+  .journey-waypoint--center.is-active .journey-waypoint__message,
+  .journey-waypoint--hero:hover .journey-waypoint__message,
+  .journey-waypoint--hero:focus-visible .journey-waypoint__message,
+  .journey-waypoint--hero.is-active .journey-waypoint__message,
+  .journey-waypoint--closing:hover .journey-waypoint__message,
+  .journey-waypoint--closing:focus-visible .journey-waypoint__message,
+  .journey-waypoint--closing.is-active .journey-waypoint__message {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Right waypoints always open to the left so they never overflow right screen edge */
+  .journey-waypoint--right .journey-waypoint__message {
+    left: auto;
+    right: calc(100% + 8px);
+    transform: translateY(-50%) translateX(3px);
+  }
+
   .journey-waypoint--right:hover .journey-waypoint__message,
   .journey-waypoint--right:focus-visible .journey-waypoint__message,
   .journey-waypoint--right.is-active .journey-waypoint__message {
+    transform: translateY(-50%) translateX(0);
+  }
+
+  /* Left waypoints open to the right */
+  .journey-waypoint--left .journey-waypoint__message {
+    left: calc(100% + 8px);
+    right: auto;
+    transform: translateY(-50%) translateX(-3px);
+  }
+
+  .journey-waypoint--left:hover .journey-waypoint__message,
+  .journey-waypoint--left:focus-visible .journey-waypoint__message,
+  .journey-waypoint--left.is-active .journey-waypoint__message {
     transform: translateY(-50%) translateX(0);
   }
 }

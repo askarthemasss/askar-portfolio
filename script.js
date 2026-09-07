@@ -695,12 +695,12 @@
       svg.style.height = docHeight + 'px';
 
       const bodyRect = document.body.getBoundingClientRect();
-      const points = [];
+      const rawPoints = [];
 
       // Hero starting point (around cosmos center, high up)
       const hero = document.getElementById('hero');
       const heroHeight = hero ? hero.offsetHeight : 600;
-      points.push({
+      rawPoints.push({
         x: centerX,
         y: Math.min(heroHeight * 0.22, 170)
       });
@@ -715,14 +715,14 @@
         const y = rect.top - bodyRect.top + rect.height / 2;
 
         waypointCoords.push({ wp, x, y, len: 0 });
-        points.push({ x, y });
+        rawPoints.push({ x, y });
       });
 
       // Closing end point (bottom compass star center)
       const closingCircle = document.querySelector('.closing__circle');
       if (closingCircle) {
         const circleRect = closingCircle.getBoundingClientRect();
-        points.push({
+        rawPoints.push({
           x: circleRect.left - bodyRect.left + circleRect.width / 2,
           y: circleRect.top - bodyRect.top + circleRect.height / 2
         });
@@ -730,15 +730,86 @@
         const closing = document.getElementById('closing');
         if (closing) {
           const closingRect = closing.getBoundingClientRect();
-          points.push({
+          rawPoints.push({
             x: centerX,
             y: closingRect.top - bodyRect.top + closingRect.height * 0.85
           });
         }
       }
 
-      // Ensure points are ordered from top to bottom
-      points.sort((a, b) => a.y - b.y);
+      // Ensure raw points are ordered from top to bottom
+      rawPoints.sort((a, b) => a.y - b.y);
+
+      // Build active curve points:
+      // On mobile / tablet, dynamically insert organic weave points across tall section spans
+      // so the line weaves across content from left to right and right to left (like laptop view)
+      const points = [];
+      const isMobileOrTablet = docWidth < 900;
+
+      if (!isMobileOrTablet) {
+        // Desktop / Laptop view: use the raw waypoint coordinates directly
+        // (preserves the sweeping diagonal crossing that laptop view is praised for)
+        points.push(...rawPoints);
+      } else {
+        // Mobile / Tablet view: dynamically insert organic weave points across tall section gaps
+        const pad = Math.max(26, docWidth * 0.08);
+        const leftX = pad;
+        const rightX = docWidth - pad;
+        const midLeftX = docWidth * 0.28;
+        const midRightX = docWidth * 0.72;
+
+        for (let i = 0; i < rawPoints.length; i++) {
+          const curr = rawPoints[i];
+          points.push(curr);
+
+          if (i < rawPoints.length - 1) {
+            const next = rawPoints[i + 1];
+            const dy = next.y - curr.y;
+
+            if (dy > 420) {
+              const count = dy > 1100 ? 2 : 1;
+              let firstWeaveX = null;
+
+              for (let k = 1; k <= count; k++) {
+                const frac = k / (count + 1);
+                const weaveY = curr.y + dy * frac;
+                let weaveX;
+
+                const currIsLeft = curr.x < centerX - 25;
+                const currIsRight = curr.x > centerX + 25;
+                const nextIsLeft = next.x < centerX - 25;
+                const nextIsRight = next.x > centerX + 25;
+
+                // Gentle curve if both points are near center (e.g. hero start to hero waypoint)
+                if (!currIsLeft && !currIsRight && !nextIsLeft && !nextIsRight) {
+                  weaveX = centerX + Math.min(50, docWidth * 0.12);
+                } else if (count === 1) {
+                  if (currIsLeft && nextIsRight) {
+                    weaveX = midRightX;
+                  } else if (currIsRight && nextIsLeft) {
+                    weaveX = midLeftX;
+                  } else if (currIsRight || nextIsRight) {
+                    weaveX = leftX;
+                  } else {
+                    weaveX = rightX;
+                  }
+                } else {
+                  // count === 2: guarantee alternating opposite side sweep across mobile
+                  if (k === 1) {
+                    weaveX = currIsLeft ? rightX : (currIsRight ? leftX : midLeftX);
+                    firstWeaveX = weaveX;
+                  } else {
+                    weaveX = firstWeaveX < centerX ? (nextIsRight ? midRightX : rightX) : (nextIsLeft ? midLeftX : leftX);
+                  }
+                }
+
+                weaveX = Math.max(leftX, Math.min(rightX, weaveX));
+                points.push({ x: weaveX, y: weaveY });
+              }
+            }
+          }
+        }
+      }
 
       const n = points.length;
       if (n < 2) return 0;
