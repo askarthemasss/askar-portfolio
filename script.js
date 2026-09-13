@@ -694,15 +694,16 @@
       svg.style.width = docWidth + 'px';
       svg.style.height = docHeight + 'px';
 
-      const bodyRect = document.body.getBoundingClientRect();
+      const svgRect = svg.getBoundingClientRect();
       const rawPoints = [];
 
       // Hero starting point (around cosmos center, high up)
       const hero = document.getElementById('hero');
       const heroHeight = hero ? hero.offsetHeight : 600;
+      const heroRect = hero ? hero.getBoundingClientRect() : null;
       rawPoints.push({
         x: centerX,
-        y: Math.min(heroHeight * 0.22, 170)
+        y: heroRect ? (heroRect.top - svgRect.top + Math.min(heroHeight * 0.22, 170)) : Math.min(heroHeight * 0.22, 170)
       });
 
       // Gather waypoint coordinates (passing directly through each dot's exact center)
@@ -710,9 +711,9 @@
       waypoints.forEach((wp) => {
         const dot = wp.querySelector('.journey-waypoint__dot') || wp;
         const rect = dot.getBoundingClientRect();
-        // Calculate coordinate relative to document body (immune to scroll position)
-        const x = rect.left - bodyRect.left + rect.width / 2;
-        const y = rect.top - bodyRect.top + rect.height / 2;
+        // Calculate coordinate relative to SVG container (immune to scroll and body offsets)
+        const x = rect.left - svgRect.left + rect.width / 2;
+        const y = rect.top - svgRect.top + rect.height / 2;
 
         waypointCoords.push({ wp, x, y, len: 0 });
         rawPoints.push({ x, y });
@@ -723,8 +724,8 @@
       if (closingCircle) {
         const circleRect = closingCircle.getBoundingClientRect();
         rawPoints.push({
-          x: circleRect.left - bodyRect.left + circleRect.width / 2,
-          y: circleRect.top - bodyRect.top + circleRect.height / 2
+          x: circleRect.left - svgRect.left + circleRect.width / 2,
+          y: circleRect.top - svgRect.top + circleRect.height / 2
         });
       } else {
         const closing = document.getElementById('closing');
@@ -732,7 +733,7 @@
           const closingRect = closing.getBoundingClientRect();
           rawPoints.push({
             x: centerX,
-            y: closingRect.top - bodyRect.top + closingRect.height * 0.85
+            y: closingRect.top - svgRect.top + closingRect.offsetHeight * 0.85
           });
         }
       }
@@ -747,9 +748,23 @@
       const isMobileOrTablet = docWidth < 900;
 
       if (!isMobileOrTablet) {
-        // Desktop / Laptop view: use the raw waypoint coordinates directly
-        // (preserves the sweeping diagonal crossing that laptop view is praised for)
-        points.push(...rawPoints);
+        // Desktop / Laptop view: preserve elegant sweeping curve across hero before connecting to hero dot
+        points.push(rawPoints[0]);
+        if (rawPoints.length > 1) {
+          const p0 = rawPoints[0];
+          const p1 = rawPoints[1];
+          const dy = p1.y - p0.y;
+          // If hero span is tall (> 240px) and both points are near center, add an organic weave point
+          // to gracefully bypass the name heading before docking into the hero waypoint dot
+          if (dy > 240 && Math.abs(p0.x - centerX) < 40 && Math.abs(p1.x - centerX) < 40) {
+            const sweepX = centerX + Math.min(52, docWidth * 0.055);
+            const sweepY = p0.y + dy * 0.44;
+            points.push({ x: sweepX, y: sweepY });
+          }
+        }
+        for (let i = 1; i < rawPoints.length; i++) {
+          points.push(rawPoints[i]);
+        }
       } else {
         // Mobile / Tablet view: dynamically insert organic weave points across tall section gaps
         const pad = Math.max(26, docWidth * 0.08);
@@ -888,15 +903,29 @@
         item.len = getLengthForY(item.y);
       });
 
+      lastDocHeight = docHeight;
+      if (waypointCoords[0]) {
+        lastHeroAnchorX = waypointCoords[0].x;
+        lastHeroAnchorY = waypointCoords[0].y;
+      }
+      if (waypointCoords[1]) {
+        lastAnchorY = waypointCoords[1].y;
+      }
+
       return pathLength;
     }
+
+    let lastDocHeight = 0;
+    let lastHeroAnchorX = 0;
+    let lastHeroAnchorY = 0;
+    let lastAnchorY = 0;
 
     calculatePath();
 
     // ── Floating Rail Elements & Synchronization ──
     const railProgress = document.querySelector('.journey-rail__progress');
     const railNodes = Array.from(document.querySelectorAll('.rail-node'));
-    const allSections = ['hero', 'about', 'experience', 'skills', 'projects', 'learning', 'closing'].map(id => document.getElementById(id)).filter(Boolean);
+    const allSections = ['hero', 'about', 'experience', 'resume', 'skills', 'projects', 'learning', 'closing'].map(id => document.getElementById(id)).filter(Boolean);
 
     // Frame renderer for buttery-smooth fluid interpolation during scroll up and down
     function renderSmoothLine() {
@@ -927,6 +956,37 @@
     // Animate line on scroll: active drawing tip stays at the middle of the viewport
     function animateLine() {
       const scrollTop = window.scrollY;
+      const currentDocHeight = document.documentElement.scrollHeight;
+      
+      // Auto-detect layout shifts (font swaps, image loads, expand/collapse) and re-sync line
+      let shifted = Math.abs(currentDocHeight - lastDocHeight) > 4;
+      if (!shifted && waypointCoords[0]) {
+        const testDot0 = waypoints[0].querySelector('.journey-waypoint__dot') || waypoints[0];
+        if (testDot0) {
+          const r0 = testDot0.getBoundingClientRect();
+          const svgR = svg.getBoundingClientRect();
+          const curX0 = r0.left - svgR.left + r0.width / 2;
+          const curY0 = r0.top - svgR.top + r0.height / 2;
+          if (Math.abs(curX0 - lastHeroAnchorX) > 1.5 || Math.abs(curY0 - lastHeroAnchorY) > 1.5) {
+            shifted = true;
+          }
+        }
+      }
+      if (!shifted && waypointCoords[1]) {
+        const testDot1 = waypoints[1].querySelector('.journey-waypoint__dot') || waypoints[1];
+        if (testDot1) {
+          const r = testDot1.getBoundingClientRect();
+          const svgR = svg.getBoundingClientRect();
+          const currentY = r.top - svgR.top + r.height / 2;
+          if (Math.abs(currentY - lastAnchorY) > 1.5) {
+            shifted = true;
+          }
+        }
+      }
+      if (shifted) {
+        calculatePath();
+      }
+
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollFraction = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
 
@@ -942,7 +1002,9 @@
         }
       }
 
-      targetDrawLength = getLengthForY(targetY);
+      // Ensure the line always touches and connects firmly into the first node (Node 0: Hero) from initial page load
+      const heroLen = waypointCoords[0] ? waypointCoords[0].len : 0;
+      targetDrawLength = Math.max(heroLen, getLengthForY(targetY));
 
       // Update floating rail progress bar
       if (railProgress) {
@@ -1025,21 +1087,53 @@
 
     window.addEventListener('scroll', animateLine, { passive: true });
 
+    // Window load event (fires when all images, stylesheets, and assets are 100% loaded)
+    window.addEventListener('load', () => {
+      calculatePath();
+      animateLine();
+    });
+
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         calculatePath();
         animateLine();
-      }, 200);
+      }, 100);
     });
 
     // Ensure layout is measured after font loading / reflow
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
+    if (document.fonts) {
+      if (document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          calculatePath();
+          animateLine();
+        });
+      }
+      document.fonts.addEventListener('loadingdone', () => {
         calculatePath();
         animateLine();
       });
+    }
+
+    // ResizeObserver: detects any layout shifts from font swaps, card expansions, etc.
+    if (window.ResizeObserver) {
+      let roTimer = null;
+      const ro = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.target === document.body) {
+            const newH = Math.round(entry.contentRect.height);
+            if (Math.abs(newH - lastDocHeight) > 4) {
+              if (roTimer) cancelAnimationFrame(roTimer);
+              roTimer = requestAnimationFrame(() => {
+                calculatePath();
+                animateLine();
+              });
+            }
+          }
+        }
+      });
+      ro.observe(document.body);
     }
 
     // Initial render: immediately draw down to the middle of the hero section
@@ -1241,12 +1335,51 @@
     initProjectBreathing();
     initHandDrawnUnderlines();
     initTimelineExpand();
+    initResumeModal();
 
     // Delayed init for draw lines (need layout to stabilize)
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         initDrawLines();
       });
+    });
+  }
+
+  // ── Resume Modal ──────────────────────────────────────
+  function initResumeModal() {
+    const openBtn = document.getElementById('resume-open-btn');
+    const modal = document.getElementById('resume-modal');
+    const closeBtn = document.getElementById('resume-modal-close');
+    const backdrop = document.getElementById('resume-modal-backdrop');
+    const iframe = document.getElementById('resume-iframe');
+    if (!openBtn || !modal) return;
+
+    function openModal() {
+      modal.removeAttribute('hidden');
+      // Lazy-load the PDF only on first open
+      if (!iframe.src || iframe.src === window.location.href) {
+        iframe.src = 'Mohamed_Askar.pdf';
+      }
+      document.body.style.overflow = 'hidden';
+      openBtn.setAttribute('aria-expanded', 'true');
+      closeBtn.focus();
+    }
+
+    function closeModal() {
+      modal.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+      openBtn.setAttribute('aria-expanded', 'false');
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.hasAttribute('hidden')) {
+        closeModal();
+      }
     });
   }
 

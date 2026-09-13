@@ -335,8 +335,8 @@ body {
 .journey-rail__track {
   position: absolute;
   left: 50%;
-  top: 12px;
-  bottom: 12px;
+  top: 14px;
+  bottom: 14px;
   width: 1.5px;
   background: rgba(196, 149, 106, 0.2);
   transform: translateX(-50%);
@@ -644,7 +644,7 @@ body {
   gap: 5px;
   z-index: 3;
   opacity: 0;
-  animation: textFadeUp 1s var(--ease-out) 3.5s forwards;
+  animation: promptFadeUp 1s var(--ease-out) 1.8s forwards;
 }
 
 .hero__scroll-prompt span {
@@ -680,6 +680,11 @@ body {
 @keyframes textFadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes promptFadeUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(16px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 @keyframes scrollBounce {
@@ -1454,6 +1459,220 @@ body {
   background: var(--gold);
 }
 
+
+/* ═══════════════════════════════════════════════════════
+   RESUME SECTION
+   ═══════════════════════════════════════════════════════ */
+.resume-section {
+  position: relative;
+  padding: clamp(1.75rem, 3.5vh, 2.75rem) var(--side-pad);
+  z-index: 5;
+  background: var(--parchment);
+  border-top: 1px solid rgba(196, 149, 106, 0.14);
+}
+
+.resume-section__header {
+  max-width: var(--content-wide);
+  margin: 0 auto 1rem;
+}
+
+.resume-section__body {
+  max-width: var(--content-wide);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.resume-section__caption {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--warm-grey);
+  font-weight: 300;
+  flex: 1 1 100%;
+  margin-bottom: 0;
+}
+
+/* View Resume Button */
+.resume-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem 0.65rem 1rem;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.22s var(--ease-out), transform 0.22s var(--ease-out), box-shadow 0.22s var(--ease-out);
+}
+
+.resume-open-btn:hover {
+  background: var(--soft-black);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(26, 26, 26, 0.18);
+}
+
+.resume-open-btn__icon {
+  display: flex;
+  align-items: center;
+}
+
+.resume-open-btn__arrow {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* Download link */
+.resume-download-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--terracotta);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(196, 149, 106, 0.35);
+  padding-bottom: 0.1rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.resume-download-link:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+/* ── Resume Modal ────────────────────────────── */
+.resume-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.resume-modal:not([hidden]) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.resume-modal[hidden] {
+  display: none;
+}
+
+.resume-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.resume-modal__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(960px, 96vw);
+  height: 96vh;
+  margin: 2vh auto;
+  background: var(--warm-white);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(26, 26, 26, 0.35);
+  transform: translateY(12px);
+  transition: transform 0.32s var(--ease-out);
+}
+
+.resume-modal:not([hidden]) .resume-modal__panel {
+  transform: translateY(0);
+}
+
+.resume-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid rgba(196, 149, 106, 0.2);
+  background: var(--cream);
+  flex-shrink: 0;
+}
+
+.resume-modal__title {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  letter-spacing: 0.03em;
+}
+
+.resume-modal__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.resume-modal__download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--terracotta);
+  text-decoration: none;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid rgba(196, 149, 106, 0.35);
+  border-radius: 999px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.resume-modal__download:hover {
+  background: var(--gold);
+  color: var(--warm-white);
+  border-color: var(--gold);
+}
+
+.resume-modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: 1px solid rgba(26, 26, 26, 0.14);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--charcoal);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.resume-modal__close:hover {
+  background: rgba(26, 26, 26, 0.06);
+  border-color: rgba(26, 26, 26, 0.28);
+}
+
+.resume-modal__viewer {
+  flex: 1;
+  overflow: hidden;
+}
+
+.resume-modal__iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
 
 /* ═══════════════════════════════════════════════════════
    SKILLS SECTION
