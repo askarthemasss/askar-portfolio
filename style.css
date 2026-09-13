@@ -1387,11 +1387,19 @@ body {
 
 .exp-item__icon {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--charcoal);
+  opacity: 0.82;
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+}
+
+.exp-item:hover .exp-item__icon {
+  opacity: 1;
+  transform: scale(1.08);
 }
 
 .exp-item__icon svg {
@@ -1443,12 +1451,7 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--terracotta);
-}
-
-.exp-card__dot--green {
-  background: var(--sage-dark);
-  box-shadow: 0 0 0 2px rgba(139, 158, 139, 0.28);
+  background: var(--gold);
 }
 
 
