@@ -120,7 +120,7 @@ body {
   stroke-width: 1.4px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.38; /* Crisp, lustrous gold — never muddy or clipped */
+  opacity: 0.18; /* Subtle — present but not distracting */
 }
 
 /* ── Journey Waypoint (Interactive Section Connectors) ── */
