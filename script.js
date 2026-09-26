@@ -1358,7 +1358,7 @@
       modal.removeAttribute('hidden');
       // Lazy-load the PDF only on first open
       if (!iframe.src || iframe.src === window.location.href) {
-        iframe.src = 'Mohamed_Askar.pdf';
+        iframe.src = 'Mohamed%20Askar.pdf';
       }
       document.body.style.overflow = 'hidden';
       openBtn.setAttribute('aria-expanded', 'true');
