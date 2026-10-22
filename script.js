@@ -52,8 +52,11 @@
 
     const ctx = canvas.getContext('2d');
     let particles = [];
-    let animationId;
-    const PARTICLE_COUNT = 35;
+    let animationId = null;
+    let isRunning = false;
+    const isMobile = window.innerWidth < 768;
+    const PARTICLE_COUNT = isMobile ? 18 : 35;
+    const PI2 = Math.PI * 2;
 
     function resize() {
       canvas.width = window.innerWidth;
@@ -82,10 +85,29 @@
       }
     }
 
+    function startLoop() {
+      if (!isRunning && !document.hidden) {
+        isRunning = true;
+        animationId = requestAnimationFrame(drawParticles);
+      }
+    }
+
+    function stopLoop() {
+      if (isRunning) {
+        isRunning = false;
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+          animationId = null;
+        }
+      }
+    }
+
     function drawParticles() {
+      if (!isRunning) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach((p, i) => {
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
         p.life--;
@@ -94,7 +116,7 @@
         const fadeOpacity = lifeRatio < 0.2 ? lifeRatio / 0.2 : (lifeRatio > 0.8 ? (1 - lifeRatio) / 0.2 : 1);
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.r, 0, PI2);
         ctx.fillStyle = `rgba(196, 149, 106, ${p.opacity * fadeOpacity})`;
         ctx.fill();
 
@@ -102,14 +124,14 @@
           particles[i] = createParticle();
           particles[i].maxLife = particles[i].life;
         }
-      });
+      }
 
       // Draw faint constellation connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const dist = Math.hypot(dx, dy);
           if (dist < 120) {
             const alpha = (1 - dist / 120) * 0.06;
             ctx.beginPath();
@@ -127,18 +149,20 @@
 
     resize();
     initParticlesArray();
-    drawParticles();
+    startLoop();
 
+    let resizeTimer;
     window.addEventListener('resize', () => {
-      resize();
-    });
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    }, { passive: true });
 
-    // Pause when tab hidden
+    // Pause when tab hidden to eliminate CPU and battery draw
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        cancelAnimationFrame(animationId);
+        stopLoop();
       } else {
-        drawParticles();
+        startLoop();
       }
     });
   }
@@ -147,47 +171,88 @@
   function initHeroConstellation() {
     if (prefersReducedMotion) return;
 
+    const hero = document.getElementById('hero');
     const container = document.querySelector('.hero__cosmos');
-    if (!container) return;
+    if (!hero || !container) return;
 
     const DOTS = 20;
     const dots = [];
+    let animationId = null;
+    let isVisible = true;
 
     for (let i = 0; i < DOTS; i++) {
       const dot = document.createElement('div');
+      const initX = Math.random() * 100;
+      const initY = Math.random() * 100;
       dot.style.cssText = `
         position: absolute;
         width: ${Math.random() * 2 + 1}px;
         height: ${Math.random() * 2 + 1}px;
         border-radius: 50%;
         background: rgba(26, 26, 26, ${Math.random() * 0.08 + 0.03});
-        left: ${Math.random() * 100}%;
-        top: ${Math.random() * 100}%;
+        left: ${initX}%;
+        top: ${initY}%;
         pointer-events: none;
+        will-change: transform;
       `;
       container.appendChild(dot);
       dots.push({
         el: dot,
-        x: parseFloat(dot.style.left),
-        y: parseFloat(dot.style.top),
-        vx: (Math.random() - 0.5) * 0.003,
-        vy: (Math.random() - 0.5) * 0.003
+        x: 0,
+        y: 0,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        bounds: 20
       });
     }
 
     function animateDots() {
-      dots.forEach(d => {
+      if (!isVisible || document.hidden) {
+        animationId = null;
+        return;
+      }
+      for (let i = 0; i < dots.length; i++) {
+        const d = dots[i];
         d.x += d.vx;
         d.y += d.vy;
-        if (d.x < 0 || d.x > 100) d.vx *= -1;
-        if (d.y < 0 || d.y > 100) d.vy *= -1;
-        d.el.style.left = d.x + '%';
-        d.el.style.top = d.y + '%';
-      });
-      requestAnimationFrame(animateDots);
+        if (d.x < -d.bounds || d.x > d.bounds) d.vx *= -1;
+        if (d.y < -d.bounds || d.y > d.bounds) d.vy *= -1;
+        d.el.style.transform = `translate3d(${d.x.toFixed(1)}px, ${d.y.toFixed(1)}px, 0)`;
+      }
+      animationId = requestAnimationFrame(animateDots);
     }
 
-    animateDots();
+    function startAnimation() {
+      if (!animationId && isVisible && !document.hidden) {
+        animationId = requestAnimationFrame(animateDots);
+      }
+    }
+
+    function stopAnimation() {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    }
+
+    // Only animate when hero is visible in viewport
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) startAnimation();
+          else stopAnimation();
+        });
+      }, { threshold: 0.05 });
+      obs.observe(hero);
+    } else {
+      startAnimation();
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopAnimation();
+      else if (isVisible) startAnimation();
+    });
   }
 
   // ── Hero Dynamic Node & Edge Network ─────────────────
@@ -204,11 +269,28 @@
     let height = 0;
     let dpr = window.devicePixelRatio || 1;
     let hoveredIndex = null;
+    let basePositions = [];
 
     let mouseX = 0;
     let mouseY = 0;
     let currentX = 0;
     let currentY = 0;
+    let animId = null;
+    let isVisible = true;
+
+    function cacheBasePositions() {
+      const heroRect = hero.getBoundingClientRect();
+      basePositions = floatItems.map(item => {
+        const prevTransform = item.style.transform;
+        item.style.transform = '';
+        const r = item.getBoundingClientRect();
+        item.style.transform = prevTransform;
+        return {
+          x: r.left - heroRect.left + r.width / 2,
+          y: r.top - heroRect.top + r.height / 2
+        };
+      });
+    }
 
     function resize() {
       const rect = hero.getBoundingClientRect();
@@ -217,10 +299,16 @@
       dpr = window.devicePixelRatio || 1;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
+      cacheBasePositions();
     }
 
-    window.addEventListener('resize', resize, { passive: true });
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    }, { passive: true });
     resize();
 
     // Hover & touch tracking on nodes
@@ -286,8 +374,6 @@
     }, { passive: true });
 
     // Defined logical relationship edges between nodes (by index 0-19)
-    // Left cluster: 0:Angular, 1:TS, 2:RxJS, 3:YouTube, 4:Cricket, 5:Hospitality, 6:Copilot, 7:LeetCode, 8:Grok, 9:Chennai
-    // Right cluster: 10:MCP, 11:Claude, 12:.NET, 13:X, 14:Ride, 15:SaaS, 16:Testing, 17:CLI, 18:Code, 19:Systems
     const definedEdges = [
       // Frontend & Core Craft
       [0, 1], [0, 2], [1, 2], [0, 5], [1, 7], [2, 6],
@@ -309,9 +395,27 @@
       });
     }
 
+    function startLoop() {
+      if (!animId && isVisible && !document.hidden) {
+        animId = requestAnimationFrame(drawNetwork);
+      }
+    }
+
+    function stopLoop() {
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+    }
+
     function drawNetwork(time) {
+      if (!isVisible || document.hidden) {
+        animId = null;
+        return;
+      }
+
       if (width === 0 || height === 0) {
-        requestAnimationFrame(drawNetwork);
+        animId = requestAnimationFrame(drawNetwork);
         return;
       }
 
@@ -319,23 +423,23 @@
       currentX += (mouseX - currentX) * 0.05;
       currentY += (mouseY - currentY) * 0.05;
 
-      floatItems.forEach((item, idx) => {
+      const nodePositions = new Array(floatItems.length);
+      for (let idx = 0; idx < floatItems.length; idx++) {
         const factor = (idx % 4 + 1) * 0.45;
         const sign = idx % 2 === 0 ? 1 : -1;
-        item.style.transform = `translate(${currentX * factor * sign}px, ${currentY * factor * sign}px)`;
-      });
+        const sx = currentX * factor * sign;
+        const sy = currentY * factor * sign;
+        floatItems[idx].style.transform = `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0)`;
+        if (basePositions[idx]) {
+          nodePositions[idx] = {
+            x: basePositions[idx].x + sx,
+            y: basePositions[idx].y + sy
+          };
+        }
+      }
 
       // Clear Canvas
       ctx.clearRect(0, 0, width, height);
-
-      const heroRect = hero.getBoundingClientRect();
-      const nodePositions = floatItems.map(item => {
-        const r = item.getBoundingClientRect();
-        return {
-          x: r.left - heroRect.left + r.width / 2,
-          y: r.top - heroRect.top + r.height / 2
-        };
-      });
 
       // Draw Edges
       definedEdges.forEach(([a, b], edgeIdx) => {
@@ -344,7 +448,6 @@
         if (!p1 || !p2) return;
 
         const isHoveredEdge = (hoveredIndex === a || hoveredIndex === b);
-        const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
 
         ctx.save();
         ctx.beginPath();
@@ -395,10 +498,26 @@
         ctx.restore();
       }
 
-      requestAnimationFrame(drawNetwork);
+      animId = requestAnimationFrame(drawNetwork);
     }
 
-    requestAnimationFrame(drawNetwork);
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) startLoop();
+          else stopLoop();
+        });
+      }, { threshold: 0.05 });
+      obs.observe(hero);
+    } else {
+      startLoop();
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopLoop();
+      else if (isVisible) startLoop();
+    });
   }
 
   // ── Closing Section Node & Edge Network ───────────────
@@ -415,11 +534,28 @@
     let height = 0;
     let dpr = window.devicePixelRatio || 1;
     let hoveredIndex = null;
+    let basePositions = [];
 
     let mouseX = 0;
     let mouseY = 0;
     let currentX = 0;
     let currentY = 0;
+    let animId = null;
+    let isVisible = false;
+
+    function cacheBasePositions() {
+      const closingRect = closing.getBoundingClientRect();
+      basePositions = floatItems.map(item => {
+        const prevTransform = item.style.transform;
+        item.style.transform = '';
+        const r = item.getBoundingClientRect();
+        item.style.transform = prevTransform;
+        return {
+          x: r.left - closingRect.left + r.width / 2,
+          y: r.top - closingRect.top + r.height / 2
+        };
+      });
+    }
 
     function resize() {
       const rect = closing.getBoundingClientRect();
@@ -428,23 +564,17 @@
       dpr = window.devicePixelRatio || 1;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
+      cacheBasePositions();
     }
 
-    window.addEventListener('resize', resize, { passive: true });
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    }, { passive: true });
     resize();
-
-    // Re-measure when section enters viewport to account for full page layout
-    if ('IntersectionObserver' in window) {
-      const obs = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            resize();
-          }
-        });
-      }, { threshold: 0.1 });
-      obs.observe(closing);
-    }
 
     // Hover & touch tracking on nodes
     floatItems.forEach((item, idx) => {
@@ -510,8 +640,6 @@
     }, { passive: true });
 
     // Defined logical relationship edges between nodes (by index 0-19)
-    // Left cluster: 0:Angular, 1:TS, 2:RxJS, 3:YouTube, 4:Cricket, 5:Hospitality, 6:Copilot, 7:LeetCode, 8:Grok, 9:Chennai
-    // Right cluster: 10:MCP, 11:Claude, 12:.NET, 13:X, 14:Ride, 15:SaaS, 16:Testing, 17:CLI, 18:Code, 19:Architecture
     const definedEdges = [
       // Left cluster: Core Frontend & Craft
       [0, 1], [0, 2], [1, 2],
@@ -545,9 +673,27 @@
       });
     }
 
+    function startLoop() {
+      if (!animId && isVisible && !document.hidden) {
+        animId = requestAnimationFrame(drawNetwork);
+      }
+    }
+
+    function stopLoop() {
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+    }
+
     function drawNetwork(time) {
+      if (!isVisible || document.hidden) {
+        animId = null;
+        return;
+      }
+
       if (width === 0 || height === 0) {
-        requestAnimationFrame(drawNetwork);
+        animId = requestAnimationFrame(drawNetwork);
         return;
       }
 
@@ -555,24 +701,23 @@
       currentX += (mouseX - currentX) * 0.05;
       currentY += (mouseY - currentY) * 0.05;
 
-      floatItems.forEach((item, idx) => {
+      const nodePositions = new Array(floatItems.length);
+      for (let idx = 0; idx < floatItems.length; idx++) {
         const factor = (idx % 4 + 1) * 0.4;
         const sign = idx % 2 === 0 ? 1 : -1;
-        item.style.transform = `translate(${currentX * factor * sign}px, ${currentY * factor * sign}px)`;
-      });
+        const sx = currentX * factor * sign;
+        const sy = currentY * factor * sign;
+        floatItems[idx].style.transform = `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0)`;
+        if (basePositions[idx]) {
+          nodePositions[idx] = {
+            x: basePositions[idx].x + sx,
+            y: basePositions[idx].y + sy
+          };
+        }
+      }
 
       // Clear Canvas
       ctx.clearRect(0, 0, width, height);
-
-      const closingRect = closing.getBoundingClientRect();
-      const nodePositions = floatItems.map(item => {
-        const r = item.getBoundingClientRect();
-        if (r.width === 0 && r.height === 0) return null;
-        return {
-          x: r.left - closingRect.left + r.width / 2,
-          y: r.top - closingRect.top + r.height / 2
-        };
-      });
 
       // Draw Edges
       definedEdges.forEach(([a, b], edgeIdx) => {
@@ -642,10 +787,31 @@
         ctx.restore();
       }
 
-      requestAnimationFrame(drawNetwork);
+      animId = requestAnimationFrame(drawNetwork);
     }
 
-    requestAnimationFrame(drawNetwork);
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) {
+            resize();
+            startLoop();
+          } else {
+            stopLoop();
+          }
+        });
+      }, { threshold: 0.05 });
+      obs.observe(closing);
+    } else {
+      isVisible = true;
+      startLoop();
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopLoop();
+      else if (isVisible) startLoop();
+    });
   }
 
   // ── Journey Line (Continuous Thread) ──────────────
@@ -912,6 +1078,13 @@
         lastAnchorY = waypointCoords[1].y;
       }
 
+      // Cache section geometry for fast lookup in animateLine without reading DOM
+      sectionBounds = allSections.map(s => ({
+        id: s.id,
+        top: s.offsetTop,
+        height: s.offsetHeight
+      }));
+
       return pathLength;
     }
 
@@ -919,13 +1092,14 @@
     let lastHeroAnchorX = 0;
     let lastHeroAnchorY = 0;
     let lastAnchorY = 0;
-
-    calculatePath();
+    let sectionBounds = [];
 
     // ── Floating Rail Elements & Synchronization ──
     const railProgress = document.querySelector('.journey-rail__progress');
     const railNodes = Array.from(document.querySelectorAll('.rail-node'));
     const allSections = ['hero', 'about', 'experience', 'resume', 'skills', 'projects', 'learning', 'closing'].map(id => document.getElementById(id)).filter(Boolean);
+
+    calculatePath();
 
     // Frame renderer for buttery-smooth fluid interpolation during scroll up and down
     function renderSmoothLine() {
@@ -944,49 +1118,19 @@
       path.style.strokeDashoffset = offset.toFixed(1);
 
       // Activate in-section waypoints as the line physically reaches them
-      waypointCoords.forEach(({ wp, len }) => {
+      for (let i = 0; i < waypointCoords.length; i++) {
+        const { wp, len } = waypointCoords[i];
         if (currentDrawLength >= len - 15) {
           wp.classList.add('is-reached');
         } else {
           wp.classList.remove('is-reached');
         }
-      });
+      }
     }
 
     // Animate line on scroll: active drawing tip stays at the middle of the viewport
     function animateLine() {
       const scrollTop = window.scrollY;
-      const currentDocHeight = document.documentElement.scrollHeight;
-      
-      // Auto-detect layout shifts (font swaps, image loads, expand/collapse) and re-sync line
-      let shifted = Math.abs(currentDocHeight - lastDocHeight) > 4;
-      if (!shifted && waypointCoords[0]) {
-        const testDot0 = waypoints[0].querySelector('.journey-waypoint__dot') || waypoints[0];
-        if (testDot0) {
-          const r0 = testDot0.getBoundingClientRect();
-          const svgR = svg.getBoundingClientRect();
-          const curX0 = r0.left - svgR.left + r0.width / 2;
-          const curY0 = r0.top - svgR.top + r0.height / 2;
-          if (Math.abs(curX0 - lastHeroAnchorX) > 1.5 || Math.abs(curY0 - lastHeroAnchorY) > 1.5) {
-            shifted = true;
-          }
-        }
-      }
-      if (!shifted && waypointCoords[1]) {
-        const testDot1 = waypoints[1].querySelector('.journey-waypoint__dot') || waypoints[1];
-        if (testDot1) {
-          const r = testDot1.getBoundingClientRect();
-          const svgR = svg.getBoundingClientRect();
-          const currentY = r.top - svgR.top + r.height / 2;
-          if (Math.abs(currentY - lastAnchorY) > 1.5) {
-            shifted = true;
-          }
-        }
-      }
-      if (shifted) {
-        calculatePath();
-      }
-
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollFraction = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
 
@@ -1011,25 +1155,26 @@
         railProgress.style.height = (scrollFraction * 100).toFixed(1) + '%';
       }
 
-      // Update active section on floating rail
+      // Update active section on floating rail using pre-cached geometry (zero layout reflow!)
       let activeSectionId = 'hero';
       const viewportMid = scrollTop + window.innerHeight * 0.45;
 
-      allSections.forEach(section => {
-        const top = section.offsetTop;
-        const height = section.offsetHeight;
-        if (viewportMid >= top && viewportMid < top + height) {
-          activeSectionId = section.id;
+      for (let i = 0; i < sectionBounds.length; i++) {
+        const b = sectionBounds[i];
+        if (viewportMid >= b.top && viewportMid < b.top + b.height) {
+          activeSectionId = b.id;
+          break;
         }
-      });
+      }
 
-      railNodes.forEach(node => {
+      for (let i = 0; i < railNodes.length; i++) {
+        const node = railNodes[i];
         if (node.getAttribute('data-section') === activeSectionId) {
           node.classList.add('is-active');
         } else {
           node.classList.remove('is-active');
         }
-      });
+      }
 
       if (!rAFId) {
         rAFId = requestAnimationFrame(renderSmoothLine);
@@ -1085,7 +1230,31 @@
       }
     });
 
-    window.addEventListener('scroll', animateLine, { passive: true });
+    // Scroll handler throttled via requestAnimationFrame to screen refresh rate (60/120Hz)
+    let scrollTicking = false;
+    function onScroll() {
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          animateLine();
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Debounced check to re-sync line if a late layout shift occurred after scrolling stops
+    let scrollEndTimer = null;
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(() => {
+        const curDocHeight = document.documentElement.scrollHeight;
+        if (Math.abs(curDocHeight - lastDocHeight) > 4) {
+          calculatePath();
+          animateLine();
+        }
+      }, 250);
+    }, { passive: true });
 
     // Window load event (fires when all images, stylesheets, and assets are 100% loaded)
     window.addEventListener('load', () => {
@@ -1100,7 +1269,7 @@
         calculatePath();
         animateLine();
       }, 100);
-    });
+    }, { passive: true });
 
     // Ensure layout is measured after font loading / reflow
     if (document.fonts) {
@@ -1166,7 +1335,11 @@
       }
     }
 
+    let lastReset = 0;
     function resetIdle() {
+      const now = Date.now();
+      if (now - lastReset < 200) return;
+      lastReset = now;
       clearTimeout(idleTimer);
       idleTimer = setTimeout(triggerPulse, 4000);
     }

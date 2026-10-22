@@ -90,6 +90,8 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* ── Particles Canvas ──────────────────────────────── */
@@ -102,6 +104,8 @@ body {
   pointer-events: none;
   z-index: 1;
   opacity: 0.4;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* ── Journey Line (SVG Continuous Thread) ──────────── */
@@ -113,6 +117,7 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 6; /* Floating above all section backgrounds (z-index 5) — never submerged! */
+  transform: translateZ(0);
 }
 
 .thread-path {
@@ -377,7 +382,7 @@ body {
   background: var(--cream);
   border: 1.5px solid rgba(196, 149, 106, 0.45);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.35s var(--ease-out);
+  transition: transform 0.35s var(--ease-out), background-color 0.35s var(--ease-out), border-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
 }
 
 .rail-node:hover .rail-node__dot,
@@ -702,6 +707,7 @@ body {
   z-index: 1;
   opacity: 0;
   animation: heroFloatFade 1.5s var(--ease-out) 1.5s forwards;
+  transform: translateZ(0);
 }
 
 .hero__floating-elements {
@@ -722,7 +728,8 @@ body {
   gap: 4px;
   color: var(--charcoal);
   opacity: 0;
-  transition: transform 0.4s var(--ease-out), color 0.3s var(--ease-out);
+  transition: color 0.3s var(--ease-out);
+  will-change: transform;
 }
 
 .hero__float-item svg {
@@ -930,7 +937,7 @@ body {
   background: rgba(255, 255, 255, 0.55);
   border: 1px solid rgba(139, 158, 139, 0.22);
   border-radius: 8px;
-  transition: all 0.3s var(--ease-out);
+  transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out), transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
   backdrop-filter: blur(4px);
 }
 
@@ -1010,7 +1017,7 @@ body {
   border: 1px solid rgba(139, 158, 139, 0.25);
   border-radius: 12px;
   gap: 0.75rem;
-  transition: all 0.35s var(--ease-out);
+  transition: background 0.35s var(--ease-out), border-color 0.35s var(--ease-out), transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
   backdrop-filter: blur(4px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
@@ -1093,7 +1100,7 @@ body {
   font-style: italic;
   color: var(--soft-black);
   letter-spacing: 0.02em;
-  transition: all 0.35s var(--ease-out);
+  transition: background 0.35s var(--ease-out), border-color 0.35s var(--ease-out), transform 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
   cursor: default;
   backdrop-filter: blur(4px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
@@ -2156,6 +2163,7 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 1;
+  transform: translateZ(0);
 }
 
 /* Floating craft nodes in closing section */
@@ -2177,7 +2185,8 @@ body {
   gap: 3px;
   color: var(--charcoal);
   opacity: 0.35;
-  transition: transform 0.35s var(--ease-out), opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), z-index 0s;
+  transition: opacity 0.3s var(--ease-out), color 0.3s var(--ease-out), z-index 0s;
+  will-change: transform;
 }
 
 .closing__float-item.is-active {
@@ -2383,7 +2392,7 @@ body {
   border: 1px solid rgba(196, 149, 106, 0.22);
   border-radius: 999px;
   padding: 0.32rem 0.75rem;
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   box-shadow: 0 1px 3px rgba(26, 26, 26, 0.02);
 }
 
