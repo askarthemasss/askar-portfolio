@@ -10,6 +10,11 @@
   // ── Reduced Motion Check ──────────────────────────
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ── Dark Mode Helper ──────────────────────────────
+  function isDarkMode() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+
   // ── Intersection Observer: Reveal on Scroll ───────
   function initRevealObserver() {
     const revealItems = document.querySelectorAll('.reveal-item');
@@ -182,6 +187,7 @@
 
     for (let i = 0; i < DOTS; i++) {
       const dot = document.createElement('div');
+      dot.className = 'hero__cosmos-dot';
       const initX = Math.random() * 100;
       const initY = Math.random() * 100;
       dot.style.cssText = `
@@ -189,7 +195,6 @@
         width: ${Math.random() * 2 + 1}px;
         height: ${Math.random() * 2 + 1}px;
         border-radius: 50%;
-        background: rgba(26, 26, 26, ${Math.random() * 0.08 + 0.03});
         left: ${initX}%;
         top: ${initY}%;
         pointer-events: none;
@@ -459,11 +464,11 @@
         ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
 
         if (isHoveredEdge) {
-          ctx.strokeStyle = 'rgba(196, 149, 106, 0.65)';
+          ctx.strokeStyle = isDarkMode() ? 'rgba(212, 163, 115, 0.75)' : 'rgba(196, 149, 106, 0.65)';
           ctx.lineWidth = 1.2;
           ctx.setLineDash([]);
         } else {
-          ctx.strokeStyle = 'rgba(26, 26, 26, 0.09)';
+          ctx.strokeStyle = isDarkMode() ? 'rgba(237, 232, 225, 0.12)' : 'rgba(26, 26, 26, 0.09)';
           ctx.lineWidth = 0.75;
           ctx.setLineDash([3, 4]);
         }
@@ -478,7 +483,9 @@
 
           ctx.beginPath();
           ctx.arc(qx, qy, isHoveredEdge ? 2.5 : 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = isHoveredEdge ? 'rgba(196, 149, 106, 0.9)' : 'rgba(139, 158, 139, 0.4)';
+          ctx.fillStyle = isHoveredEdge
+            ? (isDarkMode() ? 'rgba(212, 163, 115, 0.95)' : 'rgba(196, 149, 106, 0.9)')
+            : (isDarkMode() ? 'rgba(163, 182, 163, 0.55)' : 'rgba(139, 158, 139, 0.4)');
           ctx.fill();
         }
 
@@ -491,7 +498,7 @@
         ctx.save();
         ctx.beginPath();
         ctx.arc(hp.x, hp.y, 22, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(196, 149, 106, 0.35)';
+        ctx.strokeStyle = isDarkMode() ? 'rgba(212, 163, 115, 0.45)' : 'rgba(196, 149, 106, 0.35)';
         ctx.lineWidth = 0.8;
         ctx.setLineDash([2, 3]);
         ctx.stroke();
@@ -748,11 +755,11 @@
         ctx.quadraticCurveTo(midX, midY, p2.x, p2.y);
 
         if (isHoveredEdge) {
-          ctx.strokeStyle = 'rgba(196, 149, 106, 0.65)';
+          ctx.strokeStyle = isDarkMode() ? 'rgba(212, 163, 115, 0.75)' : 'rgba(196, 149, 106, 0.65)';
           ctx.lineWidth = 1.2;
           ctx.setLineDash([]);
         } else {
-          ctx.strokeStyle = 'rgba(26, 26, 26, 0.08)';
+          ctx.strokeStyle = isDarkMode() ? 'rgba(237, 232, 225, 0.12)' : 'rgba(26, 26, 26, 0.08)';
           ctx.lineWidth = 0.75;
           ctx.setLineDash([3, 4]);
         }
@@ -767,7 +774,9 @@
 
           ctx.beginPath();
           ctx.arc(qx, qy, isHoveredEdge ? 2.5 : 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = isHoveredEdge ? 'rgba(196, 149, 106, 0.9)' : 'rgba(139, 158, 139, 0.4)';
+          ctx.fillStyle = isHoveredEdge
+            ? (isDarkMode() ? 'rgba(212, 163, 115, 0.95)' : 'rgba(196, 149, 106, 0.9)')
+            : (isDarkMode() ? 'rgba(163, 182, 163, 0.55)' : 'rgba(139, 158, 139, 0.4)');
           ctx.fill();
         }
 
@@ -780,7 +789,7 @@
         ctx.save();
         ctx.beginPath();
         ctx.arc(hp.x, hp.y, 20, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(196, 149, 106, 0.35)';
+        ctx.strokeStyle = isDarkMode() ? 'rgba(212, 163, 115, 0.45)' : 'rgba(196, 149, 106, 0.35)';
         ctx.lineWidth = 0.8;
         ctx.setLineDash([2, 3]);
         ctx.stroke();
@@ -1459,11 +1468,11 @@
       link.addEventListener('mouseenter', () => {
         link.style.borderBottomWidth = '1.5px';
         link.style.borderBottomStyle = 'solid';
-        link.style.borderBottomColor = 'rgba(184, 122, 90, 0.6)';
+        link.style.borderBottomColor = isDarkMode() ? 'rgba(217, 138, 98, 0.7)' : 'rgba(184, 122, 90, 0.6)';
       });
 
       link.addEventListener('mouseleave', () => {
-        link.style.borderBottomColor = 'rgba(184, 122, 90, 0.3)';
+        link.style.borderBottomColor = isDarkMode() ? 'rgba(217, 138, 98, 0.35)' : 'rgba(184, 122, 90, 0.3)';
         link.style.borderBottomWidth = '1px';
       });
     });
@@ -1494,8 +1503,94 @@
     });
   }
 
+  // ── Theme Switcher ────────────────────────────────
+  function initTheme() {
+    const toggleBtn = document.getElementById('theme-toggle');
+    const toggleLabel = document.getElementById('theme-toggle-label');
+    const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function getSystemTheme() {
+      return mediaQuery.matches ? 'dark' : 'light';
+    }
+
+    function getSavedTheme() {
+      try {
+        return localStorage.getItem('color-scheme');
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function applyTheme(theme) {
+      const activeTheme = theme || getSystemTheme();
+      document.documentElement.setAttribute('data-theme', activeTheme);
+
+      if (colorSchemeMeta) {
+        const saved = getSavedTheme();
+        colorSchemeMeta.content = saved ? saved : 'light dark';
+      }
+
+      if (themeColorMeta) {
+        themeColorMeta.content = activeTheme === 'dark' ? '#141210' : '#F8F4F0';
+      }
+
+      if (toggleBtn) {
+        const isDark = activeTheme === 'dark';
+        const nextMode = isDark ? 'light' : 'dark';
+        toggleBtn.setAttribute('aria-label', `Switch to ${nextMode} theme`);
+        toggleBtn.setAttribute('title', `Switch to ${nextMode} theme`);
+      }
+
+      if (toggleLabel) {
+        toggleLabel.textContent = activeTheme === 'dark' ? 'day mode' : 'night mode';
+      }
+    }
+
+    // Set initial button state based on existing documentElement data-theme
+    const currentTheme = document.documentElement.getAttribute('data-theme') || (getSavedTheme() || getSystemTheme());
+    applyTheme(currentTheme);
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const target = current === 'dark' ? 'light' : 'dark';
+        const system = getSystemTheme();
+
+        try {
+          if (target === system) {
+            // Revert back to system preference
+            localStorage.removeItem('color-scheme');
+          } else {
+            localStorage.setItem('color-scheme', target);
+          }
+        } catch (e) {}
+
+        applyTheme(target);
+      });
+    }
+
+    // React to system preference changes when user hasn't set an explicit override
+    mediaQuery.addEventListener('change', (e) => {
+      const saved = getSavedTheme();
+      if (!saved) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+
+    // Sync across browser tabs
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'color-scheme') {
+        const saved = e.newValue;
+        applyTheme(saved || getSystemTheme());
+      }
+    });
+  }
+
   // ── Initialize Everything ─────────────────────────
   function init() {
+    initTheme();
     initRevealObserver();
     initParticles();
     initHeroConstellation();
