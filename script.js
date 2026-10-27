@@ -1460,23 +1460,7 @@
     });
   }
 
-  // ── Text Underline Hand-drawn Effect ──────────────
-  function initHandDrawnUnderlines() {
-    const links = document.querySelectorAll('.about__text a, .project-card__description a');
 
-    links.forEach(link => {
-      link.addEventListener('mouseenter', () => {
-        link.style.borderBottomWidth = '1.5px';
-        link.style.borderBottomStyle = 'solid';
-        link.style.borderBottomColor = isDarkMode() ? 'rgba(217, 138, 98, 0.7)' : 'rgba(184, 122, 90, 0.6)';
-      });
-
-      link.addEventListener('mouseleave', () => {
-        link.style.borderBottomColor = isDarkMode() ? 'rgba(217, 138, 98, 0.35)' : 'rgba(184, 122, 90, 0.3)';
-        link.style.borderBottomWidth = '1px';
-      });
-    });
-  }
 
   // ── Timeline Node Expand ──────────────────────────
   function initTimelineExpand() {
@@ -1601,7 +1585,6 @@
     initScrollHint();
     initSkillCells();
     initProjectBreathing();
-    initHandDrawnUnderlines();
     initTimelineExpand();
     initResumeModal();
 

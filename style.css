@@ -67,55 +67,11 @@
 
   /* Color-scheme standards */
   color-scheme: light dark;
-
-  &:has(> head > meta[name="color-scheme"][content="dark"]) {
-    color-scheme: dark;
-  }
-  &:has(> head > meta[name="color-scheme"][content="light"]) {
-    color-scheme: light;
-  }
 }
 
 /* ── Dark Theme Tokens (Night Notebook) ────────────── */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]):not(:has(> head > meta[name="color-scheme"][content="light"])) {
-    --cream: #141210;
-    --sage: #171816;
-    --parchment: #1A1815;
-    --warm-white: #1E1B18;
-    --linen: #181614;
-    --sage-tint: #161815;
-    --charcoal: #EDE8E1;
-    --soft-black: #D8D2C8;
-    --warm-grey: #9E978F;
-    --light-grey: #38342E;
-    --terracotta: #D98A62;
-    --indigo: #8C8FB8;
-    --gold: #D4A373;
-    --gold-dim: rgba(212, 163, 115, 0.3);
-    --blush: #241E1A;
-    --sage-dark: #9EAF9E;
-
-    --card-glass: rgba(30, 27, 24, 0.72);
-    --card-glass-hover: rgba(42, 38, 34, 0.95);
-    --card-item-bg: rgba(24, 21, 19, 0.78);
-    --card-item-hover: rgba(38, 34, 30, 0.96);
-    --card-border: rgba(212, 163, 115, 0.22);
-    --card-border-hover: rgba(212, 163, 115, 0.48);
-    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    --card-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.45);
-    --card-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    --card-inset-hover: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    --badge-bg: rgba(24, 21, 19, 0.88);
-    --network-edge: rgba(237, 232, 225, 0.12);
-    --network-edge-active: rgba(212, 163, 115, 0.75);
-    --cosmos-dot: rgba(237, 232, 225, 0.16);
-    --grain-opacity: 0.022;
-  }
-}
-
-:root[data-theme="dark"],
-:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+:root[data-theme="dark"] {
+  color-scheme: dark;
   --cream: #141210;
   --sage: #171816;
   --parchment: #1A1815;
@@ -150,40 +106,42 @@
   --grain-opacity: 0.022;
 }
 
-:root[data-theme="light"],
-:root:has(> head > meta[name="color-scheme"][content="light"]) {
-  --cream: #F7F5F0;
-  --sage: #EEF3ED;
-  --parchment: #F1ECE3;
-  --warm-white: #FAF8F5;
-  --linen: #F3EFE8;
-  --sage-tint: #EFF3EE;
-  --charcoal: #1A1A1A;
-  --soft-black: #2C2C2C;
-  --warm-grey: #8A8580;
-  --light-grey: #C5BFB8;
-  --terracotta: #B87A5A;
-  --indigo: #6B6EA0;
-  --gold: #C4956A;
-  --gold-dim: rgba(196, 149, 106, 0.3);
-  --blush: #F0EBE5;
-  --sage-dark: #8B9E8B;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --cream: #141210;
+    --sage: #171816;
+    --parchment: #1A1815;
+    --warm-white: #1E1B18;
+    --linen: #181614;
+    --sage-tint: #161815;
+    --charcoal: #EDE8E1;
+    --soft-black: #D8D2C8;
+    --warm-grey: #9E978F;
+    --light-grey: #38342E;
+    --terracotta: #D98A62;
+    --indigo: #8C8FB8;
+    --gold: #D4A373;
+    --gold-dim: rgba(212, 163, 115, 0.3);
+    --blush: #241E1A;
+    --sage-dark: #9EAF9E;
 
-  --card-glass: rgba(255, 255, 255, 0.65);
-  --card-glass-hover: #ffffff;
-  --card-item-bg: rgba(247, 245, 240, 0.8);
-  --card-item-hover: rgba(255, 255, 255, 0.98);
-  --card-border: rgba(196, 149, 106, 0.22);
-  --card-border-hover: rgba(196, 149, 106, 0.45);
-  --card-shadow: 0 4px 16px rgba(26, 26, 26, 0.04);
-  --card-shadow-hover: 0 6px 20px rgba(196, 149, 106, 0.12);
-  --card-inset: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  --card-inset-hover: inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  --badge-bg: rgba(247, 245, 240, 0.82);
-  --network-edge: rgba(26, 26, 26, 0.08);
-  --network-edge-active: rgba(196, 149, 106, 0.65);
-  --cosmos-dot: rgba(26, 26, 26, 0.08);
-  --grain-opacity: 0.035;
+    --card-glass: rgba(30, 27, 24, 0.72);
+    --card-glass-hover: rgba(42, 38, 34, 0.95);
+    --card-item-bg: rgba(24, 21, 19, 0.78);
+    --card-item-hover: rgba(38, 34, 30, 0.96);
+    --card-border: rgba(212, 163, 115, 0.22);
+    --card-border-hover: rgba(212, 163, 115, 0.48);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    --card-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.45);
+    --card-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    --card-inset-hover: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --badge-bg: rgba(24, 21, 19, 0.88);
+    --network-edge: rgba(237, 232, 225, 0.12);
+    --network-edge-active: rgba(212, 163, 115, 0.75);
+    --cosmos-dot: rgba(237, 232, 225, 0.16);
+    --grain-opacity: 0.022;
+  }
 }
 
 html {
@@ -232,28 +190,9 @@ section,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body,
-  section,
-  .about,
-  .experience,
-  .resume-section,
-  .skills,
-  .projects,
-  .learning,
-  .closing,
-  .exp-card,
-  .exp-item,
-  .skill-cell,
-  .compact-card,
-  .compact-card__icon,
-  .about__point,
-  .about__visual-card,
-  .about__chip,
-  .closing__link,
-  .journey-waypoint__message,
-  .rail-node__label,
-  .resume-modal__panel,
-  .resume-modal__header {
+  *,
+  *::before,
+  *::after {
     transition: none !important;
   }
 }
@@ -2250,11 +2189,12 @@ svg text[fill="#8A8580" i] {
   color: var(--terracotta);
   text-decoration: none;
   border-bottom: 1px solid rgba(184, 122, 90, 0.3);
-  transition: border-color 0.3s var(--ease-out);
+  transition: border-color 0.25s var(--ease-out), border-bottom-width 0.2s var(--ease-out);
 }
 
 .project-card__description a:hover {
   border-bottom-color: var(--terracotta);
+  border-bottom-width: 1.5px;
 }
 
 .project-card__caption {
@@ -2774,14 +2714,7 @@ svg text[fill="#8A8580" i] {
   height: 16px;
 }
 
-/* ═══════════════════════════════════════════════════════
-   HAND-DRAWN UNDERLINE EFFECT
-   ═══════════════════════════════════════════════════════ */
-.about__text a,
-.project-card__description a {
-  position: relative;
-  text-decoration: none;
-}
+
 
 /* ═══════════════════════════════════════════════════════
    RESPONSIVE REFINEMENTS
